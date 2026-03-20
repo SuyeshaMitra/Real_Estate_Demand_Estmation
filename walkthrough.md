@@ -19,7 +19,7 @@ flowchart TD
         Filter --> IO[Append to london_data.csv]
     end
 
-    subgraph Feature Engineering Engine
+    subgraph "Feature Engineering Engine"
         IO --> Base[Date Parsing: Year/Month]
         Base --> GeoAPI[pgeocode Offline Lookup]
         GeoAPI --> Merge[Lat/Lon Coordinate Mapping]

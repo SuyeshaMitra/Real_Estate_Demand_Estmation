@@ -13,7 +13,7 @@ graph TD
         B -->|Filter & Clean| C[(london_data.csv\n3.9M Records)]
     end
 
-    subgraph Feature Engine (pgeocode)
+    subgraph "Feature Engine (pgeocode)"
         C --> D[Extract Unique Postcodes]
         D -->|Query pgeocode Offline| E[Generate Latitude & Longitude]
         E --> F[Merge Lat/Lon into Primary Dataset]
