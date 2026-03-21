@@ -141,21 +141,25 @@ All 3 API outputs run live and successfully export physical test examples to the
 
 ### 1. OpenStreetMap (OSM) - Spatial Infrastructure Tuning
 **Why this improves accuracy:** A purely geographical ML model doesn't inherently understand what "Lat/Lon" means besides plotting a dot. By explicitly scanning the API for infrastructure and mapping a new `stations_within_1.5km` numeric column onto the dataset, we mathematically force the AI to correlate high infrastructure density with premium land valuations. 
-| Target API | Sample Parameters Passed | Result Extracted | Generated Reference File |
-|------------|--------------------------|------------------|--------------------------|
-| **Overpass API (`overpass-api.de`)** | `Lat: 51.3734`<br>`Lon: 0.0881`<br>`Radius: 1500m`<br>`Transport="station"`<br>`Amenity="school"` | JSON array plotting 1 node matching Public Station and 1 node matching schools nearby. | 📄 [`api_result_osm.json`](api_result_osm.json) |
+
+*(Note: The coordinates below specifically match the London Property dataset postcode **BR6 7FN**)*
+| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
+|------------|--------------------------|----------------------------------------|------------------|
+| **Overpass API (`overpass-api.de`)** | `Lat: 51.3734`<br>`Lon: 0.0881`<br>`Radius: 1500m`<br>`Amenity="school"` | [Run Overpass API in Browser](http://overpass-api.de/api/interpreter?data=[out:json];node[%22amenity%22=%22school%22](around:1500,51.3734,0.0881);out;) | Live JSON array plotting the exact nodes matching schools near BR6 7FN. |
 
 ### 2. Google Trends (`pytrends`) - Temporal Economic Tuning
 **Why this improves accuracy:** Real estate dataset histories lag by months because of closing delays. Google search volumes lead macroeconomic reality (e.g. people aggressively search online *before* they buy). Appending the `macro_demand_index` allows our algorithmic ensemble to pre-emptively predict London price bumps prior to physical data catching up.
-| Target API | Sample Parameters Passed | Result Extracted | Generated Reference File |
-|------------|--------------------------|------------------|--------------------------|
-| **Google Trends (`pytrends` module)** | `kw_list = ["London mortgage", "London house prices"]`<br>`geo="GB-ENG"`<br>`timeframe='2018-01-01 2022-12-31'` | A Pandas DataFrame containing the exact weekly internet search volume Index indexed 0-100. | 📉 [`api_result_google_trends.csv`](api_result_google_trends.csv) |
+
+| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
+|------------|--------------------------|----------------------------------------|------------------|
+| **Google Trends** | `kw_list = ["London mortgage", "London house prices"]`<br>`geo="GB-ENG"`<br>`timeframe='2018-01-01 2022-12-31'` | [Run Google Trends in Browser](https://trends.google.com/trends/explore?date=2018-01-01%202022-12-31&geo=GB-ENG&q=London%20mortgage,London%20house%20prices) | Weekly internet search volume Index indexed 0-100 indicating hype levels. |
 
 ### 3. Google News RSS Feed - Geopolitical Sentiment Tuning
 **Why this improves accuracy:** General housing demand algorithms struggle heavily when external unmodeled panics occur (e.g., banking crashes). By dynamically parsing headline strings and counting daily real estate publication volume (`weekly_news_volume`), the models can inherently dampen or elevate localized predicted growth rates.
-| Target API | Sample Parameters Passed | Result Extracted | Generated Reference File |
-|------------|--------------------------|------------------|--------------------------|
-| **News RSS (`news.google.com/rss`)** | `query = "London+Real+Estate"`<br>HTTP GET Request | An XML DOM tree pulling 100 of the latest article publication dates and headline context. | 📰 [`api_result_google_news.xml`](api_result_google_news.xml) |
+
+| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
+|------------|--------------------------|----------------------------------------|------------------|
+| **News RSS (`news.google.com/rss`)** | `query = "London+Real+Estate"`<br>HTTP GET Request | [Run Google News RSS in Browser](https://news.google.com/rss/search?q=London+Real+Estate) | An XML DOM tree dynamically pulling the newest article publication dates and headlines. |
 
 ---
 

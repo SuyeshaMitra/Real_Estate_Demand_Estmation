@@ -134,3 +134,8 @@ Once `06_external_feature_extraction.py` finishes, it mathematically validates t
 1. `api_result_osm.json` (OpenStreetMap Geographic JSON Nodes)
 2. `api_result_google_trends.csv` (PyTrends Search Volume DataFrame)
 3. `api_result_google_news.xml` (RSS XML Document Object Model)
+
+**💡 Wait, how does Python actually do this? Can I see it myself?**
+Absolutely. Python is doing nothing more than sending an invisible web browser link (an HTTP GET request) and saving the text that comes back. You can do the exact same thing right now! 
+Instead of running Python, copy and paste this exact link into your browser to pull the exact same JSON mapping data for the London `BR6 7FN` property we tested in the scripts:
+`http://overpass-api.de/api/interpreter?data=[out:json];node[%22amenity%22=%22school%22](around:1500,51.3734,0.0881);out;`
