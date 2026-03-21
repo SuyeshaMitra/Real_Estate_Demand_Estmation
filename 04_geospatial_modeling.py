@@ -86,8 +86,13 @@ print(f"Geospatial R-Squared: {r2:.4f}")
 print("\nSaving dataset to show prediction validation (Actual vs Predicted)...")
 validation_df = test_df[['postcode', 'date_of_transfer', 'price', 'latitude', 'longitude']].copy()
 validation_df.rename(columns={'price': 'Actual_Price'}, inplace=True)
-validation_df['Predicted_Price'] = y_pred
-validation_df['Price_Difference'] = validation_df['Actual_Price'] - validation_df['Predicted_Price']
+validation_df['Predicted_Price'] = np.round(y_pred, 2)
+validation_df['Price_Difference'] = np.round(validation_df['Actual_Price'] - validation_df['Predicted_Price'], 2)
+
+# Calculate Accuracy & Error precision percentages for regression
+validation_df['Error_%'] = np.round(np.abs(validation_df['Price_Difference'] / validation_df['Actual_Price']) * 100, 2)
+# Floor accuracy at 0% if the error is vastly oversized
+validation_df['Accuracy_%'] = np.clip(100 - validation_df['Error_%'], 0, 100)
 
 # Print the top 15 validation results to console
 print("\n--- First 15 validation records ---")

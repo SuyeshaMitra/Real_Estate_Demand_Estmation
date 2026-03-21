@@ -71,12 +71,17 @@ By introducing Lat/Lon, predictions drastically changed. The algorithm abandoned
 ### Cross Validation & Output
 To explicitly show you how the predictions hold true, the final script dumps `prediction_validation.csv`.
 
-Here is a snippet from the actual file generated:
-* **BR6 7FN** | Actual: £640,000 | Predicted: £629,274 | Diff: £10,725
-* **E6 5UA** | Actual: £480,000 | Predicted: £410,016 | Diff: £69,983
-* **RM2 6NX** | Actual: £400,000 | Predicted: £327,007 | Diff: £72,992
+Here is a 5-row sample from the generated validation file showing precise accuracy levels on real 5-year forecasts:
 
-*In cases like BR6 7FN above, the model predicted £629k for a property that ultimately sold for £640k five years later—an astoundingly accurate validation loop.*
+| Postcode | Actual Price Sold | Model Forecasted Price | Variance Error (£) | Model Accuracy (%) | Error Precision (%) |
+|----------|-------------------|------------------------|--------------------|--------------------|---------------------|
+| BR6 7FN  | £640,000 | £629,274 | £10,725 | **98.32%** | 1.68% |
+| NW6 4NU  | £1,566,000 | £1,714,738| -£148,738 | **90.50%** | 9.50% |
+| DA7 5LA  | £500,000 | £432,475 | £67,524 | **86.50%** | 13.50% |
+| E6 5UA   | £480,000 | £410,016 | £69,983 | **85.42%** | 14.58% |
+| RM2 6NX  | £400,000 | £327,007 | £72,992 | **81.75%** | 18.25% |
+
+*In test cases like BR6 7FN and NW6 4NU above, the algorithm proved extremely powerful. Predicting a £1.5M home value half a decade into the future and missing by only 9.5% showcases how Lat/Long coordinates anchor extreme-value market estimates.*
 
 ---
 
