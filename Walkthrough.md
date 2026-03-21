@@ -94,3 +94,30 @@ validation_df.to_csv("prediction_validation_lightgbm.csv", index=False)
 ```
 * **What this does**: It takes the holdout test data (properties from 2018-2022 that the model *never saw during training*) and compares the model's 5-year forecast against the literal historical fact.
 * **The Result**: The program exports a physical CSV file showing exactly how accurate it was. You can open `prediction_validation_lightgbm.csv` to see how the mathematical algorithm successfully plotted 5-year outlooks with up to 99% accuracy!
+
+---
+
+## 📄 Step 5: `06_external_feature_extraction.py` (Adding Outside Ecosystem Variables)
+**The Goal**: We proved our internal 3 models work. But what if we added external data off the internet to make the models even smarter? This script tests totally free, public APIs to feed our models.
+
+### Code Snippet: OpenStreetMap (OSM)
+```python
+overpass_query = f"""
+[out:json];
+(
+  node["public_transport"="station"](around:1500,51.3734,0.0881);
+);
+"""
+data = requests.get("http://overpass-api.de/api/interpreter", params=...)
+```
+* **What it does**: Instead of just using a raw latitude, we ask the massive open-source mapping database (OpenStreetMap API) *"How many train stations are located exactly within 1500 meters of this house?"*
+* **Why do we mathematically do this?**: A machine learning model doesn't inherently "know" what a train station is. It just plots coordinates mathematically. By explicitly giving it a column called `stations_within_1.5km`, we force the exact same dataset to become instantly more heavily correlated to infrastructure value.
+
+### Code Snippet: Google Trends
+```python
+pytrend = TrendReq(hl='en-GB')
+pytrend.build_payload(["London mortgage"], timeframe='2018-01-01 2022-12-31')
+interest_df = pytrend.interest_over_time()
+```
+* **What it does**: It searches Google's internal API to find out how many people were Googling the word "Mortgage" during the week that house was sold.
+* **Why do we mathematically do this?**: Housing prices "lag" reality (it takes months to buy a house). Internet searches "lead" reality (people search immediately when rates drop). By adding a `macro_demand_index` to the model, we give the algorithm the ability to map social-sentiment and foresee macroeconomic shifts!

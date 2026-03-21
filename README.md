@@ -133,6 +133,24 @@ To explicitly showcase exactly how the predictions hold true side-by-side, we tr
 | **2nd** | **XGBoost (Depth-wise)** | **£410,339** | ~3.5 seconds | An excellent and powerful predictor that reliably maps spatial gradients better than tree averaging, but requires high computational limits and struggles slightly scaling with wealthy outliers. |
 | **3rd** | **Random Forest (Baseline)** | **£424,476** | ~1.5 seconds | Stable, trustworthy, and perfectly protects luxury boundary zones. However, block-averaging latitude and longitude is fundamentally unable to map rolling wealth gradients accurately. |
 
+## 🌍 External Ecosystem API Feature Extraction
+
+To further optimize forecasting accuracy, we designed `06_external_feature_extraction.py` to tap into open, free public APIs. By extracting ecosystem variables from Google and OpenStreetMap (OSM) and feeding them into our spatial models, we can mathematically tune our engines to capture real-time demand.
+
+### 1. OpenStreetMap (Overpass API) - Spatial Tuning
+* **What is sent**: A physical bounding box coordinate (e.g., Latitude `51.3734`, Longitude `0.0881`) and a `radius` (e.g., 1500 meters) sent via HTTP GET to the free `overpass-api.de` endpoint.
+* **What is received**: A massive JSON array of local amenities tagged logically. We filter for `public_transport="station"` and `amenity="school"`.
+* **Why use this for Feature Tuning?**: Proximity to infrastructure is the highest geographic driver of premium housing costs. Simply providing the model with `latitude` forces it to guess the value of an area based on history. By appending two new features (`stations_within_1.5km` and `schools_within_1.5km`), the Algorithm physically understands *why* that latitude is expensive, making the Random Forest and LightGBM engines massively more precise for future, unseen property developments that occur near train stations.
+
+### 2. Google Trends (`pytrends` API) - Temporal Demand Tuning
+* **What is sent**: A keyword payload (e.g., `"London mortgage"`, `"London house prices"`) bounded by a date timeframe sent via the `pytrends` framework.
+* **What is received**: A Pandas DataFrame containing a `search_volume_index` from 0-100 indicating weekly public internet interest.
+* **Why use this for Feature Tuning?**: Housing prices lag actual demand. When mortgage rates drop, internet searches for "London mortgage" spike months before properties are actually sold. By merging the `macro_demand_index` onto the dataset based on the property's `date_of_transfer`, we feed our models leading systemic economic indicators rather than just geographic lagging ones.
+
+### 3. Other Free Datasets (NOAA Nightlights & Google News)
+* **Night-light Imagery (VIIRS)**: Public NOAA satellites take infrared captures of Earth at night. Areas with brighter night-light footprints strongly correlate with high local GDP and structural GDP growth. Merging regional night-light variance historically acts as a direct proxy for neighborhood gentrification.
+* **Google News RSS (Geopolitical Sentiment)**: Using public RSS APIs for "Real Estate Market England", we can run basic `VADER` sentiment analysis (Pos/Neg scores) on daily articles. Appending a `30_day_sentiment_score` to the temporal layer of our algorithm prevents it from over-predicting values during times of intense regional banking pessimism.
+
 ---
 
 ## ⚙️ Detailed Technical File Reference & Execution Flow
