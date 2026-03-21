@@ -119,5 +119,18 @@ pytrend = TrendReq(hl='en-GB')
 pytrend.build_payload(["London mortgage"], timeframe='2018-01-01 2022-12-31')
 interest_df = pytrend.interest_over_time()
 ```
-* **What it does**: It searches Google's internal API to find out how many people were Googling the word "Mortgage" during the week that house was sold.
-* **Why do we mathematically do this?**: Housing prices "lag" reality (it takes months to buy a house). Internet searches "lead" reality (people search immediately when rates drop). By adding a `macro_demand_index` to the model, we give the algorithm the ability to map social-sentiment and foresee macroeconomic shifts!
+### Code Snippet 3: Google News RSS (Geopolitical Sentiment Tracking)
+```python
+news_url = "https://news.google.com/rss/search?q=London+Real+Estate"
+news_response = requests.get(news_url)
+root = ET.fromstring(news_response.content)
+article_count = len(root.findall('.//item'))
+```
+* **What it does**: It queries the public Google News server, looking specifically for articles talking about the London housing market. It physically parses the raw XML feed to extract how many recent articles were published on the topic.
+* **Why do we mathematically do this?**: ML algorithms often fail when completely unpredictable systemic risks occur (like a sudden mortgage banking collapse). This logic acts as a circuit breaker. By converting the volume of real estate news into a `weekly_news_volume` variable, the exact same model suddenly gains the ability to identify anomalous bursts in public sentiment and scale its geographic predictions down accordingly.
+
+### 💾 Validating the API Data (Saved to Root)
+Once `06_external_feature_extraction.py` finishes, it mathematically validates the concepts by physically exporting the 3 external API data schemas to your root folder:
+1. `api_result_osm.json` (OpenStreetMap Geographic JSON Nodes)
+2. `api_result_google_trends.csv` (PyTrends Search Volume DataFrame)
+3. `api_result_google_news.xml` (RSS XML Document Object Model)

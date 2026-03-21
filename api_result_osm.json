@@ -1,0 +1,48 @@
+{
+    "version": 0.6,
+    "generator": "Overpass API 0.7.62.11 87bfad18",
+    "osm3s": {
+        "timestamp_osm_base": "2026-03-21T06:48:30Z",
+        "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+    },
+    "elements": [
+        {
+            "type": "node",
+            "id": 3825936573,
+            "lat": 51.3736037,
+            "lon": 0.0887195,
+            "tags": {
+                "fare_zone": "6",
+                "name": "Orpington",
+                "naptan:AtcoCode": "9100ORPNGTN",
+                "network": "National Rail",
+                "network:website": "https://www.nationalrail.co.uk/stations/orp/",
+                "network:wikidata": "Q26334",
+                "operator": "Southeastern",
+                "operator:website": "https://www.southeasternrailway.co.uk/travel-information/more-travel-help/station-information/stations/orpington",
+                "operator:wikidata": "Q1696490",
+                "payment:contactless": "yes",
+                "payment:oyster": "yes",
+                "public_transport": "station",
+                "railway": "station",
+                "ref:crs": "ORP",
+                "source": "NPE",
+                "wheelchair": "yes",
+                "wikidata": "Q1956050",
+                "wikipedia": "en:Orpington railway station"
+            }
+        },
+        {
+            "type": "node",
+            "id": 6386850112,
+            "lat": 51.3734614,
+            "lon": 0.097956,
+            "tags": {
+                "addr:city": "Orpington",
+                "addr:street": "High Street",
+                "amenity": "school",
+                "name": "Explore Learning - Maths & English"
+            }
+        }
+    ]
+}
