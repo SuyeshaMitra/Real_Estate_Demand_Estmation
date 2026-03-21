@@ -55,9 +55,18 @@ Real estate pricing is dictated heavily by exact location. We built 3 distinct T
 
 ---
 
-## 📊 Summary Table: Model Comparison & Which is Better?
+## 📊 Summary Table & Visualizations: Which Model is Better?
 
 We validated these three models over a blind 5-year chronological holdout set (Trained on 2008-2017, Tested 2018-2022).
+
+### Graphical Model Performance Analysis
+The following charts explicitly graph the spatial performance difference between the architectures. LightGBM demonstrates aggressive supremacy in both error reduction and execution velocity.
+
+![Model Validation MAE](chart_model_mae_comparison.png)  
+![Model Validation Accuracy](chart_model_accuracy_comparison.png)  
+![Model Training Execution Speed](chart_model_speed_comparison.png)  
+
+### Model Breakdown & Cons Matrix
 
 | Model Configuration | Mean Absolute Error (MAE) | Training Speed | Pros | Cons |
 |---------------------|---------------------------|----------------|------|------|
