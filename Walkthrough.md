@@ -5,12 +5,14 @@ If you are new to data science or object-oriented Python, this document is desig
 ---
 
 ## 🧭 Where do I start?
-To understand this project, you have to read the files in chronological order **(01 → 02 → 03 → 04)**. 
+To understand this project, you have to read the files in chronological order **(01 → 02 → 03 → 04 → 05 → 06)**. 
 Machine learning is like baking a cake. You cannot put the cake in the oven (Training the Model) before you have sifted the flour (Cleaning the Data). 
 1. `01` explores the raw ingredients.
 2. `02` filters out what we don't need.
 3. `03` bakes a basic test cake.
 4. `04` uses advanced geometric math to bake 3 world-class competitor cakes.
+5. `05` decorates the cakes with beautiful visual presentation charts evaluating who won.
+6. `06` goes back to the global market (External APIs) to hunt for exotic new ingredients (Macroeconomics & Structural Geography) to build a futuristic cake.
 
 ---
 
