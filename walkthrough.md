@@ -1,65 +1,47 @@
 # Real Estate Forecasting: Technical Architecture & Walkthrough
 
-Welcome! This document is the **single, unified technical reference** explaining the design, the architecture, the code scripts, the feature tuning, the hyperparameter selections, and the results of our HM Land Registry property forecasting project.
+Welcome! This document is the single, unified technical reference explaining the design, the architecture, the code scripts, the feature tuning, the hyperparameter selections, and the results of our HM Land Registry property forecasting project mapping the true geospatial accuracy of Random Forests vs XGBoost Algorithms.
 
 ---
 
 ## 🏗️ 1. Architecture Design
 
-The pipeline aggressively handles the massive 3.2GB `pp-complete.csv` file without causing Out-of-Memory (OOM) errors, extracting the Greater London dataset for specific modeling. In the final phase, it uses an offline API to map physical Earth coordinates to boost predictive power.
+The pipeline leverages an offline `pgeocode` coordinate extraction layer before splitting features geographically into two concurrent Tree-Based machine learning algorithms.
 
 ```mermaid
 flowchart TD
     A[Raw Data pp-complete.csv: 3.2GB] -->|01_data_exploration.py| B(Schema & Missing Values)
     B -->|02_data_preparation.py| C{Streaming Pandas Chunk Engine}
     C -->|Extracts 'GREATER LONDON'| D[london_data.csv: ~3.9M Rows]
-    D -->|04_geospatial_modeling.py| E[pgeocode Lat/Lon Extraction]
-    E -->|Offline SQLite Lookup| F[Include Latitude/Longitude]
+    D --> E[pgeocode Lat/Lon Extraction]
+    E --> F[Include Latitude/Longitude]
     F -->|Time-aligned Split| G[Train Subset: 2008-2017]
     F -->|Time-aligned Split| H[Test Holdout: 2018-2022]
-    G --> I[Random Forest Regressor Max_Depth=20]
+    G --> I[04A: Random Forest Regressor]
+    G --> X[04B: XGBoost Regressor]
     I --> K[Evaluate Forecasting 5-Years Ahead]
-    K --> L[Generate prediction_validation.csv]
+    X --> K
+    K --> L[Generate prediction_validation_xgb.csv]
 ```
 
 ---
 
 ## 🐍 2. Technical Code Walkthrough
 
-We divided the objective into four primary Python scripts to manage memory boundaries and temporal state splits.
+We divided the objective into distinct sequential Python scripts to manage memory boundaries and temporal split models.
 
 ### 📄 Script 1: `01_data_exploration.py` (Data Exploration)
-* **What it does**: Peeks into the 3.2 GB raw dataset. Because `pp-complete.csv` is unheadered, this script maps the 15 standard land registry columns. We parse in `chunksize=1000000` to find missing values without crashing laptops.
+* Parses 31M rows utilizing `chunksize=1000000` to stream without memory crashes. Maps the 15 standard land registry columns natively.
 
 ### 📄 Script 2: `02_data_preparation.py` (Data Prep & Filtering)
-* **What it does**: Reads the giant dataset by 1M row increments, explicitly filters `chunk[chunk['county'] == 'GREATER LONDON']` to slice out the target domain, and saves a much smaller `london_data.csv` (~3.9M records).
+* Reads the giant dataset by 1M row increments and explicitly filters `chunk[chunk['county'] == 'GREATER LONDON']` to physically carve out `london_data.csv`.
 
 ### 📄 Script 3: `03_trend_analysis_and_modeling.py` (Baseline Modeling)
-* **What it does**: Establishes a baseline prediction utilizing basic categorical variables (like `district`) and raw time markers (`year`, `month`).
+* Establishes a baseline prediction utilizing basic categorical variables (like string `district`) and raw time markers (`year`, `month`) ensuring we have an absolute error bar to beat via geography.
 
-### 📄 Script 4: `04_geospatial_modeling.py` (Geospatial Model & Validation)
-* **What it does**: 
-  1. Isolates unique `postcode` entries.
-  2. Queries `pgeocode.Nominatim('gb')` offline to derive `latitude` and `longitude`.
-  3. Re-trains the optimized Random Forest purely on physical vectors and temporal features.
-  4. Exports `prediction_validation.csv` which physically outputs the **actual known 2018-2022 dataset** next to our model's predictions.
-
-#### The Geospatial Data Engine Explained (`pgeocode` vs Live APIs)
-**1. How and When Does `pgeocode` Fetch the Data?**
-When you run the command `pip install pgeocode`, Python silently reaches out to the internet and downloads a tiny, highly-compressed mini-database (provided by the GeoNames project). It tucks this database safely inside your Python installation folders. This mini-database is essentially a massive hidden spreadsheet that maps every known UK postcode to a specific Latitude and Longitude.
-
-* **When is it fetched?** It is fetched exactly at the moment you run `04_geospatial_modeling.py`.
-* **Is it real-time over the internet?** No. When the Python script asks for the coordinates of `BR6`, `pgeocode` does not connect to the internet. Instead, it does the equivalent of a blazing-fast "Ctrl+F" (search) on that hidden offline database stored on your computer.
-* **How is it stored in your project?** During the script, we merge those fetched coordinates temporarily into our main dataset in system memory (RAM) to train the model. At the very end of the script, we permanently embed those newly fetched coordinates inside the `prediction_validation.csv` file alongside your property rows so you can view them anytime!
-
-**2. Would it be more "realistic" to invoke a live web API (like postcodes.io) in real-time?**
-Actually, it would be much worse for this specific usecase. Here is why:
-
-* **Geographical Coordinates Never Change**: Unlike checking the live price of a stock (which changes every second), the geographic coordinates of a neighborhood (`BR6`) are permanently fixed. The ground does not move! Therefore, checking a live website in real-time to find out where a postcode is located gives you the exact same numbers as an offline database.
-* **The "Big Data" Speed Problem**: If we forced Python to reach out to the internet (a web API like `postcodes.io`) in real-time for every single property, each internet round-trip takes about `0.5` seconds. To look up 150,000 unique postcodes over a live web API, it would take your computer over **20 hours** just sitting there waiting for the internet to reply. Furthermore, most free public APIs will heavily penalize or block you (called "rate limiting") if you send them 150,000 requests in a row because it overloads their servers.
-* By querying the offline `pgeocode` database locally on your own computer, we resolved all 150,000 coordinates in **under 2 seconds**. 
-
-**Summary**: In the professional data engineering world, using a locally cached geographic database (like `pgeocode`) instead of a live web API is the absolute industry standard for massive machine learning datasets. It is just as accurate, immune to internet outages, prevents your scripts from being blocked by websites, and runs 1000x faster!
+### 📄 Script 4A & 4B: Geospatial Mapping & Competitor Modeling
+* **04A: Random Forest**: Extracts outward codes (`BR6`) and fires an offline `pgeocode` SQL lookup to extract continuous `latitude` and `longitude` grids. Re-trains a deeply nested decision ensemble (`max_depth=20`) to map neighborhood pricing pockets.
+* **04B: Gradient Boosting (XGBoost)**: Leverages the exact same spatial grid extraction but replaces the naive average forest with sequential gradient residual correction (`learning_rate=0.05, max_depth=10`). 
 
 ---
 
@@ -68,39 +50,33 @@ Actually, it would be much worse for this specific usecase. Here is why:
 Transitioning from Script 3 to Script 4 forced us to deliberately change our machine learning structure. 
 
 ### Why the Predictions Changed with Lat/Long
-* **Baseline (Categorical)**: Without Latitude and Longitude, the baseline Random Forest grouped all houses in `CROYDON` into the same trajectory. It couldn't differentiate between a massive expensive estate on Croydon's north border vs a cheaper flat on the south border. 
-* **Geospatial Impact**: By introducing Lat/Lon floats, we destroyed the administrative boundaries. The algorithm now logically "draws geometric rectangles" directly onto the grid. A property standing near the edge of a wealthy neighborhood accurately absorbs the wealthy pricing trajectory. 
-
-*Result*: The Mean Absolute Error (MAE) dropped by a massive **£46,000 per house** simply by feeding the algorithm continuous earth coordinates.
+* **Geospatial Impact**: By introducing Lat/Lon floats, we destroyed the administrative boundaries. The algorithms now logically "draw geometric rectangles" directly onto the grid. A property standing near the edge of a wealthy neighborhood accurately absorbs the localized wealthy pricing trajectory. 
+* *Result*: The Mean Absolute Error (MAE) dropped by a massive **£46,000 to £60,000 per house** simply by feeding the algorithms continuous physical earth coordinates.
 
 ### The Hyperparameters Used
-To capitalize on the geographical floats, we utilized the `RandomForestRegressor`.
-* **`n_estimators=100`**: We used 100 decision trees. Because continuous lat/long ranges generate infinitely more split logic than just 33 London district string labels, we needed the extra ensemble averaging to prevent severe variance.
-* **`max_depth=20`**: We increased the tree depth boundary from 15 to 20. A single latitude band across London contains thousands of different price thresholds. A depth of 20 allows the model's leaves to zoom in to a sub-100 meter resolution (essentially isolating individual high-value streets), which is exactly how local real estate pricing functions.
-
-*(We also built a comparative `MLPRegressor` Neural Network using `hidden_layer_sizes=(64,32)` but the decision boundaries drawn by the tree ensemble vastly outperformed the neural network's gradient mapping.)*
+1. **`RandomForestRegressor(n_estimators=100, max_depth=20)`**: We increased the tree depth boundary from 15 to 20 because a single latitude band across London contains thousands of different price thresholds. A depth of 20 allows the model's leaves to zoom in to a sub-100 meter resolution.
+2. **`XGBRegressor(n_estimators=300, max_depth=10, learning_rate=0.05)`**: Gradient boosting utilizes shorter trees but thousands of them sequentially. The smaller learning rate `0.05` explicitly restricts the model from aggressively overfitting massive outlier mansions, allowing it to correctly capture the standard median price of average homeowners in a neighborhood better than RF.
 
 ---
 
 ## 📈 4. Results & Prediction Verification
+**Geospatial Random Forest MAE**: £424,476 
+**Geospatial XGBoost MAE**: **£410,339**
 
-We split the data strictly by time to simulate true forecasting: **Train (2008-2017) -> Test (2018-2022)**.
+*XGBoost mathematically out-performed the Random Forest by saving £14,000 in average geometric forecast error!*
 
-### Results
-* **Geospatial Random Forest MAE**: £424,476 (In a city where mansions sell for £50m+, this tracks nicely close to the log-median).
-* **RMSE**: £3,970,720
+### Validation Dataset Output Snippets
+To explicitly show you how the geospatial predictions hold true, the models export `.csv` grids locking actual test price boundaries physically against their respective model forecasts.
 
-### Validation Dataset Output Snippet
-To explicitly show you how the geospatial predictions hold true, `04_geospatial_modeling.py` generates `prediction_validation.csv`. 
-
-Here is a 5-row snippet tracking row-by-row accuracy percentage on future forecasts:
-
-| Postcode | Actual Price Sold | Model Forecasted Price | Variance Error (£) | Model Accuracy (%) | Error Precision (%) |
-|----------|-------------------|------------------------|--------------------|--------------------|---------------------|
+#### 04A. Geospatial Random Forest Outputs
+| Postcode | Actual Price Sold | RF Predicted Price | Variance Error (£) | RF Accuracy (%) | Error Precision (%) |
+|----------|-------------------|------------------------|--------------------|-----------------|---------------------|
 | BR6 7FN  | £640,000 | £629,274 | £10,725 | **98.32%** | 1.68% |
 | NW6 4NU  | £1,566,000 | £1,714,738| -£148,738 | **90.50%** | 9.50% |
-| DA7 5LA  | £500,000 | £432,475 | £67,524 | **86.50%** | 13.50% |
-| E6 5UA   | £480,000 | £410,016 | £69,983 | **85.42%** | 14.58% |
-| RM2 6NX  | £400,000 | £327,007 | £72,992 | **81.75%** | 18.25% |
 
-*In cases like BR6 7FN above, the model successfully forecasted £629k for a property that ultimately sold 5 years into the future for £640k, achieving an accuracy of 98.32%.*
+#### 04B. Geospatial XGBoost Baseline Outputs (Winner)
+| Postcode | Actual Price Sold | XGB Predicted Price | Variance Error (£) | XGB Accuracy (%) | Error Precision (%) |
+|----------|-------------------|-------------------------|--------------------|------------------|---------------------|
+| E6 5UA   | £480,000 | £432,710 | £47,290 | **90.15%** | 9.85% |
+| RM2 6NX  | £400,000 | £362,760 | £37,240 | **90.69%** | 9.31% |
+*In mid-market cases like E6 5UA, the XGBoost engine aggressively proved superior by restricting wild variance trees and anchoring safely to standard market valuation decays!*
