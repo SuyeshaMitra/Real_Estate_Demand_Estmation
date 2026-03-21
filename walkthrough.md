@@ -21,7 +21,7 @@ flowchart TD
     G --> X[04B: XGBoost Regressor]
     I --> K[Evaluate Forecasting 5-Years Ahead]
     X --> K
-    K --> L[Generate prediction_validation_xgb.csv]
+    K --> L[Generate prediction_validation_randomforest.csv & xgb.csv]
 ```
 
 ---
@@ -40,8 +40,8 @@ We divided the objective into distinct sequential Python scripts to manage memor
 * Establishes a baseline prediction utilizing basic categorical variables (like string `district`) and raw time markers (`year`, `month`) ensuring we have an absolute error bar to beat via geography.
 
 ### 📄 Script 4A & 4B: Geospatial Mapping & Competitor Modeling
-* **04A: Random Forest**: Extracts outward codes (`BR6`) and fires an offline `pgeocode` SQL lookup to extract continuous `latitude` and `longitude` grids. Re-trains a deeply nested decision ensemble (`max_depth=20`) to map neighborhood pricing pockets.
-* **04B: Gradient Boosting (XGBoost)**: Leverages the exact same spatial grid extraction but replaces the naive average forest with sequential gradient residual correction (`learning_rate=0.05, max_depth=10`). 
+* **04A: Random Forest**: Extracts outward codes (`BR6`) and fires an offline `pgeocode` SQL lookup to extract continuous `latitude` and `longitude` grids. Re-trains a deeply nested decision ensemble (`max_depth=20`) to map neighborhood pricing pockets. Outputs `prediction_validation_randomforest.csv`.
+* **04B: Gradient Boosting (XGBoost)**: Leverages the exact same spatial grid extraction but replaces the naive average forest with sequential gradient residual correction (`learning_rate=0.05, max_depth=10`). Outputs `prediction_validation_xgb.csv`. 
 
 ---
 
@@ -68,7 +68,7 @@ Transitioning from Script 3 to Script 4 forced us to deliberately change our mac
 ### Validation Dataset Output Snippets
 To explicitly show you how the geospatial predictions hold true, the models export `.csv` grids locking actual test price boundaries physically against their respective model forecasts.
 
-#### 04A. Geospatial Random Forest Outputs
+#### 04A. Geospatial Random Forest Outputs (`prediction_validation_randomforest.csv`)
 | Postcode | Actual Price Sold | RF Predicted Price | Variance Error (£) | RF Accuracy (%) | Error Precision (%) |
 |----------|-------------------|------------------------|--------------------|-----------------|---------------------|
 | BR6 7FN  | £640,000 | £629,274 | £10,725 | **98.32%** | 1.68% |
