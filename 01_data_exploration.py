@@ -15,7 +15,7 @@ print("--- Data Exploration: First 15 Rows ---")
 df_head = pd.read_csv(file_path, names=columns, header=None, nrows=15)
 print(df_head)
 
-print("\--- Data Types ---")
+print("--- Data Types ---")
 print(df_head.dtypes)
 
 print("\n--- Identifying Unique Values and Data Quality Gaps ---")
