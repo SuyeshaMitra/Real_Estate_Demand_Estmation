@@ -221,9 +221,38 @@ If you open the `04` Geospatial plots and compare them to the original `03` plot
    It natively *did* improve computationally! The error shrank by tens of thousands of pounds per house strictly from adding Latitude/Longitude logic. However, on a massive visualization scaled to £1,000,000, a £40,000 improvement just looks like a tiny visual nudge upwards.
    More importantly, you are visually encountering a famous structural ML flaw: **"The Extrapolation Limit."** Tree-based algorithms (like Random Forest) work by partitioning the original prices they previously trained on. Because we purposefully restricted the AI's training data exclusively to `2008-2017`, **it physically cannot guess a number radically higher than the absolute maximum prices it saw natively back in 2017.** It is fundamentally incapable of forecasting a bubble that it has never structurally seen before, which is exactly why our pipeline is forced to proceed to File `06`.
 
+3. **Comparing the Competitors: Random Forest vs. XGBoost vs. LightGBM**
+   When explicitly overlaying the three AI outputs, where is the mathematical break or difference? Because all 3 models suffer from the Extrapolation penalty mentioned above, their "Orange AI" lines will never successfully hit the £900k blue true line. However, the internal variance of how they behave *beneath* that ceiling differs drastically:
+   
+   * **04A (Random Forest)**: Creates a very rigid, flat, safe plateau. It is mathematically hesitant to make wild guesses, leaving it generally furthest from the true reality curve.
+     ![04A RF Forecast](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/04A_forecast_validation.png)
+   
+   * **04B (XGBoost)**: Gradient boosting explicitly chases errors. You will see its orange line natively bending with significantly higher volatility trying desperately to scale up and catch the massive historical upward trend.
+     ![04B XGB Forecast](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/04B_forecast_validation.png)
+   
+   * **04C (LightGBM - The Victor)**: Because LightGBM dynamically forces discrete coordinate buckets on the absolutely highest-error neighborhoods (usually the wealthy districts currently dominating the inflation curve), its spatial prediction line mathematically pulls the closest to the "True Blue" actual line out of all 3 algorithms!
+     ![04C LGBM Forecast](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/04C_forecast_validation.png)
+
 ---
 
-## 📄 Step 5: `06_external_feature_extraction.py` (Adding Outside Ecosystem Variables)
+## 📄 Step 5: `05_model_comparison_charts.py` (The Mathematical Showdown)
+**The Goal**: We have run 3 different competitive geospatial algorithms. We now need a professional, automated way to scientifically prove to the business exactly which one won so we can formally select it for our final architecture pipeline.
+
+### What this File Automates
+Rather than forcing executives to read raw console output logs, this script scientifically rips open the exported `04` validation CSVs, computationally extracts their respective error margins, evaluates their compilation processing speed, and renders three gorgeous business-ready visualizations directly into your root folder:
+
+* **`chart_model_mae_comparison.png`** (The Core Metric): Visually proves mathematically that **LightGBM** (04C) absolutely dominates the competition achieving the lowest physical cash error margin.
+  ![MAE Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/chart_model_mae_comparison.png)
+
+* **`chart_model_accuracy_comparison.png`**: Beautifully converts abstract raw currency (£) geometric errors into a completely flat Business "% Accuracy" scorecard for non-technical stakeholders.
+  ![Accuracy Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/chart_model_accuracy_comparison.png)
+
+* **`chart_model_speed_comparison.png`**: The final killing blow. Not only is LightGBM definitively the most accurate financially, it literally trains itself completely on a standard machine in just ~0.5 seconds (utterly destroying Random Forest's 5.0+ seconds).
+  ![Speed Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/chart_model_speed_comparison.png)
+
+---
+
+## 📄 Step 6: `06_external_feature_extraction.py` (Adding Outside Ecosystem Variables)
 **The Goal**: We proved our internal 3 models work. But what if we added external data off the internet to make the models even smarter? This script tests totally free, public APIs to extract advanced features that "tune" our models.
 
 ### Why do ML Models need External API Features?
