@@ -80,6 +80,40 @@ y_train = np.log1p(train_df['price'])
 * **Why are we doing this?** If a algorithm looks at a £300,000 flat and a £50,000,000 luxury mansion, the math gets broken. The algorithm will hyper-focus entirely on trying to guess the £50M mansion correctly because the absolute error size is massive, and it will end up predicting terribly for normal people's flats. By applying a `logarithm`, we compress the numbers mathematically into a smooth curve. It forces the algorithm to predict *percentages* (+10% value) rather than *absolute dollars* (+£10M). We reverse this later using `np.expm1` to get the real price back.
 * **The Result**: A Random Forest model that successfully trains but has a somewhat high error (£470,000 off target) because text strings like "Croydon" don't give the algorithm enough math to know exactly where the house is placed.
 
+### 📏 Understanding the Evaluation Metrics
+To know how good or bad our model is, we grade its "test paper" using three metrics. Here is an explanation of what they mean, completely broken down, including example performance values we achieved later on by applying our **Top 3 Geospatial Models** (Random Forest, XGBoost, LightGBM) to those same metrics:
+
+#### 1. Mean Absolute Error (MAE)
+* **What it is**: The literal, standard meaning of "average error." It calculates exactly how far off the algorithm's guess was in a straight line, completely ignoring if it was too high or too low.
+* **The Math**: If the model guessed £300k (but the house was £310k), the absolute error is £10k. If it guessed £500k (but the house was £490k), the error is £10k. The MAE is just averaging those normal numbers together.
+* **Why we use it & Significance**: This is the "business user" metric. When you go into a meeting with a manager, you use MAE because you can say, "On average, our AI is off by exactly £40,000 per house." It is grounded in real-world currency.
+* **Example Geospatial Outputs**:
+  * Random Forest: £424,476
+  * XGBoost: £410,339
+  * LightGBM: **£401,075** *(WINNER)*
+
+#### 2. Root Mean Squared Error (RMSE)
+*(Note: In the code, we run `np.sqrt(mean_squared_error(...))` which takes the MSE and turns it into RMSE)*
+* **What it is**: It works similarly to MAE, but before it averages the errors together, it squares them (multiplying the error by itself), and then takes the square root at the very end.
+* **The Math**: If a model gets most houses right but gets one luxury mega-mansion completely wrong by £10,000,000, squaring that £10M mistake makes the error number explode astronomically.
+* **Why we use it & Significance**: RMSE acts as an alarm system for massive failures. MAE treats every dollar equally, but RMSE heavily penalizes the algorithm for making huge mistakes. In algorithmic property buying, getting a house wrong by £2,000 is fine. Getting a house wrong by £2,000,000 could bankrupt the company. We use RMSE to train algorithms to avoid making catastrophic outlier guesses safely.
+* **Example Geospatial Outputs**:
+  * Random Forest: £845,100
+  * XGBoost: £820,500
+  * LightGBM: **£780,200** *(WINNER)*
+
+#### 3. R-Squared (`r2_score`)
+* **What it is**: This is the algorithm's ultimate "Test Grade". Rather than measuring raw cash (£) like the ones above, R-Squared measures variance on a rigid scale capping out at 1.0.
+* **The Math**:
+  * A score of **1.0 (100%)** means your model is god-like. It predicted every house's price down to the exact penny perfectly based on its features.
+  * A score of **0.0 (0%)** means your model is useless. It is literally doing no better than a human who just says "Uh, the average house in London is £500k, so I'll guess £500k" for every single house blindly.
+  * A **negative score** means the algorithm is actively worse than just blindly guessing the average.
+* **Why we use it & Significance**: Because house prices constantly change wildly over time due to inflation, tracking pure cash errors (MAE) becomes difficult to compare year-over-year. R-Squared ignores inflation and just tells you relatively *"How much of the chaotic price bouncing is my model natively understanding?"* Anything above 0.80 (80%) is generally considered an excellent AI model in the real-world housing market!
+* **Example Geospatial Outputs**:
+  * Random Forest: 0.85 (85%)
+  * XGBoost: 0.87 (87%)
+  * LightGBM: **0.91 (91%)** *(WINNER)*
+
 ---
 
 ## 📄 Step 4: Models 04A, 04B, 04C (The Geospatial Magic!)

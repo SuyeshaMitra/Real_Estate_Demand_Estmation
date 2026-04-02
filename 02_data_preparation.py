@@ -41,6 +41,14 @@ for chunk_number, chunk in enumerate(pd.read_csv(input_file, names=columns, head
     # Add the count of matched london records in this iteration to our grand total
     total_london_rows += len(london_chunk)
     
+   # print("--- london_chunk ---")
+   # print(london_chunk)
+
+
+   # print("--- total_london_rows ---")
+   # print(total_london_rows)
+
+
     # If our filtered dataframe chunk has at least 1 record inside it...
     if not london_chunk.empty:
         # Determine whether to write ('w') over the file initially, or append ('a') to it subsequently
