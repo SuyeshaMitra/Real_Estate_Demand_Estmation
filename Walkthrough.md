@@ -151,17 +151,50 @@ geo_data = nom.query_postal_code("BR6")
 * **Why not use a live web API?** A live web API takes 0.5 seconds per house. For 3.9 million houses, calling the internet would take **over 20 hours**. 
 * **What this code does**: `pgeocode` is an offline database. When we pass it "BR6", it does a lightning-fast "Ctrl+F" search on your own hard drive to find the latitude and longitude instantly. We fetched all coordinates in 2 seconds!
 
-### Code Snippet 2: Running 3 Competitor Models
-Now that we have exact X,Y coordinates for the properties, we test three different ML Engines.
-* **04A: Random Forest** (`RandomForestRegressor(max_depth=20)`)
-  * **What it does**: It draws thousands of hard rectangular boxes over the map of London based on the `target` prices and averages them out.
-  * **Result**: Very safe and stable. Highly resilient.
-* **04B: XGBoost** (`XGBRegressor(learning_rate=0.05)`)
-  * **What it does**: "Depth-wise Gradient Boosting". Instead of averaging everything, each new tree looks at the error made by the *previous* tree, and specifically tries to fix that geographic error natively.
-  * **Result**: Much better at mapping the smooth "drop-off" in prices as you walk further away from a wealthy neighborhood center than Random Forest.
-* **04C: LightGBM** (`LGBMRegressor(num_leaves=64)`)
-  * **What it does**: "Leaf-wise Histogram Boosting". It converts the continuous floating-point map coordinates into discrete mathematical buckets (histograms). If it finds a really volatile, expensive neighborhood, it will aggressively split that specific leaf over and over until the error drops to zero.
-  * **Result**: **THE ULTIMATE WINNER**. By aggressively targeting only the highest-error neighborhoods spatially, LightGBM decimated the error margins, achieving an average error of only £401k (saving thousands over its competitors) while executing in literally 0.5 seconds!
+### Running 3 Competitor Geospatial Models
+Now that we have exact X,Y coordinates for the properties, we test three different Machine Learning Engines to see which one understands London's geography the best.
+
+#### 🌲 04A: Random Forest (`RandomForestRegressor`)
+* **What is the model & Why use it?**: Random Forest is essentially a massive "committee" of hundreds of separate, basic decision trees. We use it because it is the "industry standard" safe option. It gives us a very stable, reliable prediction that rarely hallucinates crazy numbers.
+* **What it does**: Imagine printing out a map of London. The Random Forest draws thousands of hard rectangular boxes over the map and simply averages the price of all houses inside that box. 
+* **How it trains and tests (Code Snippet)**:
+  ```python
+  # 1. TRAIN: The algorithm studies 100k older properties (2008-2017) to learn the patterns
+  rf_model.fit(X_train, y_train)
+  
+  # 2. TEST: We force it to predict 50k newer properties (2018-2022) it has never seen before
+  y_pred_log = rf_model.predict(X_test)
+  ```
+  *(How to run: type `python 04A_geospatial_Random_Forest_modeling.py` in your terminal)*
+* **Result & Significance**: It gives an output MAE error of roughly **£424k**. It is highly resilient and safe, but because it draws "hard rectangles" instead of smooth geographic circles, it struggles to perfectly map prices that slowly fade off as you walk away from a wealthy city center.
+
+#### 🚀 04B: XGBoost (`XGBRegressor`)
+* **What is the model & Why use it?**: XGBoost stands for *Extreme Gradient Boosting*. Instead of building 100 trees at once like Random Forest, it builds 1 tree, explicitly looks at what that tree got wrong, and then specifically trains the 2nd tree *only* to fix the 1st tree's mistakes. We use it when we need ruthless precision.
+* **What it does**: "Depth-wise Gradient Boosting". By hyper-focusing only on its geographic mistakes, it mathematically learns the smooth "drop-off" in prices much faster than Random Forest.
+* **How it trains and tests (Code Snippet)**:
+  ```python
+  # 1. TRAIN: XGBoost systematically attacks the training data, correcting its own errors sequentially
+  xgb_model.fit(X_train, y_train)
+  
+  # 2. TEST: We generate predictions to measure its real-world accuracy
+  y_pred_log = xgb_model.predict(X_test)
+  ```
+  *(How to run: type `python 04B_geospatial_XGBoost_modeling.py` in your terminal)*
+* **Result & Significance**: It outputs an MAE error of roughly **£410k**. The significance is that fixing errors sequentially definitively beats averaging out random guesses. It significantly outperforms Random Forest by about £14,000 per house.
+
+#### ⚡ 04C: LightGBM (`LGBMRegressor`)
+* **What is the model & Why use it?**: LightGBM is a futuristic algorithm built by Microsoft. We use it when we are dealing with insanely massive datasets (like our 4 million row file). It gives us lightning-fast speeds combined with world-class accuracy.
+* **What it does**: "Leaf-wise Histogram Boosting". It takes the continuous floating-point GPS coordinates (e.g., 51.5385) and converts them into discrete mathematical buckets. If it spots a highly volatile, expensive neighborhood (like Mayfair), it ignores the rest of London and immediately aggressively drills down into Mayfair until the error drops to zero.
+* **How it trains and tests (Code Snippet)**:
+  ```python
+  # 1. TRAIN: LightGBM builds histograms of the coordinates, learning at blistering speeds
+  lgb_model.fit(X_train, y_train)
+  
+  # 2. TEST: Producing final outputs for the holdout timeframe
+  y_pred_log = lgb_model.predict(X_test)
+  ```
+  *(How to run: type `python 04C_geospatial_LightGBM_modeling.py` in your terminal)*
+* **Result & Significance**: **[THE ULTIMATE WINNER]**. By aggressively targeting only the absolute highest-error neighborhoods spatially, LightGBM decimated the error margins, achieving an average MAE error of only **£401k**. The profound significance is that it saved thousands of dollars over its competitors while actually executing on standard hardware in literally *0.5 seconds*!
 
 ### The Final Validation Output & Visualizations
 At the very bottom of the scripts:
