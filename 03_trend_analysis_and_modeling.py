@@ -59,8 +59,8 @@ plt.xlabel("Year")
 plt.ylabel("Average Property Price (£)")
 # Enable grid lines inside the chart so values are easier to read
 plt.grid(True)
-# Save the rendered graph out directly to as an image file artifact
-plt.savefig("C:/Users/SuyeshaM/.gemini/antigravity/brain/43e1b8ec-08b5-4205-9e3c-edfcd7d0c5b0/historical_trend.png")
+# Save the rendered graph out directly to a local image file
+plt.savefig("historical_trend.png")
 # Close out the figure to release RAM
 plt.close()
 
@@ -174,7 +174,7 @@ plt.legend()
 # Turn down grids to show values sharply
 plt.grid(True)
 # Directly record chart visualization straight to disk for users
-plt.savefig("C:/Users/SuyeshaM/.gemini/antigravity/brain/43e1b8ec-08b5-4205-9e3c-edfcd7d0c5b0/forecast_validation.png")
+plt.savefig("forecast_validation.png")
 # Tidy RAM
 plt.close()
 
