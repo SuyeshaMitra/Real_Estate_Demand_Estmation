@@ -46,58 +46,45 @@ We bypass expensive EC2 computers and RAG databases entirely. Instead, we use hi
 
 ---
 
-## 🚀 Phase 1: Automated Launch
-
-1. Log into your **AWS Console** -> **CloudFormation**.
-2. Click **Create stack** -> **Upload a template file** -> **`aws_cloudformation.yaml`**.
-3. **Parameters**:
-   - **Environment**: Setup as `production`.
-   - **CostSavingMode**: Set to `true` (Limits CPU usage heavily out-of-the-box).
-4. Wait for it to hit exactly `CREATE_COMPLETE`.
-
----
-
-## 📦 Phase 2: Build & Push the Logic (One-Time)
-
-You must bundle your local ML files and the Database map perfectly into an Amazon cloud "snapshot" layer (a Docker Image).
-
-1. Go to AWS Console -> **Elastic Container Registry (ECR)** -> Select `real-estate-ai-engine`.
-2. Click the **View push commands** button.
-3. Open a terminal in the root of your project where `Dockerfile` lives, and blindly execute the 4 commands Amazon gives you:
-   1. `aws ecr get-login-password ... docker login`
-   2. `docker build -t real-estate-ai-engine .` *(Note: This step downloads the pgeocode map locally!)*
-   3. `docker tag real-estate-ai-engine:latest ...`
-   4. `docker push ...`
-
----
-
-## ⚡ Phase 3: Power Management Script
+## 🚀 The "1-Click" Novice Wrapper
+To save you from manually clicking through the complex AWS Console networking layers, we have packaged the entire CloudFormation initialization, Elastic Container Registry Docker login, Image Compilation, and ECS scaling parameters into an automated bat file!
 
 Open your terminal in the project folder. You never have to log into AWS again.
 
-### **A. Start The Platform**
+### **1. Install & Deploy The Platform**
+```powershell
+./cloud_power_manager.bat deploy
+```
+* **What it does**: 
+  1. Spools up the `aws_cloudformation.yaml` stack mapping the load balancers.
+  2. Binds your local Docker Desktop safely to the AWS ECR registry.
+  3. Builds the `Python 3.10` ML container natively trapping the `pgeocode` database purely in memory!
+  4. Tags and Pushes the snapshot to the cloud securely.
+
+### **2. Start The Cloud Engine**
 ```powershell
 ./cloud_power_manager.bat start
 ```
-* **Result**: Powers up the Fargate container, connects it to the Internet Gateway, and begins ML processing requests. 
+* **Result**: Powers up the Fargate container from 0 to 1, connecting it directly to the Internet Gateway to safely begin ML processing requests. 
 * **Cost**: Matches 70% cheaper Fargate Spot rates (~$0.01 per hour).
 
-### **B. Stop Charging (Zero-Cost Sleep)**
+### **3. Stop Charging (Zero-Cost Sleep)**
 ```powershell
 ./cloud_power_manager.bat stop
 ```
-* **Result**: Powers down the massive computing engine, saving your settings totally natively.
-* **COST: $0.00**. Run this blindly whenever you finish work!
+* **Result**: Powers down the massive computing engine (desired task count 0), saving your architectural settings totally natively.
+* **Cost**: **$0.00**. Run this blindly whenever you finish work!
 
-### **C. Permanent Cleanup**
+### **4. Permanent Cleanup (Uninstall)**
 ```powershell
 ./cloud_power_manager.bat cleanup
 ```
-* **Result**: Force formats the ECR image repository and executes a deletion cascade of the CloudFormation Stack. Use this when the real estate project concludes permanently.
+* **Result**: Force formats the ECR image repository to prevent Docker caching locks, and then explicitly executes a deletion cascade logically wiping the CloudFormation Stack absolutely clean. Use this when the real estate project concludes permanently.
 
 ---
 
 ## 🔄 Updating Algorithms
+
 
 If you edit `07_Features_LightGBM_modeling.py` internally locally, follow this strictly to jump the changes safely to the internet cloud:
 1. Repeat the **ECR Push Commands** exactly as Step 2 (rebuilding the container locally).
