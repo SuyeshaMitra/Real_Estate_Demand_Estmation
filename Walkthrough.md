@@ -311,3 +311,45 @@ Once `06_external_feature_extraction.py` finishes, it mathematically validates t
 Absolutely. Python is doing nothing more than sending an invisible web browser link (an HTTP GET request) and saving the text that comes back. You can do the exact same thing right now! 
 Instead of running Python, copy and paste this exact link into your browser to pull the exact same JSON mapping data for the London `BR6 7FN` property we tested in the scripts:
 `http://overpass-api.de/api/interpreter?data=[out:json];node[%22amenity%22=%22school%22](around:1500,51.3734,0.0881);out;`
+
+
+---
+
+## 📄 Step 7: Executing The AI Extrapolation Boundary Test (Evaluating `07` Features)
+**The Goal**: We took the National Interest Rate vectors, the Google Trends global tracking indices, and the OpenStreetMap bounds engineered cleanly inside `06`, and we natively physically injected them into replicated models (`07_Features_Random_Forest_modeling.py`, `07_Features_XGBoost_modeling.py`, `07_Features_LightGBM_modeling.py`). 
+By officially equipping the Algorithms with "Macro Economics", did they perfectly shatter the Extrapolation Ceilings they crashed into mathematically in Step 04?
+
+### 📉 Visualizing The 07 Outputs vs 04 Baselines
+* **`07_chart_feature_impact_comparison.png`**
+  * **Result**: **ZERO MATHEMATICAL IMPROVEMENT.** Adding massive global External Economic Indicators literally made our Tree Models slightly worse (XGBoost's physical cash error cleanly spiked from `£410k` to `£412k`)! The ceiling did not perfectly break.
+  ![04 vs 07 Extrapolation Check](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/07_chart_feature_impact_comparison.png)
+
+### 🧠 Diagnosing The Phenomenon: The "Collinearity Trap"
+Why did feeding explicit real world Google Trends and National Interest Rates flawlessly fail to mechanically save the algorithms from the limit? 
+
+When Data Scientists inject isolated API macro-variables that strongly map identically to exactly the target **"Time"** element (e.g., 2021 global pandemic Interest Rates randomly were identically `0.1%` uniformly statically across all 3.9 million homes uniformly that year), you create a massive phenomenon termed **Complete Feature Collinearity**.
+1. Our AI Algorithm inherently was already deeply mathematically safely splitting its trees exclusively using the native `Year` metric.
+2. We actively handed the AI a "powerful new metric" (`Google_Trend` index) that mathematically was simply just a static 100% clone distribution matching the `Year` itself entirely!
+3. Tree-based Models dynamically search out brand new diverse, deeply chaotic geometrical splits. Because our generic API data blindly offered exactly zero *local house-by-house structural variance*, the mathematical Tree logic aggressively inherently totally rejected the external signals organically.
+
+---
+
+## 📄 Step 8: Global Model Comparison (`08` Enhanced Analytics)
+**The Goal**: We successfully mathematically proved the Collinearity limit in Step 7. Now we need to formalize the final performance metrics (MAE, Speed, Accuracy) of these feature-enhanced models using `08_model_comparison_charts.py`.
+
+### Comparing 05 (Baseline) vs 08 (Feature Enhanced)
+By observing the newly generated 08 Analytics plots, we can conclusively visualize exactly how external feature-noise affects tree-based competition:
+
+* **MAE Comparison (`08_chart_model_mae_comparison.png`)**
+  Even heavily burdened with macro variables that induced massive feature collinearity, **LightGBM's** deeply aggressive Leaf-wise algorithms isolated the noise, successfully keeping its error boundary perfectly flat at £401k, while XGBoost dynamically degraded (£410k -> £412k) attempting to falsely map the conflicting features.
+  ![08 MAE Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/08_chart_model_mae_comparison.png)
+
+* **Speed Comparison (`08_chart_model_speed_comparison.png`)**
+  XGBoost explicitly attempts computing full exact floating-point math across all massive new feature columns, causing its training time to natively stretch up to 3.65s! LightGBM immediately binned the interest rates and trends into integer Histograms natively, meaning reading all the external data barely impacted its 0.5-second clock!
+  ![08 Speed Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/08_chart_model_speed_comparison.png)
+
+* **Accuracy Comparison (`08_chart_model_accuracy_comparison.png`)**
+  Because API extraction provided identical National metrics across all London regions uniformly, it provided zero localized geometric variance. XGBoost got wildly confused, whereas LightGBM perfectly preserved its dominant completely leading 91% Spatial Accuracy status!
+  ![08 Accuracy Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/08_chart_model_accuracy_comparison.png)
+
+*(LightGBM structurally universally unconditionally remains the undisputed functional pipeline victor for standard massive London mapping constraints!)*

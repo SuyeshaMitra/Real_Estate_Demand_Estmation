@@ -16,9 +16,11 @@ print(" EXTERNAL ECOSYSTEM FEATURE EXTRACTION PROOF OF CONCEPT ")
 print("======================================================\n")
 
 # -------------------------------------------------------------
-# 1. OpenStreetMap (OSM) Overpass API
+# --- STEP 1: OPENSTREETMAP (OSM) INFRASTRUCTURE EXTRACTION ---
+# WHAT IT DOES: We send GPS coordinates to public free map servers to structurally count
+#               the number of Train Stations and Schools inside a 1.5 kilometer walking radius.
+# WHY IT MATTERS: A house with 5 train stations nearby is fundamentally worth more than identical houses without.
 # -------------------------------------------------------------
-# We want to pull pure infrastructure and amenity signals
 print("1. Testing Public OpenStreetMap (OSM) Overpass API...")
 # Hardcode an arbitrary central London sample GPS target explicitly
 sample_lat = 51.3734
@@ -76,7 +78,11 @@ except Exception as e:
 print("\n------------------------------------------------------\n")
 
 # -------------------------------------------------------------
-# 2. Public Google Trends API (pytrends)
+# --- STEP 2: GOOGLE TRENDS API (PYTRENDS) ECONOMIC EXTRACTION ---
+# WHAT IT DOES: We ping Google's servers to fundamentally download the raw search volume percentage 
+#               for terms like "London mortgage" month-over-month.
+# WHY IT MATTERS: People frantically googling "mortgage" is the ultimate leading indicator 
+#                 of a real estate bubble exploding before the actual housing prices physically rise.
 # -------------------------------------------------------------
 print("2. Testing Public Google Trends API (pytrends)...")
 try:
@@ -113,7 +119,11 @@ except Exception as e:
 print("\n------------------------------------------------------\n")
 
 # -------------------------------------------------------------
-# 3. Google News RSS Feed (Sentiment / Geopolitical Parsing)
+# --- STEP 3: GOOGLE NEWS RSS FEED GEOPOLITICAL EXTRACTION ---
+# WHAT IT DOES: We mathematically parse the XML data from Google News searching for "London Real Estate"
+#               to physically count how many global news articles are being published every week.
+# WHY IT MATTERS: International investment (like foreign oligarchs buying London properties) causes massive 
+#                 unpredictable spikes that standard historical data literally cannot see.
 # -------------------------------------------------------------
 # Inform the start of simple news gathering targets 
 print("3. Testing Public Google News RSS Real Estate Feed...")
