@@ -211,6 +211,16 @@ validation_df.to_csv("prediction_validation_lightgbm.csv", index=False)
   * `04C_historical_trend.png` and `04C_forecast_validation.png` (LightGBM Spatial Output)
 This crucial visual update allows you to visibly overlay and compare exactly how the three spatial mathematical models drew massively different conclusions on the identical future timeline.
 
+### 🧠 Diagnosing the 04 Geospatial Plots vs File 03 Plots
+If you open the `04` Geospatial plots and compare them to the original `03` plots, you will notice two major Data Science phenomenons:
+
+1. **Why does the Blue "Actual" line look slightly different between File 03 and File 04?**
+   In File `03`, we asked the code to grab a random sample of `50,000` houses to test itself on. However, in Files `04`, before taking our sample, we ran code that successfully deleted a few thousand houses where the postcode physically failed to map to a Geographic Coordinate. Because the "total pool" of available houses shrank slightly, when the algorithm went to blindly grab its random `50,000` test houses, it grabbed a slightly different randomized mix of houses! Because the sampled houses were mathematically different, the true average price of the test batch "wiggled" slightly on the graphs.
+   
+2. **Why does the Orange "AI" line look almost identical, still massively underpredicting £900k reality?**
+   It natively *did* improve computationally! The error shrank by tens of thousands of pounds per house strictly from adding Latitude/Longitude logic. However, on a massive visualization scaled to £1,000,000, a £40,000 improvement just looks like a tiny visual nudge upwards.
+   More importantly, you are visually encountering a famous structural ML flaw: **"The Extrapolation Limit."** Tree-based algorithms (like Random Forest) work by partitioning the original prices they previously trained on. Because we purposefully restricted the AI's training data exclusively to `2008-2017`, **it physically cannot guess a number radically higher than the absolute maximum prices it saw natively back in 2017.** It is fundamentally incapable of forecasting a bubble that it has never structurally seen before, which is exactly why our pipeline is forced to proceed to File `06`.
+
 ---
 
 ## 📄 Step 5: `06_external_feature_extraction.py` (Adding Outside Ecosystem Variables)

@@ -61,17 +61,23 @@ print(f"Fetching Latitude and Longitude using pgeocode...")
 # and explicitly stores it locally securely on your computer's hard drive (inside your python site-packages).
 # 'nom' stands for Nominatim. Passing ('gb') tells Python to load the Great Britain offline database into active memory.
 nom = pgeocode.Nominatim('gb')
+print("\n--- Output element: nom ---")
+print(nom)
 
 # --- STEP 3: PREPARING THE QUERY STRING ---
 # UK postcodes have two halves (e.g., "BR6 7FN"). The first half ("BR6") is called the 'outcode'.
 # To radically speed up the offline spatial mapping and ensure 100% match rates, we strip " 7FN" and just search for "BR6".
 outcodes = pd.Series(unique_postcodes).str.split(' ').str[0]
+print("\n--- Output element: outcodes (First 5) ---")
+print(outcodes.head())
 
 # --- STEP 4: QUERYING THE OFFLINE DATABASE ---
 # We pass the cleaned list of outcodes to 'nom.query_postal_code()'. 
 # Because the database is sitting offline locally on your hard drive, it can instantly search hundreds of thousands 
 # of outcodes and return their Latitude and Longitude mathematically in less than 2 seconds without using the internet!
 geo_data = nom.query_postal_code(outcodes.tolist())
+print("\n--- Output element: geo_data (First 5 rows) ---")
+print(geo_data.head())
 
 # --- STEP 5: CREATING THE MASTER GEOSPATIAL MAP (Matching Found!) ---
 # 'geo_data' now holds the raw X and Y coordinates. We need to pair them cleanly back to the original full "BR6 7FN" string format.
@@ -81,6 +87,8 @@ postcode_map = pd.DataFrame({
     'latitude': geo_data['latitude'].values,
     'longitude': geo_data['longitude'].values
 })
+print("\n--- Output element: postcode_map (First 5 matching records) ---")
+print(postcode_map.head())
 
 # --- STEP 6: SENDING IT TO THE MAIN DATASET (Preparing for the Model) ---
 print("Merging Geospatial data back to main dataset...")
@@ -88,6 +96,9 @@ print("Merging Geospatial data back to main dataset...")
 # Every row in the long CSV looks at its 'postcode', walks directly over to the postcode_map, grabs the exact matching Lat/Lon,
 # and permanently adds those 2 columns to itself. The dataset is now ready to be sent to the AI Model!
 df = df.merge(postcode_map, on='postcode', how='left')
+print("\n--- Output element: df (First 5 rows showcasing newly merged latitude/longitude) ---")
+print(df[['postcode', 'latitude', 'longitude']].head())
+# ==============================================================================
 # ==============================================================================
 
 # Track dataset size before dropping bad geospatial data
