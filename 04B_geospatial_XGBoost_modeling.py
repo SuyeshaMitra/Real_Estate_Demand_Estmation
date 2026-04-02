@@ -60,7 +60,9 @@ print(f"Fetching Latitude and Longitude using pgeocode...")
 # 'nom' stands for Nominatim. Passing ('gb') tells Python to load the Great Britain offline database into active memory.
 nom = pgeocode.Nominatim('gb')
 print("\n--- Output element: nom ---")
-print(nom)
+print("Search Engine Memory Object:", nom)
+print("Physical Offline Database Location:", nom._data_path)
+print("Internal Database Schema Glimpse (First 5 records):\n", nom._data[['postal_code', 'place_name', 'latitude', 'longitude']].head(5))
 
 # --- STEP 3: PREPARING THE QUERY STRING ---
 # UK postcodes have two halves (e.g., "BR6 7FN"). The first half ("BR6") is called the 'outcode'.
