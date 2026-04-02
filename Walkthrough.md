@@ -1,6 +1,25 @@
 # A Beginner's Guide: Understanding the Real Estate ML Pipeline
 
-If you are new to data science or object-oriented Python, this document is designed specifically for you. We are going to walk through exactly **where to start**, **what code does what**, and most importantly, **why we wrote the code that way.**
+If you are new to data science or object-oriented Python, this document is designed specifically for you. We are going to walk through exactly **where to start**, **what code does what**, **how to run it**, and most importantly, **why we wrote the code that way.**
+
+---
+
+## 🏃 How to Run and Debug the Code
+
+Before understanding the math, you need to know how to execute the files.
+
+### Running the Files Normally
+1. **Open the Terminal**: In VS Code, go to **Terminal > New Terminal** (or press Ctrl+` ).
+2. **Execute the Python File**: Type `python <filename.py>` and press Enter. 
+   - *Example*: `python 01_data_exploration.py`
+3. **Watch the Output**: The terminal will print out all the intermediate statuses and numbers calculated by the script.
+
+### Running in Debug Mode
+Debugging allows you to pause the execution of your script on specific lines, see the current values of your variables, and step through the code one line at a time. This is extremely helpful for understanding exactly what your code is doing.
+
+1. **Set a Breakpoint**: Hover over the line numbers on the left side of the editor in VS Code. A faint red dot will appear. Click on it to set a "breakpoint" (it will turn bright red).
+2. **Start Debugging**: Go to the top menu and click **Run > Start Debugging** (or press F5). If prompted, select **Python File**.
+3. **Using the Debugger**: The script will run and then pause exactly on the line where you placed the red dot. Look at the **Run and Debug** panel on the left side to see the values of all your variables. Use the **Step Over** (F10) button to run the current line and move to the next one.
 
 ---
 
