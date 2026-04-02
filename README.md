@@ -181,3 +181,11 @@ python 04A_geospatial_Random_Forest_modeling.py
 python 04B_geospatial_XGBoost_modeling.py
 python 04C_geospatial_LightGBM_modeling.py
 ```
+
+## ☁️ Cloud Deployment (Zero-Cost Fargate MVP)
+Architecturally, attempting to execute this Machine Learning framework securely relies natively on heavy parallel processing memory bounds.
+
+To seamlessly dynamically host the AI Engine completely to the internet cleanly for $0.00 infrastructure drain:
+* 📖 Read [AWS_DEPLOYMENT.md](AWS_DEPLOYMENT.md) for the complete blind-novice deployment map.
+* Infrastructure is structurally entirely automated fundamentally via `aws_cloudformation.yaml`.
+* The entire ~20MB Geolocation Coordinate offline mapping bounds runs locally memory-frozen inside the `Dockerfile`, eliminating needing expensive external RAG storage entirely!

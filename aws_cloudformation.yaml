@@ -1,0 +1,120 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Real Estate Demand AI Platform ECS + ECR Infrastructure
+
+Parameters:
+  DesiredCount:
+    Type: Number
+    Default: 0
+    Description: Set to 0 during manual Setup phase holding billing costs strictly.
+
+Resources:
+  # -------------------------------------------------------------
+  # 1. Elastic Container Registry (The Code Storage Layer)
+  # -------------------------------------------------------------
+  AIEngineRegistry:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: real-estate-ai-engine
+      EmptyOnDelete: true
+
+  # -------------------------------------------------------------
+  # 2. Cluster & Task Definitions (The Processing Layer)
+  # -------------------------------------------------------------
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: RealEstateDemandCluster
+
+  TaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+
+  MLEngineTaskDef:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: ai-engine-processor
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: 1024
+      Memory: 2048
+      ExecutionRoleArn: !Ref TaskExecutionRole
+      ContainerDefinitions:
+        - Name: ai-backend
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/real-estate-ai-engine:latest"
+          PortMappings:
+            - ContainerPort: 8080
+          Essential: true
+
+  # -------------------------------------------------------------
+  # 3. Networking (The API Gateway Routing Layer)
+  # -------------------------------------------------------------
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.1.0/24
+      AvailabilityZone: !Select [0, !GetAZs '']
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref InternetGateway
+
+  ContainerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow API Request Mapping internally
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+
+  # -------------------------------------------------------------
+  # 4. Service Host (Spot Bound Saving Model)
+  # -------------------------------------------------------------
+  FargateService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: AI-Engine-Service
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref MLEngineTaskDef
+      DesiredCount: !Ref DesiredCount
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - !Ref PublicSubnet1
+          SecurityGroups:
+            - !Ref ContainerSecurityGroup
+
+Outputs:
+  ECRRepositoryURI:
+    Description: The target destination to physically push the isolated built container code
+    Value: !GetAtt AIEngineRegistry.RepositoryUri
