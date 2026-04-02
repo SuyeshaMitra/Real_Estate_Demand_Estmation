@@ -80,6 +80,19 @@ y_train = np.log1p(train_df['price'])
 * **Why are we doing this?** If a algorithm looks at a £300,000 flat and a £50,000,000 luxury mansion, the math gets broken. The algorithm will hyper-focus entirely on trying to guess the £50M mansion correctly because the absolute error size is massive, and it will end up predicting terribly for normal people's flats. By applying a `logarithm`, we compress the numbers mathematically into a smooth curve. It forces the algorithm to predict *percentages* (+10% value) rather than *absolute dollars* (+£10M). We reverse this later using `np.expm1` to get the real price back.
 * **The Result**: A Random Forest model that successfully trains but has a somewhat high error (£470,000 off target) because text strings like "Croydon" don't give the algorithm enough math to know exactly where the house is placed.
 
+### ❓ What are we trying to do here? (The Baseline Test)
+Think of File `03` as the **"Baseline Test."** In data science, before you spend hours doing complex math and writing advanced code, you must first build a simple, basic model to see if it's even necessary. We ask the AI to guess house prices using extremely basic, surface-level information: *Year, Month, Property Type, Old/New, and District Name*. We want to see how accurate an AI can be *purely by looking at basic text categories*. 
+
+### 🤖 Why use Random Forest and Neural Networks (MLP)?
+* **Why Random Forest?** Random Forest is the industry's ultimate "Reliable Control Group." It almost never crashes, is easy to set up, and always gives a "decent" answer. If we want a solid baseline, Random Forest is the gold standard.
+* **Why Neural Networks (MLP)?** We specifically included a Neural Network as a wildcard. People often assume that Neural Networks are automatically the smartest, so they will perform best. This tests that theory! (Spoiler: Neural Networks actually tend to perform *worse* than Random Forests on basic tabular spreadsheets). 
+* **Why wait on XGBoost and LightGBM?** XGBoost and LightGBM are "heavy artillery" algorithms. Using them on basic text buckets (like the word "Croydon") is overkill. We explicitly save them for File `04` where their advanced math can actively take advantage of latitude and longitude coordinates.
+
+### 📊 What do the two File 03 Plots signify?
+File `03` computes and generates two visual artifacts directly to your root folder:
+1. **`3_historical_trend.png`**: Before the AI even trains, this plots the *true* average real estate price in London from 2008 to 2022. **Significance & Decision Context**: It visually establishes the problem we are facing. We can definitively *see* that prices are aggressively rising, proving mathematically why we had to make the critical design decision to use Logarithm transformations (to compress and tame the inflation curve).
+2. **`3_forecast_validation.png`**: This is the visual proof of our baseline model. It draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data the AI was never previously allowed to see), and places a dotted line representing what the AI *predicted* would happen. **Significance & Decision Context**: If the dotted line roughly follows the solid line, it proves our AI mathematically understands the forward flow of time and confirms our baseline model structure works!
+
 ### 📏 Understanding the Evaluation Metrics
 To know how good or bad our model is, we grade its "test paper" using three metrics. Here is an explanation of what they mean, completely broken down, including example performance values we achieved later on by applying our **Top 3 Geospatial Models** (Random Forest, XGBoost, LightGBM) to those same metrics:
 
@@ -140,7 +153,7 @@ Now that we have exact X,Y coordinates for the properties, we test three differe
   * **What it does**: "Leaf-wise Histogram Boosting". It converts the continuous floating-point map coordinates into discrete mathematical buckets (histograms). If it finds a really volatile, expensive neighborhood, it will aggressively split that specific leaf over and over until the error drops to zero.
   * **Result**: **THE ULTIMATE WINNER**. By aggressively targeting only the highest-error neighborhoods spatially, LightGBM decimated the error margins, achieving an average error of only £401k (saving thousands over its competitors) while executing in literally 0.5 seconds!
 
-### The Final Validation Output
+### The Final Validation Output & Visualizations
 At the very bottom of the scripts:
 ```python
 # Calculate Accuracy %
@@ -148,7 +161,12 @@ validation_df['Error_%'] = np.round(np.abs(validation_df['Price_Difference'] / v
 validation_df.to_csv("prediction_validation_lightgbm.csv", index=False)
 ```
 * **What this does**: It takes the holdout test data (properties from 2018-2022 that the model *never saw during training*) and compares the model's 5-year forecast against the literal historical fact.
-* **The Result**: The program exports a physical CSV file showing exactly how accurate it was. You can open `prediction_validation_lightgbm.csv` to see how the algorithmic math translated into 5-year real-world projections.
+* **The Result Data**: Each script exports a physical CSV file showing exactly how accurate it was. You can open `prediction_validation_lightgbm.csv` to see how the algorithmic math translated into 5-year real-world projections.
+* **The Result Plots**: We have now modified files `04A`, `04B`, and `04C` so that each model will explicitly generate its own specific visualization charts (exactly like file `03` did). When you run them, you will automatically generate:
+  * `4A_historical_trend.png` and `4A_forecast_validation.png` (Random Forest Spatial Output)
+  * `4B_historical_trend.png` and `4B_forecast_validation.png` (XGBoost Spatial Output)
+  * `4C_historical_trend.png` and `4C_forecast_validation.png` (LightGBM Spatial Output)
+This crucial visual update allows you to visibly overlay and compare exactly how the three spatial mathematical models drew massively different conclusions on the identical future timeline.
 
 ---
 

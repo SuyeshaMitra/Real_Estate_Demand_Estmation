@@ -60,7 +60,7 @@ plt.ylabel("Average Property Price (£)")
 # Enable grid lines inside the chart so values are easier to read
 plt.grid(True)
 # Save the rendered graph out directly to a local image file
-plt.savefig("historical_trend.png")
+plt.savefig("3_historical_trend.png")
 # Close out the figure to release RAM
 plt.close()
 
@@ -174,7 +174,7 @@ plt.legend()
 # Turn down grids to show values sharply
 plt.grid(True)
 # Directly record chart visualization straight to disk for users
-plt.savefig("forecast_validation.png")
+plt.savefig("3_forecast_validation.png")
 # Tidy RAM
 plt.close()
 

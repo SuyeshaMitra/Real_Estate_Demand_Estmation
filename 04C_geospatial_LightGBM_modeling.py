@@ -2,6 +2,10 @@
 import pandas as pd
 # Import mathematical operations library
 import numpy as np
+# Import matplotlib for rendering static graph image files naturally
+import matplotlib.pyplot as plt
+# Import seaborn as a wrapper over matplotlib
+import seaborn as sns
 # Import library that converts UK postcodes into precise GPS coordinates
 import pgeocode
 # Import standard library timer for assessing compute latency 
@@ -28,6 +32,18 @@ df['month'] = df['date_of_transfer'].dt.month
 
 # Filter dataframe maintaining just the 15-year 2008-2022 block
 df = df[(df['year'] >= 2008) & (df['year'] <= 2022)].copy()
+
+# Trend analysis: Price vs Year
+print("Generating 4C Historical Trend Plot...")
+yearly_trend = df.groupby('year')['price'].mean().reset_index()
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=yearly_trend, x='year', y='price', marker="o")
+plt.title("Historical Price Trend in Greater London (2008 - 2022)")
+plt.xlabel("Year")
+plt.ylabel("Average Property Price (£)")
+plt.grid(True)
+plt.savefig("4C_historical_trend.png")
+plt.close()
 
 print("Extracting unique postcodes for Geospatial mapping...")
 # Extract list of isolated generic postcodes 
@@ -133,3 +149,19 @@ print(validation_df.head(15))
 validation_df.to_csv("prediction_validation_lightgbm.csv", index=False)
 # Show exiting completed notification status success cleanly   
 print("\nValidation Dataset saved as 'prediction_validation_lightgbm.csv' for review!")
+
+# Save evaluation plot
+print("Generating 4C Forecast Validation Plot...")
+test_df['predicted_price'] = y_pred
+yearly_test_trend = test_df.groupby('year').agg({'price': 'mean', 'predicted_price': 'mean'}).reset_index()
+
+plt.figure(figsize=(10, 6))
+plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", label="Actual Avg Price")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['predicted_price'], marker="x", linestyle="--", label="Forecasted Price (Geospatial LightGBM)")
+plt.title("5-Year Ahead Holdout Forecast Validation (2018-2022)")
+plt.xlabel("Year")
+plt.ylabel("Average Property Price (£)")
+plt.legend()
+plt.grid(True)
+plt.savefig("4C_forecast_validation.png")
+plt.close()

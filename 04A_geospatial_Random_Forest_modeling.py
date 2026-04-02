@@ -2,6 +2,10 @@
 import pandas as pd
 # Import numpy for numerical and array operations
 import numpy as np
+# Import matplotlib for rendering static graph image files naturally
+import matplotlib.pyplot as plt
+# Import seaborn as a wrapper over matplotlib
+import seaborn as sns
 # Import pgeocode for translating postcodes into latitude/longitude coordinates
 import pgeocode
 # Import time module to benchmark
@@ -30,6 +34,18 @@ df['month'] = df['date_of_transfer'].dt.month
 
 # Filter dataset to only include the 2008-2022 15-year window
 df = df[(df['year'] >= 2008) & (df['year'] <= 2022)].copy()
+
+# Trend analysis: Price vs Year
+print("Generating 4A Historical Trend Plot...")
+yearly_trend = df.groupby('year')['price'].mean().reset_index()
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=yearly_trend, x='year', y='price', marker="o")
+plt.title("Historical Price Trend in Greater London (2008 - 2022)")
+plt.xlabel("Year")
+plt.ylabel("Average Property Price (£)")
+plt.grid(True)
+plt.savefig("4A_historical_trend.png")
+plt.close()
 
 # Print status to terminal
 print("Extracting unique postcodes for Geospatial mapping...")
@@ -139,3 +155,19 @@ print(validation_df.head(15))
 # Export the entire detailed validation log frame to CSV
 validation_df.to_csv("prediction_validation_randomforest.csv", index=False)
 print("\nValidation Dataset saved as 'prediction_validation_randomforest.csv' for review!")
+
+# Save evaluation plot
+print("Generating 4A Forecast Validation Plot...")
+test_df['predicted_price'] = y_pred
+yearly_test_trend = test_df.groupby('year').agg({'price': 'mean', 'predicted_price': 'mean'}).reset_index()
+
+plt.figure(figsize=(10, 6))
+plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", label="Actual Avg Price")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['predicted_price'], marker="x", linestyle="--", label="Forecasted Price (Geospatial RF)")
+plt.title("5-Year Ahead Holdout Forecast Validation (2018-2022)")
+plt.xlabel("Year")
+plt.ylabel("Average Property Price (£)")
+plt.legend()
+plt.grid(True)
+plt.savefig("4A_forecast_validation.png")
+plt.close()

@@ -2,6 +2,10 @@
 import pandas as pd
 # Import numpy for math operations
 import numpy as np
+# Import matplotlib for rendering static graph image files naturally
+import matplotlib.pyplot as plt
+# Import seaborn as a wrapper over matplotlib
+import seaborn as sns
 # Import pgeocode to translate address postcodes to coordinates
 import pgeocode
 # Import time to measure algorithm performance speeds
@@ -28,6 +32,18 @@ df['month'] = df['date_of_transfer'].dt.month
 
 # Filter dataframe maintaining just the 15-year 2008-2022 dataset scope
 df = df[(df['year'] >= 2008) & (df['year'] <= 2022)].copy()
+
+# Trend analysis: Price vs Year
+print("Generating 4B Historical Trend Plot...")
+yearly_trend = df.groupby('year')['price'].mean().reset_index()
+plt.figure(figsize=(10, 6))
+sns.lineplot(data=yearly_trend, x='year', y='price', marker="o")
+plt.title("Historical Price Trend in Greater London (2008 - 2022)")
+plt.xlabel("Year")
+plt.ylabel("Average Property Price (£)")
+plt.grid(True)
+plt.savefig("4B_historical_trend.png")
+plt.close()
 
 print("Extracting unique postcodes for Geospatial mapping...")
 # Retrieve unique postcodes
@@ -133,3 +149,19 @@ print(validation_df.head(15))
 validation_df.to_csv("prediction_validation_xgb.csv", index=False)
 # Conclude module success status
 print("\nValidation Dataset saved as 'prediction_validation_xgb.csv' for review!")
+
+# Save evaluation plot
+print("Generating 4B Forecast Validation Plot...")
+test_df['predicted_price'] = y_pred
+yearly_test_trend = test_df.groupby('year').agg({'price': 'mean', 'predicted_price': 'mean'}).reset_index()
+
+plt.figure(figsize=(10, 6))
+plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", label="Actual Avg Price")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['predicted_price'], marker="x", linestyle="--", label="Forecasted Price (Geospatial XGBoost)")
+plt.title("5-Year Ahead Holdout Forecast Validation (2018-2022)")
+plt.xlabel("Year")
+plt.ylabel("Average Property Price (£)")
+plt.legend()
+plt.grid(True)
+plt.savefig("4B_forecast_validation.png")
+plt.close()
