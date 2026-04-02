@@ -189,3 +189,7 @@ To seamlessly dynamically host the AI Engine completely to the internet cleanly 
 * 📖 Read [AWS_DEPLOYMENT.md](AWS_DEPLOYMENT.md) for the complete blind-novice deployment map.
 * Infrastructure is structurally entirely automated fundamentally via `aws_cloudformation.yaml`.
 * The entire ~20MB Geolocation Coordinate offline mapping bounds runs locally memory-frozen inside the `Dockerfile`, eliminating needing expensive external RAG storage entirely!
+
+### ⚡ The "1-Click" Novice Wrapper
+We have strictly automated away all complex AWS Cloud deployment knowledge by combining Docker builds, ECR pushes, and CloudFormation infrastructure maps directly into a single wrapper script.
+Just blindly run `.\cloud_power_manager.bat deploy` locally to physically launch the entire pipeline dynamically without opening an AWS Console!
