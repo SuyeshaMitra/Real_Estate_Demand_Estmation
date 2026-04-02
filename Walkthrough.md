@@ -241,14 +241,14 @@ If you open the `04` Geospatial plots and compare them to the original `03` plot
 ### What this File Automates
 Rather than forcing executives to read raw console output logs, this script scientifically rips open the exported `04` validation CSVs, computationally extracts their respective error margins, evaluates their compilation processing speed, and renders three gorgeous business-ready visualizations directly into your root folder:
 
-* **`chart_model_mae_comparison.png`** (The Core Metric): Visually proves mathematically that **LightGBM** (04C) absolutely dominates the competition achieving the lowest physical cash error margin.
-  ![MAE Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/chart_model_mae_comparison.png)
+* **`05_chart_model_mae_comparison.png`** (The Core Metric): Visually proves mathematically that **LightGBM** (04C) absolutely dominates the competition achieving the lowest physical cash error margin.
+  ![MAE Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_mae_comparison.png)
 
-* **`chart_model_accuracy_comparison.png`**: Beautifully converts abstract raw currency (£) geometric errors into a completely flat Business "% Accuracy" scorecard for non-technical stakeholders.
-  ![Accuracy Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/chart_model_accuracy_comparison.png)
+* **`05_chart_model_accuracy_comparison.png`**: Beautifully converts abstract raw currency (£) geometric errors into a completely flat Business "% Accuracy" scorecard for non-technical stakeholders.
+  ![Accuracy Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_accuracy_comparison.png)
 
-* **`chart_model_speed_comparison.png`**: The final killing blow. Not only is LightGBM definitively the most accurate financially, it literally trains itself completely on a standard machine in just ~0.5 seconds (utterly destroying Random Forest's 5.0+ seconds).
-  ![Speed Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/chart_model_speed_comparison.png)
+* **`05_chart_model_speed_comparison.png`**: The final killing blow. Not only is LightGBM definitively the most accurate financially, it literally trains itself completely on a standard machine in just ~0.5 seconds (utterly destroying Random Forest's 5.0+ seconds).
+  ![Speed Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_speed_comparison.png)
 
 ---
 

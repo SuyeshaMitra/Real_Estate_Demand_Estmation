@@ -40,7 +40,7 @@ for i, v in enumerate(mae_scores):
 # Ensure no graphical elements get cleanly cut off
 plt.tight_layout()
 # Render physical high-density PNG picture completely direct to local disk system
-plt.savefig('chart_model_mae_comparison.png', dpi=200)
+plt.savefig('05_chart_model_mae_comparison.png', dpi=200)
 # Clear the matplotlib internal canvas completely preventing overlaps
 plt.close()
 
@@ -62,7 +62,7 @@ for i, v in enumerate(training_times):
 # Ensure clean alignment natively 
 plt.tight_layout()
 # Render internal state to a static transparent PNG locally
-plt.savefig('chart_model_speed_comparison.png', dpi=200)
+plt.savefig('05_chart_model_speed_comparison.png', dpi=200)
 # Purge memory states internally 
 plt.close()
 
@@ -86,7 +86,7 @@ for i, v in enumerate(median_test_accuracy):
 # Protect bounding layout natively 
 plt.tight_layout()
 # Render to filesystem 
-plt.savefig('chart_model_accuracy_comparison.png', dpi=200)
+plt.savefig('05_chart_model_accuracy_comparison.png', dpi=200)
 # Terminate plot tracking metrics completely
 plt.close()
 
