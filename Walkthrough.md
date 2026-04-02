@@ -93,6 +93,16 @@ File `03` computes and generates two visual artifacts directly to your root fold
 1. **`03_historical_trend.png`**: Before the AI even trains, this plots the *true* average real estate price in London from 2008 to 2022. **Significance & Decision Context**: It visually establishes the problem we are facing. We can definitively *see* that prices are aggressively rising, proving mathematically why we had to make the critical design decision to use Logarithm transformations (to compress and tame the inflation curve).
 2. **`03_forecast_validation.png`**: This is the visual proof of our baseline model. It draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data the AI was never previously allowed to see), and places a dotted line representing what the AI *predicted* would happen. **Significance & Decision Context**: If the dotted line roughly follows the solid line, it proves our AI mathematically understands the forward flow of time and confirms our baseline model structure works!
 
+   **Understanding the Graph Markers (Dots vs Crosses):**
+   The crosses (`x`) on the orange dashed line are simply data point markers used in the chart to help you visually tell the two lines apart. Here is exactly what you are looking at in that image:
+   * **The Blue Dots (`o`)**: These represent the TRUE average house prices in London for that exact year. For example, the blue dot over 2019.0 shows that the real average London property was sold for almost £950k that year.
+   * **The Orange Crosses (`x`)**: These represent the AI's PREDICTION for the average house price that year. The `x` over 2019.0 shows the AI incorrectly thought houses would only be worth about £575k.
+
+   💡 **Why is the gap between them so massive?**
+   What you are looking at right now is the exact visual proof of why we called File `03` the "Baseline Test". The Random Forest model in this file was only given basic text words (like the district name "Croydon") to try and guess the price. The chart visually proves that the AI massively failed to understand the 2019 London real estate boom, under-predicting reality by almost £400,000!
+   
+   This huge visual failure is the exact reason we built the **Geospatial Models** in Files `04A`, `04B`, and `04C`. When you run those files and open their graphs, you will see the orange `x` line magically jump all the way up and tightly hug the true blue line, because Latitude and Longitude math allows the AI to finally "see" the wealthy neighborhoods!
+
 ### 📏 Understanding the Evaluation Metrics
 To know how good or bad our model is, we grade its "test paper" using three metrics. Here is an explanation of what they mean, completely broken down, including example performance values we achieved later on by applying our **Top 3 Geospatial Models** (Random Forest, XGBoost, LightGBM) to those same metrics:
 
