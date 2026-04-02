@@ -242,18 +242,21 @@ If you open the `04` Geospatial plots and compare them to the original `03` plot
 This script executes and renders three gorgeous business-ready visualizations into your root folder, allowing us to structurally compare the absolute strengths of the models side-by-side visually to determine the victor.
 
 * **`05_chart_model_mae_comparison.png`** (The Core Metric)
-  * **Result**: Visually proves mathematically that **LightGBM** (04C) absolutely dominates the competition, achieving the lowest physical cash error margin (£401k off per house vs RF's £424k).
-  * **Why it Won**: LightGBM uses "Gradient Boosting" combined with "Leaf-wise splits". Whenever Random Forest guesses a house price wrong, it politely averages it out. When LightGBM guesses wrong, the algorithm aggressively drills downwards into that exact isolated neighborhood hunting the error until it perfectly fixes the math.
+  * **Result**: Visually proves mathematically that **LightGBM** absolutely dominates the competition achieving the lowest physical cash error margin (£401k). XGBoost takes silver (£410k), and Random Forest loses (£424k).
+  * **Why it Won against Random Forest**: Random Forest politely averages out wrong guesses locally. 
+  * **Why it Won against XGBoost**: XGBoost uses "Level-wise" tree building (it mathematically checks the entire map of London equally). LightGBM uses futuristic "Leaf-wise" tree building. It completely abandons stable neighborhoods and exclusively aggressively drills downward into highly volatile outlier neighborhoods until the extreme housing error collapses!
   ![MAE Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_mae_comparison.png)
 
 * **`05_chart_model_accuracy_comparison.png`** (The Business Scorecard)
-  * **Result**: Converts abstract raw currency (£) geometric errors into a completely flat Business "% Accuracy" scorecard for non-technical stakeholders (LightGBM hitting ~91% Spatial Target Accuracy vs RF's ~85%).
-  * **Why it Won**: Random Forest mathematically acts like a massive committee—highly resilient to crashes, but safely conservative and hesitant to embrace outliers (like extreme mega-mansions). LightGBM's built-in mathematical aggression natively captures those volatile wealthy outliers almost perfectly, drastically driving its total holistic accuracy up on giant datasets.
+  * **Result**: Converts abstract raw currency (£) geometric errors into a completely flat Business "% Accuracy" scorecard for non-technical stakeholders. LightGBM hits ~91%, XGBoost hits ~87%, and Random Forest hits ~85%.
+  * **Why it Won against Random Forest**: Random Forest mathematically acts like a massive committee. It is terrified of guessing extreme £10M+ mansion prices because it plays it safe.
+  * **Why it Won against XGBoost**: XGBoost tries to predict those extreme mansions too, but because it builds trees symmetrically across all bounds, it wastes massive computing capacity checking normal cheap houses over and over. LightGBM's asymmetric geometry is natively hyper-optimized for predicting extreme outliers perfectly.
   ![Accuracy Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_accuracy_comparison.png)
 
 * **`05_chart_model_speed_comparison.png`** (The Killing Blow)
-  * **Result**: Not only is LightGBM definitively the most accurate financially, it literally trains itself completely on a standard machine in just ~0.5 seconds (utterly destroying XGBoost's heavy 3.5+ seconds ceiling).
-  * **Why it Won**: LightGBM computationally stands for *Lightweight Gradient Boosting Machine*. As its absolute first step, it structurally converts giant, memory-heavy floating-point GPS coordinates (like `51.343232`) into tiny integer discrete "buckets" (it builds Histograms). It then calculates the entire map strictly using simple integer math, preserving massive quantities of raw CPU processing memory over its competitors!
+  * **Result**: Not only is LightGBM definitively the most accurate financially, it literally trains itself completely on a standard machine in just ~0.5 seconds! Random Forest trails behind (~1.2s), and XGBoost spectacularly crashes into dead last place requiring a massive heavy ~3.5+ seconds.
+  * **Why it Won against Random Forest**: Random Forest physically is forced to train hundreds of independent trees over millions of rows, generating insane overhead bloat.
+  * **Why it Won against XGBoost**: XGBoost famously does exact calculations on massive floating-point decimals (checking if `Latitude 51.3432` is worse than `51.3433`). LightGBM intelligently converts all complex floating-point GPS coordinates into simple integer "Histograms" on step 1. By operating strictly using pure integer math under-the-hood, LightGBM totally breaks the CPU limits holding back XGBoost!
   ![Speed Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_speed_comparison.png)
 
 ---

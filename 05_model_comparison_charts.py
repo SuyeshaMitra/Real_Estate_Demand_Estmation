@@ -23,9 +23,9 @@ median_test_accuracy = [85.5, 87.1, 91.3]
 # ==============================================================================
 # --- STEP 1: PLOTTING MAE COMPARISON (THE CORE METRIC) ---
 # WHAT IT IS FOR: Visually tracks the absolute physical cash error (£) per house. Lower is better.
-# WHY LIGHTGBM WINS: LightGBM operates using 'Leaf-wise splits'. While Random Forest politely 
-#   averages out all wrong guesses, LightGBM hunts them. It aggressively drills down dynamically 
-#   into the worst-performing, highly volatile wealthy neighborhoods until the math perfectly fixes.
+# WHY LIGHTGBM WINS: LightGBM uses 'Leaf-wise splits'. Both XGBoost and Random Forest check 
+#   the entire map equally, wasting computation. LightGBM aggressively abandons stable neighborhoods 
+#   and dynamically drills down purely into the extreme expensive outlier mansions until fixed.
 # ==============================================================================
 # Establish a 10 by 6 inch physical canvas format
 plt.figure(figsize=(10, 6))
@@ -53,9 +53,9 @@ plt.close()
 # ==============================================================================
 # --- STEP 2: PLOTTING SPEED COMPARISON (THE SCALING KILLER) ---
 # WHAT IT IS FOR: Shows literal computation seconds required to build the model. Lower is better.
-# WHY LIGHTGBM WINS: Instead of painfully processing math on heavy floating-point GPS 
-#   coordinates (51.123), LightGBM bins those coordinates into pure integer "Histograms" immediately.
-#   It literally calculates the entire geographic map using ultra-fast integers, destroying CPU overhead.
+# WHY LIGHTGBM WINS: XGBoost does heavy, slow math on exact floating-point decimals (Latitude 51.343).
+#   LightGBM builds a "Histogram". It converts all giant decimal floats into simple tiny integers 
+#   on step one, radically destroying CPU overhead and absolutely humiliating XGBoost in raw speed.
 # ==============================================================================
 # Establish new standard 10 by 6 format frame
 plt.figure(figsize=(10, 6))
@@ -81,9 +81,9 @@ plt.close()
 # ==============================================================================
 # --- STEP 3: PLOTTING ACCURACY % (THE BUSINESS SCORECARD) ---
 # WHAT IT IS FOR: Converts complex currency (£) errors into a flat 1-100% executive grading scale.
-# WHY LIGHTGBM WINS: Random Forest mathematically acts like a cautious committee, terrified 
-#   of guessing extreme outlier numbers. LightGBM embraces outliers aggressively. Natively capturing 
-#   those extreme £10M+ mansion sales computationally aggressively pushes total accuracy over 90%.
+# WHY LIGHTGBM WINS: Random Forest plays it safe, terrified to guess extreme outliers. XGBoost tries  
+#   to catch them but builds trees too symmetrically. LightGBM uniquely bends asymmetrically into 
+#   high-volatility housing pockets perfectly, physically propelling its aggregate score beyond 90%.
 # ==============================================================================
 # Build new physical framing space
 plt.figure(figsize=(10, 6))
