@@ -14,22 +14,22 @@ graph TD
     classDef docker fill:#2496ED,stroke:#0db7ed,stroke-width:2px,color:white;
     classDef external fill:#EEEEEE,stroke:#999999,stroke-width:2px;
 
-    User([User Request]) --> IGW[Internet Gateway]
-    IGW --> VPC[AWS VPC Network]
+    User(["User Request"]) --> IGW["Internet Gateway"]
+    IGW --> VPC["AWS VPC Network"]
     
     subgraph "Zero-Cost Serverless Infrastructure (AWS Fargate)"
-        VPC --> ECS[Amazon Elastic Container Service (ECSCluster)]
-        ECS --> Service[ECS Fargate Service<br>(AI-Engine-Service)]
+        VPC --> ECS["Amazon Elastic Container Service (ECS Cluster)"]
+        ECS --> Service["ECS Fargate Service<br/>(AI-Engine-Service)"]
     end
     
     subgraph "Docker Application Image (real-estate-ai-engine)"
-        Service --> App[Python 3.10 AI Code]
-        App --> Models[(Local Memory)]
-        Models -.-> pgeocode[(pgeocode Map Database<br>Frozen inside Docker)]
-        Models -.-> ML[LightGBM / XGBoost Regressors]
+        Service --> App["Python 3.10 AI Code"]
+        App --> Models[("Local Memory")]
+        Models -.-> pgeocode[("pgeocode Map Database<br/>Frozen inside Docker")]
+        Models -.-> ML["LightGBM / XGBoost Regressors"]
     end
 
-    ECR[Elastic Container Registry (ECR)] -.->|Deploys Image| ECS
+    ECR["Elastic Container Registry (ECR)"] -.->|Deploys Image| ECS
     
     class IGW,VPC,ECS,Service,ECR aws;
     class App,Models,pgeocode,ML docker;
