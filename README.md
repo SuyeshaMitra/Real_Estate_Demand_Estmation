@@ -193,3 +193,35 @@ To seamlessly dynamically host the AI Engine completely to the internet cleanly 
 ### ⚡ The "1-Click" Novice Wrapper
 We have strictly automated away all complex AWS Cloud deployment knowledge by combining Docker builds, ECR pushes, and CloudFormation infrastructure maps directly into a single wrapper script.
 Just blindly run `.\cloud_power_manager.bat deploy` locally to physically launch the entire pipeline dynamically without opening an AWS Console!
+
+
+### 🏗️ Physical AWS Cloud Architecture Diagram
+
+```mermaid
+graph TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
+    classDef docker fill:#2496ED,stroke:#0db7ed,stroke-width:2px,color:white;
+    classDef external fill:#EEEEEE,stroke:#999999,stroke-width:2px;
+
+    User([User Request]) --> IGW[Internet Gateway]
+    IGW --> VPC[AWS VPC Network]
+    
+    subgraph "Zero-Cost Serverless Infrastructure (AWS Fargate)"
+        VPC --> ECS[Amazon Elastic Container Service (ECSCluster)]
+        ECS --> Service[ECS Fargate Service<br>(AI-Engine-Service)]
+    end
+    
+    subgraph "Docker Application Image (real-estate-ai-engine)"
+        Service --> App[Python 3.10 AI Code]
+        App --> Models[(Local Memory)]
+        Models -.-> pgeocode[(pgeocode Map Database<br>Frozen inside Docker)]
+        Models -.-> ML[LightGBM / XGBoost Regressors]
+    end
+
+    ECR[Elastic Container Registry (ECR)] -.->|Deploys Image| ECS
+    
+    class IGW,VPC,ECS,Service,ECR aws;
+    class App,Models,pgeocode,ML docker;
+    class User external;
+```
+

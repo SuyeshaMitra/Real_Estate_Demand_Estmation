@@ -361,3 +361,49 @@ We cleanly tested exactly how external feature-noise affects tree-based speed an
 **The Final Conclusion**: We successfully scientifically proved structurally that to completely break the 5-year Extrapolation Limit natively in Real Estate AI, any targeted outside external APIs strictly fundamentally *MUST* aggressively provide hyper-local, totally varying granular variance vectors physically differing from house-to-house! 
 
 *(LightGBM structurally remains the undisputed functional pipeline victor for London mapping constraints!)*
+
+---
+
+## ☁️ Step 9: Cloud Scaling (`aws_cloudformation.yaml`)
+Once the Artificial Intelligence model was formally proven via Local metrics (Step 08), the final architecture stage is structurally porting this Pipeline to the public Internet without triggering massive database bills.
+
+
+### 🏗️ Physical AWS Cloud Architecture Diagram
+
+```mermaid
+graph TD
+    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
+    classDef docker fill:#2496ED,stroke:#0db7ed,stroke-width:2px,color:white;
+    classDef external fill:#EEEEEE,stroke:#999999,stroke-width:2px;
+
+    User([User Request]) --> IGW[Internet Gateway]
+    IGW --> VPC[AWS VPC Network]
+    
+    subgraph "Zero-Cost Serverless Infrastructure (AWS Fargate)"
+        VPC --> ECS[Amazon Elastic Container Service (ECSCluster)]
+        ECS --> Service[ECS Fargate Service<br>(AI-Engine-Service)]
+    end
+    
+    subgraph "Docker Application Image (real-estate-ai-engine)"
+        Service --> App[Python 3.10 AI Code]
+        App --> Models[(Local Memory)]
+        Models -.-> pgeocode[(pgeocode Map Database<br>Frozen inside Docker)]
+        Models -.-> ML[LightGBM / XGBoost Regressors]
+    end
+
+    ECR[Elastic Container Registry (ECR)] -.->|Deploys Image| ECS
+    
+    class IGW,VPC,ECS,Service,ECR aws;
+    class App,Models,pgeocode,ML docker;
+    class User external;
+```
+
+
+**How to blindly execute this deployment:**
+We built a completely "1-click" wrapper (`cloud_power_manager.bat`) entirely circumventing the AWS Console natively.
+* `.\cloud_power_manager.bat deploy` (Physically Creates CF Stack, Builds Docker Database, & Pushes to ECR).
+* `.\cloud_power_manager.bat start`  (Spools up Fargate spot-instances).
+* `.\cloud_power_manager.bat stop`   (Freezes AWS Charges to $0).
+* `.\cloud_power_manager.bat cleanup` (Safely Uninstalls, forcefully Deletes, and Erases completely everything).
+
+*(Refer to [AWS_DEPLOYMENT.md](AWS_DEPLOYMENT.md) for deeper mechanical mapping specifics.)*
