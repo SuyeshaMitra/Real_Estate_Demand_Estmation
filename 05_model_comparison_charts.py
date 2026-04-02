@@ -20,7 +20,13 @@ training_times = [1.22, 3.53, 0.55]
 # Define the Aggregate Median Accuracy (percentages) on holdouts for each model internally
 median_test_accuracy = [85.5, 87.1, 91.3] 
 
-# --- 1. Plot MAE Comparison ---
+# ==============================================================================
+# --- STEP 1: PLOTTING MAE COMPARISON (THE CORE METRIC) ---
+# WHAT IT IS FOR: Visually tracks the absolute physical cash error (£) per house. Lower is better.
+# WHY LIGHTGBM WINS: LightGBM operates using 'Leaf-wise splits'. While Random Forest politely 
+#   averages out all wrong guesses, LightGBM hunts them. It aggressively drills down dynamically 
+#   into the worst-performing, highly volatile wealthy neighborhoods until the math perfectly fixes.
+# ==============================================================================
 # Establish a 10 by 6 inch physical canvas format
 plt.figure(figsize=(10, 6))
 # Instruct Seaborn to paint a bar chart mapping models to error rates while picking designated custom light hex colours
@@ -44,7 +50,13 @@ plt.savefig('05_chart_model_mae_comparison.png', dpi=200)
 # Clear the matplotlib internal canvas completely preventing overlaps
 plt.close()
 
-# --- 2. Plot Speed Comparison ---
+# ==============================================================================
+# --- STEP 2: PLOTTING SPEED COMPARISON (THE SCALING KILLER) ---
+# WHAT IT IS FOR: Shows literal computation seconds required to build the model. Lower is better.
+# WHY LIGHTGBM WINS: Instead of painfully processing math on heavy floating-point GPS 
+#   coordinates (51.123), LightGBM bins those coordinates into pure integer "Histograms" immediately.
+#   It literally calculates the entire geographic map using ultra-fast integers, destroying CPU overhead.
+# ==============================================================================
 # Establish new standard 10 by 6 format frame
 plt.figure(figsize=(10, 6))
 # Tell Seaborn to draw another mapped bar chart using our same standardized brand palette
@@ -66,7 +78,13 @@ plt.savefig('05_chart_model_speed_comparison.png', dpi=200)
 # Purge memory states internally 
 plt.close()
 
-# --- 3. Plot Accuracy Score ---
+# ==============================================================================
+# --- STEP 3: PLOTTING ACCURACY % (THE BUSINESS SCORECARD) ---
+# WHAT IT IS FOR: Converts complex currency (£) errors into a flat 1-100% executive grading scale.
+# WHY LIGHTGBM WINS: Random Forest mathematically acts like a cautious committee, terrified 
+#   of guessing extreme outlier numbers. LightGBM embraces outliers aggressively. Natively capturing 
+#   those extreme £10M+ mansion sales computationally aggressively pushes total accuracy over 90%.
+# ==============================================================================
 # Build new physical framing space
 plt.figure(figsize=(10, 6))
 # Instruct Seaborn to paint the actual 1-100 percentage metric scores
