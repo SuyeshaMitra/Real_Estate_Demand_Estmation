@@ -372,6 +372,28 @@ Because the Model fell into the Collinearity Trap, the actual Forecast Graph out
 We cleanly tested exactly how external feature-noise affects tree-based speed and scale competition utilizing the analytic evaluator (`08_model_comparison_charts.py`).
 
 ### 📊 Comparing 05 (Baseline) vs 08 (Feature Enhanced) Analytic Charts
+To comprehensively document the architectural shifts inside the pipeline, we dynamically graph the absolute visual performance limits cleanly mapping the exact variables isolated inside the testing strings.
+
+#### 📊 Chart 1: The Error Shift Breakdown (`04` Baseline vs `07A` Macro Track)
+**Purpose:** This chart directly visually compares the mathematical performance difference between the Baseline Models (which were fed strictly `Latitude + Longitude`) against the exact same models burdened with the `Track 07A` API trap (fed `OSM Distances + Google Trends + Google News + Bank of England Rates`). 
+**Analysis:** You can visibly see the blue bar (the "Enhanced" model) is actually strictly *higher* (worse error) than the red bar for XGBoost due to the collinearity trap.
+
+![07A Vs 04 Feature Impact Map](07A_Vs_04_chart_feature_impact_comparison.png)
+*(Above: Direct geometric error shift explicitly demonstrating the 'Collinearity Crash')*
+
+#### 📊 Chart 2: The `08A` Macro Topology Model Collapse
+**Purpose:** This chart completely isolates strictly the `Track 07A/08A` environment (modeling strictly the data loaded with all 4 APIs: `OSM + Trends + News + Rates`). It is solely comparing the three AI models against each other to see which algorithm survived the noise.
+**Analysis:** It proves visibly that LightGBM's leaf-wise histogram bucketing successfully bypassed the economic noise (£401,553), while depth-wise XGBoost algorithmically severely struggled (£412,490) trying to physically map static interest-rates against spatial topology!
+
+![08A Error Map](08A_chart_model_mae_comparison.png)
+
+#### 📊 Chart 3: `08B` Pure OSM Geography (The Final Victor)
+**Purpose:** This chart maps the ultimate mathematically refined `Track 07B/08B` model environment explicitly devoid of Global Macro noise, feeding only OpenStreetMap distance bounds into the engines.
+**Analysis:** LightGBM functionally leverages the OSM topology beautifully, definitively mathematically breaking the rigid £400k Extrapolation ceiling while maintaining a blistering 0.58s execution speed!
+
+![08B Absolute Validation Map](08B_chart_model_mae_comparison.png)
+
+---
 
 | Analytic Chart Metric | `05` Baseline Winner | Track `08A` (Noisy External) | Track `08B` (Pure OSM Vector) | Architectural Explanation of the Track Drops |
 | :--- | :--- | :--- | :--- | :--- |
