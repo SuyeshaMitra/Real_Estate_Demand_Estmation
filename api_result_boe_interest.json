@@ -1,0 +1,812 @@
+[
+    {
+        "page": 1,
+        "pages": 2,
+        "per_page": 50,
+        "total": 66,
+        "sourceid": "2",
+        "lastupdated": "2026-02-24"
+    },
+    [
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2025",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2024",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2023",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2022",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2021",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2020",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2019",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2018",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2017",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2016",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2015",
+            "value": null,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2014",
+            "value": 0.5,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2013",
+            "value": 0.5,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2012",
+            "value": 0.5,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2011",
+            "value": 0.5,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2010",
+            "value": 0.5,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2009",
+            "value": 0.644866666666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2008",
+            "value": 4.67530833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2007",
+            "value": 5.50870833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2006",
+            "value": 4.63825833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2005",
+            "value": 4.648675,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2004",
+            "value": 4.37981666666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2003",
+            "value": 3.69579166666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2002",
+            "value": 4,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2001",
+            "value": 5.122375,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "2000",
+            "value": 5.96389166666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1999",
+            "value": 5.34440833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1998",
+            "value": 7.23205,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1997",
+            "value": 6.5634,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1996",
+            "value": 5.95853333333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1995",
+            "value": 6.693675,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1994",
+            "value": 5.46278333333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1993",
+            "value": 6.01363333333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1992",
+            "value": 9.56348333333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1991",
+            "value": 11.6949833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1990",
+            "value": 14.7681166666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1989",
+            "value": 13.8418083333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1988",
+            "value": 10.0957083333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1987",
+            "value": 9.7355,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1986",
+            "value": 10.9013583333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1985",
+            "value": 12.2529833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1984",
+            "value": 9.6801,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1983",
+            "value": 9.82526666666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1982",
+            "value": 11.9309666666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1981",
+            "value": 13.255,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1980",
+            "value": 16.3126833333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1979",
+            "value": 13.6948083333333,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1978",
+            "value": 9.09315,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1977",
+            "value": 8.91186666666667,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        },
+        {
+            "indicator": {
+                "id": "FR.INR.LEND",
+                "value": "Lending interest rate (%)"
+            },
+            "country": {
+                "id": "GB",
+                "value": "United Kingdom"
+            },
+            "countryiso3code": "GBR",
+            "date": "1976",
+            "value": 11.10095,
+            "unit": "",
+            "obs_status": "",
+            "decimal": 1
+        }
+    ]
+]

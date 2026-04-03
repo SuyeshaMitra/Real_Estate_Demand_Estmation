@@ -27,4 +27,4 @@ COPY . /app
 EXPOSE 8080
 
 # Trigger the dominant pipeline execution specifically confirming mapping integrity
-CMD ["python", "07_Features_LightGBM_modeling.py"]
+CMD ["python", "07B_OSM_LightGBM_modeling.py"]
