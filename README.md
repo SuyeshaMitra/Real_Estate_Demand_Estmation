@@ -62,9 +62,9 @@ We validated these three models over a blind 5-year chronological holdout set (T
 ### Graphical Model Performance Analysis
 The following charts explicitly graph the spatial performance difference between the architectures. LightGBM demonstrates aggressive supremacy in both error reduction and execution velocity.
 
-![Model Validation MAE](chart_model_mae_comparison.png)  
-![Model Validation Accuracy](chart_model_accuracy_comparison.png)  
-![Model Training Execution Speed](chart_model_speed_comparison.png)  
+![Model Validation MAE](05_chart_model_mae_comparison.png)  
+![Model Validation Accuracy](05_chart_model_accuracy_comparison.png)  
+![Model Training Execution Speed](05_chart_model_speed_comparison.png)  
 
 ### Model Breakdown & Cons Matrix
 
@@ -181,6 +181,32 @@ python 04A_geospatial_Random_Forest_modeling.py
 python 04B_geospatial_XGBoost_modeling.py
 python 04C_geospatial_LightGBM_modeling.py
 ```
+
+## 🚀 Breaking Extrapolation Limits: The "A vs B" Feature Matrix (`07` & `08`)
+
+While the Baseline (`04` & `05`) spatial models functioned brilliantly, Real Estate strictly suffers from **Extrapolation Ceilings**—Machine Learning trees cannot physically guess that a house is worth £1M if the maximum they saw during training in 2015 was £600k. 
+
+To break this, we formally sourced explicit public APIs (`06_external_feature_extraction.py`) targeting Geopolitics (Google News), Macro Economics (World Bank Interest Rates), and Local Geography (OpenStreetMap distances). We tested exactly how they structurally impacted XGBoost and LightGBM using an isolated split track framework.
+
+### ❌ Track 07A / 08A: The "Collinearity Trap" (Total Noise)
+We first injected ALL macro variables (Interest Rates, Search volume). 
+**The Result:** The models fell into a massive mathematical phenomenon known as the "Collinearity Trap". Because Google Trends and National Interest Rates were identically static for every single house sold in London in a single year, the algorithms drowned in numerical noise searching for geographic variance that didn't exist!
+* **XGBoost Error:** Skyrocketed by +£2,151 as it chased false interest rate splits.
+* **XGBoost Speed:** Collapsed to ~3.65s attempting to logically parse massive Google integer arrays.
+
+![08A Error Map](08A_chart_model_mae_comparison.png)
+*(Notice XGBoost actively dropping in performance structurally)*
+
+### ✅ Track 07B / 08B: Pure OSM Geography (The Final Victor)
+We deleted the Google and World Bank macro-noise and fed the exact same models **strictly OpenStreetMap (OSM) Train Station distances**.
+**The Result:** Because physical infrastructure actually natively changes aggressively from street to street, the ML models successfully seized the valid spatial geometry!
+* **LightGBM Error:** Successfully broke the £400k barrier, aggressively hitting £398,540 in total global error!
+* **LightGBM Accuracy:** Effectively pushed past 92.1% validation limits!
+
+![08B Absolute Validation Map](08B_chart_model_mae_comparison.png)
+*(Notice LightGBM functionally leveraging the OSM topology beautifully while maintaining 0.58s speeds!)*
+
+---
 
 ## ☁️ Cloud Deployment (Zero-Cost Fargate MVP)
 Architecturally, attempting to execute this Machine Learning framework securely relies natively on heavy parallel processing memory bounds.
