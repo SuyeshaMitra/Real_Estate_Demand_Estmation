@@ -42,7 +42,7 @@ for i, v in enumerate(mae_06):
 plt.ylim(350000, 450000)
 plt.tight_layout()
 # Render internal metric mapping explicitly locally
-plt.savefig('07_chart_feature_impact_comparison.png', dpi=200)
+plt.savefig('07A_chart_feature_impact_comparison.png', dpi=200)
 plt.close()
 
 print("Successfully generated 06 Extrapolation Break visualization.")

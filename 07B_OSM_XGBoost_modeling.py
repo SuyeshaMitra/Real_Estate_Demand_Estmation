@@ -116,25 +116,7 @@ df['old_new_code'] = df['old_new'].astype('category').cat.codes
 # Therefore, we synthetically "inject" those exact extracted global environments down below:
 print("Merging External Macro-economic, Infrastructure, and Sentiment indicators...")
 
-# FEATURE 1: GOOGLE TRENDS & GOOGLE NEWS (The Economic Leading Indicator)
-# What it is: A sentiment score (0-100) reflecting how desperately the public is Googling "Mortgages" or reading "Real Estate News".
-# Why it's fed to the model: Real estate history is a "lagging" indicator. Google searches are "leading". 
-# Injecting the 2021 95/100 score attempts to warn the AI that a massive buying frenzy is occurring globally!
-df['google_trends_mortgage_index'] = df['year'].map({
-    2008: 40, 2009: 42, 2010: 45, 2011: 44, 2012: 50, 
-    2013: 55, 2014: 68, 2015: 75, 2016: 80, 2017: 85,
-    2018: 88, 2019: 89, 2020: 80, 2021: 95, 2022: 98
-})
-
-# FEATURE 2: NATIONAL INTEREST RATES (The Physical Market Engine)
-# What it is: The central banking borrowing rate.
-# Why it's fed to the model: By forcing rates to 0.1% in 2020-2021, we are attempting to mathematically 
-# explain to the AI exactly *why* houses suddenly became so expensive: money became completely free to borrow!
-df['national_interest_rate'] = df['year'].map({
-    2008: 5.0, 2009: 0.5, 2010: 0.5, 2011: 0.5, 2012: 0.5, 
-    2013: 0.5, 2014: 0.5, 2015: 0.5, 2016: 0.25, 2017: 0.25,
-    2018: 0.5, 2019: 0.75, 2020: 0.1, 2021: 0.1, 2022: 1.25
-})
+# DELETED GOOGLE/BOE MACROS (07B PURE-GEOGRAPHY PIPELINE)
 
 # FEATURE 3: OPENSTREETMAP (OSM) INFRASTRUCTURE DENSITY
 # What it is: The physical count of train stations surrounding an exact property constraint.
@@ -144,7 +126,7 @@ df['osm_stations_within_1km'] = np.where(df['property_code'] == 1, 4, 1)
 
 # Overwrite model feature array to explicitly FINALLY include the new world-aware ecosystem data!
 features = ['year', 'month', 'property_code', 'old_new_code', 'latitude', 'longitude', 
-            'google_trends_mortgage_index', 'national_interest_rate', 'osm_stations_within_1km']
+            'osm_stations_within_1km']
 # ==============================================================================
 
 
@@ -217,9 +199,9 @@ print("\n--- First 15 validation records ---")
 print(validation_df.head(15))
 
 # Persist output dataframe natively to local desktop file for user inspection side by side
-validation_df.to_csv("prediction_validation_07_xgboost.csv", index=False)
+validation_df.to_csv("prediction_validation_07b_xgboost.csv", index=False)
 # Conclude module success status
-print("\nValidation Dataset saved as 'prediction_validation_07_xgboost.csv' for review!")
+print("\nValidation Dataset saved as 'prediction_validation_07b_xgboost.csv' for review!")
 
 # Save evaluation plot
 print("Generating 4B Forecast Validation Plot...")
@@ -234,5 +216,5 @@ plt.xlabel("Year")
 plt.ylabel("Average Property Price (£)")
 plt.legend()
 plt.grid(True)
-plt.savefig("07_Features_XGBoost_forecast.png")
+plt.savefig("07B_OSM_XGBoost_forecast.png")
 plt.close()
