@@ -8,30 +8,47 @@ The system handles extremely large datasets (3.2 GB raw CSV) efficiently using a
 
 ```mermaid
 graph TD
+    classDef highlight fill:#ff9999,stroke:#cc0000,stroke-width:2px;
+    classDef highlightB fill:#99ff99,stroke:#009900,stroke-width:2px;
+
     subgraph Data Layer
         A[(Raw UK Property Data\n3.2 GB CSV)] -->|Chunk Streaming| B[Data Prep Engine]
         B -->|Filter & Clean| C[(london_data.csv\n3.9M Records)]
     end
 
-    subgraph "Feature Engine (pgeocode)"
+    subgraph "Feature Engine (pgeocode & External APIs)"
         C --> D[Extract Unique Postcodes]
         D -->|Query Offline DB| E[Generate Latitude & Longitude]
         E --> F[Merge Lat/Lon into Primary Dataset]
+        
+        API1["🌍 OpenStreetMap<br>(OSM_stations)"]
+        API2["📰 Google News<br>(News_Volume)"]
+        API3["📈 Google Trends<br>(Mortgage_index)"]
+        API4["🏦 World Bank<br>(Interest_Rates)"]
+        
+        API1 --> F
+        API2 --> F
+        API3 --> F
+        API4 --> F
     end
 
     subgraph Machine Learning Engine
         F --> G{Train/Test Split}
-        G -->|Train Subset: 2008-2017| H[04A: Random Forest]
-        G -->|Train Subset: 2008-2017| X[04B: XGBoost]
-        G -->|Train Subset: 2008-2017| L[04C: LightGBM]
-        G -->|Holdout Test: 2018-2022| I[5-Year Forecast Validator]
-        H --> I
-        X --> I
-        L --> I
+        
+        G -->|Train Subset: Base Geo| L[04C: LightGBM Base]
+        
+        G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models[07A: All Features]
+        class A_Models highlight;
+        
+        G -->|"Train Subset: Clean Geo<br>(OSM Stations ONLY)"| B_Models[07B: OSM Only]
+        class B_Models highlightB;
+        
+        L --> I[5-Year Forecast Validator]
+        A_Models -.->|"Collinearity Crash"| I
+        B_Models ==>|"Supreme Accuracy"| I
     end
 
     subgraph Presentation Layer
-        I --> J[Validation CSVs: Actual vs Predicted]
         I --> K[Forecast Metrics & Comparisons]
     end
 ```
@@ -160,6 +177,13 @@ All 3 API outputs run live and successfully export physical test examples to the
 | Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
 |------------|--------------------------|----------------------------------------|------------------|
 | **News RSS (`news.google.com/rss`)** | `query = "London+Real+Estate"`<br>HTTP GET Request | [Run Google News RSS in Browser](https://news.google.com/rss/search?q=London+Real+Estate) | An XML DOM tree dynamically pulling the newest article publication dates and headlines. |
+
+### 4. World Bank Public API - National Interest Rates
+**Why this improves accuracy:** The price of property drastically swings inversely depending on how expensive it is to functionally borrow money. The Bank of England crashed interest rates to 0.1% during the 2021 pandemic causing a massive boom. By directly pinging the world bank for `national_interest_rate`, we mathematically tell the models exactly when lending bubbles occur!
+
+| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
+|------------|--------------------------|----------------------------------------|------------------|
+| **World Bank (`api.worldbank.org`)** | `country = "GB"`<br>`indicator = FR.INR.LEND`<br>`format=json` | [Run World Bank API in Browser](https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json) | A structured JSON Array physically dictating the UK's historical absolute lending interest rate explicitly spanning decades. |
 
 ---
 
