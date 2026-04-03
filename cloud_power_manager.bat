@@ -12,7 +12,7 @@ set CLUSTER_NAME=RealEstateDemandCluster
 set SERVICE_NAME=AI-Engine-Service
 set ECR_REPO=real-estate-ai-engine
 set REGION=eu-west-2
-:: You can change your region globally above! Defaulting to London (eu-west-2) for UK housing data.
+:: Defaulting to London (eu-west-2) for UK housing data.
 
 set ACTION=%1
 
@@ -20,23 +20,24 @@ if "%ACTION%"=="" (
     echo ====================================================
     echo   REAL ESTATE AI - AWS CLOUD MANAGER 
     echo ====================================================
-    echo Valid Commands:
-    echo  .\cloud_power_manager.bat deploy   - Creates total AWS Cloud Infrastructure + Pushes Docker logic
-    echo  .\cloud_power_manager.bat start    - Powers on the AI Engine ^($0.01/hr^)
-    echo  .\cloud_power_manager.bat stop     - Freezes the AI Engine safely ^($0.00/hr^)
-    echo  .\cloud_power_manager.bat cleanup  - Vigorously deletes ALL AWS resources permanently to protect billing!
+    echo Valid Commands for Novice Operators:
+    echo  .\cloud_power_manager.bat deploy   - FIRST TIME SETUP: Creates Cloud Framework + Initial Docker deploy
+    echo  .\cloud_power_manager.bat start    - DAILY MORNING: Powers on the AI Engine ^($0.01/hr^)
+    echo  .\cloud_power_manager.bat stop     - DAILY EVENING: Freezes the AI Engine safely ^($0.00/hr^)
+    echo  .\cloud_power_manager.bat update   - CODE CHANGE: Rebuilds and pushes a new Docker image safely to active servers
+    echo  .\cloud_power_manager.bat cleanup  - DANGER: Vigorously deletes ALL AWS resources permanently to protect billing!
     echo ====================================================
     exit /b 1
 )
 
 :: -------------------------------------------------------------------
-:: DEPLOYMENT PHASE (CloudFormation + Docker)
+:: DEPLOYMENT PHASE (First Time Setup)
 :: -------------------------------------------------------------------
 if /I "%ACTION%"=="deploy" (
     echo [EXECUTE] Generating AWS Framework via CloudFormation...
     aws cloudformation create-stack --stack-name %STACK_NAME% --template-body file://aws_cloudformation.yaml --capabilities CAPABILITY_IAM >nul
     
-    echo [WAITING] Binding AWS infrastructure... ^(Takes roughly 3 minutes^)
+    echo [WAITING] Binding AWS infrastructure... ^(Takes roughly 3-5 minutes^)
     aws cloudformation wait stack-create-complete --stack-name %STACK_NAME%
     if !errorlevel! neq 0 (
         echo [ERROR] CloudFormation Failed! Check your AWS Console events natively.
@@ -50,7 +51,7 @@ if /I "%ACTION%"=="deploy" (
     echo [EXECUTE] Securing physical Docker Bridge to Elastic Container Registry...
     aws ecr get-login-password --region %REGION% | docker login --username AWS --password-stdin !AWS_ACCOUNT!.dkr.ecr.%REGION%.amazonaws.com
 
-    echo [EXECUTE] Compiling Python Docker Image ^(This traps the 20MB Geodatabase securely inside^)...
+    echo [EXECUTE] Compiling Python Docker Image ^(Traps 20MB Geodatabase securely inside^)...
     docker build -t %ECR_REPO% .
 
     echo [EXECUTE] Tagging and Pushing Image into AWS Cloud Storage...
@@ -68,7 +69,31 @@ if /I "%ACTION%"=="deploy" (
 )
 
 :: -------------------------------------------------------------------
-:: POWER ON PHASE 
+:: UPDATE CODE PHASE (Recompiling Python Logic Safely without network crashing)
+:: -------------------------------------------------------------------
+if /I "%ACTION%"=="update" (
+    echo [EXECUTE] Fetching AWS Account ID securely...
+    for /f "tokens=*" %%a in ('aws sts get-caller-identity --query Account --output text') do set AWS_ACCOUNT=%%a
+
+    echo [EXECUTE] Securing physical Docker Bridge to Elastic Container Registry...
+    aws ecr get-login-password --region %REGION% | docker login --username AWS --password-stdin !AWS_ACCOUNT!.dkr.ecr.%REGION%.amazonaws.com
+
+    echo [EXECUTE] Re-Compiling Python Docker Image with new Code Changes...
+    docker build -t %ECR_REPO% .
+
+    echo [EXECUTE] Pushing refreshed Image logically into AWS Cloud Storage...
+    docker tag %ECR_REPO%:latest !AWS_ACCOUNT!.dkr.ecr.%REGION%.amazonaws.com/%ECR_REPO%:latest
+    docker push !AWS_ACCOUNT!.dkr.ecr.%REGION%.amazonaws.com/%ECR_REPO%:latest
+
+    echo [EXECUTE] Refreshing live AWS Fargate routing natively replacing old instances flawlessly...
+    aws ecs update-service --cluster %CLUSTER_NAME% --service %SERVICE_NAME% --force-new-deployment >nul
+    
+    echo [SUCCESS] The AWS Architecture has explicitly dynamically consumed the updated file changes!
+    exit /b 0
+)
+
+:: -------------------------------------------------------------------
+:: POWER ON PHASE (Daily Morning)
 :: -------------------------------------------------------------------
 if /I "%ACTION%"=="start" (
     echo [EXECUTE] Powering up the Real Estate AI Fargate Spot Instances...
@@ -76,13 +101,13 @@ if /I "%ACTION%"=="start" (
     if !errorlevel! neq 0 (
         echo [ERROR] Failed to start cluster!
     ) else (
-        echo [SUCCESS] Real Estate engine is powering ON natively!
+        echo [SUCCESS] Real Estate engine is powering ON. You can now use it natively!
     )
     exit /b !errorlevel!
 )
 
 :: -------------------------------------------------------------------
-:: HYBERNATION PHASE (Stop Billing)
+:: HYBERNATION PHASE (Daily Evening / Stop Billing)
 :: -------------------------------------------------------------------
 if /I "%ACTION%"=="stop" (
     echo [EXECUTE] Securing Zero-Cost Storage Sequence...
@@ -90,7 +115,7 @@ if /I "%ACTION%"=="stop" (
     if !errorlevel! neq 0 (
         echo [ERROR] Failed to stop the engine.
     ) else (
-        echo [SUCCESS] ECS Engine suspended accurately. Charges have stopped!
+        echo [SUCCESS] ECS Engine suspended accurately. Charges have stopped for the night!
     )
     exit /b !errorlevel!
 )
@@ -109,7 +134,7 @@ if /I "%ACTION%"=="cleanup" (
     echo [WAITING] Terminating resources... ^(This takes roughly 5 minutes^)
     aws cloudformation wait stack-delete-complete --stack-name %STACK_NAME%
     
-    echo [SUCCESS] Your absolute environment is fully zeroed and safely deleted!
+    echo [SUCCESS] Your absolute environment is fully zeroed and safely uninstalled!
     exit /b 0
 )
 
