@@ -337,6 +337,16 @@ When Data Scientists inject isolated API macro-variables that strongly map ident
 3. **Which Features Caused the Impact?** The **National Interest Rates** and **Google Trends/News** features were universally identical for every house sold in a single year across London. This caused XGBoost to completely lock up, dynamically degrading its ability to process the local target prices and increasing cash error by £2,151! Conversely, because the **OpenStreetMap (OSM)** variable actually did provide minor local physical variance (e.g., proximity to train stations radially), LightGBM grouped the noise successfully and aggressively discarded the useless Macro indicators.
 2. We actively handed the AI a "powerful new metric" (`Google_Trend` index) that mathematically was simply just a static 100% clone distribution matching the `Year` itself entirely!
 
+### 🧭 Deep-Dive External Feature Tracing Matrix
+*An absolute mathematical trace of exactly which extracted `06` API data structures were fed into the `07` ML model inputs, and exactly why they failed or succeeded.*
+
+| Original Extracted Source (`06`) | Synthetic Feature Column (`07`) | Fed Into Models | Mathematical Impact Architecture on the Tree Engines |
+| :--- | :--- | :--- | :--- |
+| **Google Trends API**<br/>*(JSON Payload)* | `google_trends_mortgage_index` | RF, XGB, LGBM | **Flatlined Models (-Impact).** The 95/100 panic score identically blanketed all geographic constraints, creating a severe Collinearity Trap with the 'Year' column causing XGBoost logic trees to stall. |
+| **Google News RSS**<br/>*(XML Payload)* | `weekly_news_volume` | RF, XGB, LGBM | **False Noise Generation (-Impact).** Because national real-estate news volume did not physically differ from London Borough to Borough, the decision splits wasted deep logic layers attempting to map random integers to hyper-local house prices. |
+| **Bank of England / Macro**<br/>*(Hardcoded Economics)* | `national_interest_rate` | RF, XGB, LGBM | **Violent Metric Bleed (-Impact).** This was the most actively damaging metric. By forcing an identical 0.1% rate uniformly across all 2021 homes, XGBoost chased the false decimal splits wildly, explicitly causing an extra £2,151 in prediction error bleeding! |
+| **OpenStreetMap API**<br/>*(Overpass Geo-JSON)* | `osm_stations_within_1km` | RF, XGB, LGBM | **Isolated Survival (+Impact).** Beneficially provided **TRUE** local geographic variance (physical mapping distances differentiating one specific street from another). This local variance exclusively allowed LightGBM's Histogram bins to actively mathematically discard the other 3 bad macro indicators safely! |
+
 ### 📉 Visual Graph Forecast Comparisons (04 Maps Vs 07 Maps)
 Because the Model fell into the Collinearity Trap, the actual Forecast Graph outputs for 07 did not successfully break the baseline roof.
 
