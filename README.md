@@ -35,7 +35,7 @@ graph TD
     subgraph Machine Learning Engine
         F --> G{Train/Test Split}
         
-        G -->|Train Subset: Base Geo| L[04C: LightGBM Base]
+        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models[04: Baseline Spatial Models]
         
         G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models[07A: All Features]
         class A_Models highlight;
@@ -43,9 +43,9 @@ graph TD
         G -->|"Train Subset: Clean Geo<br>(OSM Stations ONLY)"| B_Models[07B: OSM Only]
         class B_Models highlightB;
         
-        L --> I[5-Year Forecast Validator]
+        Base_Models -->|"Standard Accuracy Baseline"| I[5-Year Forecast Validator]
         A_Models -.->|"Collinearity Crash"| I
-        B_Models ==>|"Supreme Accuracy"| I
+        B_Models ==>|"Supreme Accuracy Leader"| I
     end
 
     subgraph Presentation Layer
