@@ -49,7 +49,7 @@ graph TD
     end
 
     subgraph Presentation Layer
-        I --> K[Forecast Metrics & Comparisons]
+        I --> K["Validation CSVs & Analytics PNG Charts"]
     end
 ```
 
