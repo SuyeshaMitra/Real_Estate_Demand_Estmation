@@ -69,6 +69,25 @@ If the data-engineering project completely concludes and you want to permanently
 
 ---
 
+## 🛠️ Phase 5: Troubleshooting & AWS Console Management
+
+If any automation completely stalls out (e.g., your internet disconnected midway through a push), you can seamlessly manually inspect the live architecture arrays by logging directly into your AWS Console!
+
+**Direct AWS Management Link:**
+🔗 [Open AWS Console (us-east-1 Region)](https://us-east-1.console.aws.amazon.com/console/home?region=us-east-1#)
+
+*(Note: If you use this region, open `cloud_power_manager.bat` with a text editor and change `set REGION=eu-west-2` to `set REGION=us-east-1` before executing Step 1!)*
+
+### Common Troubleshooting Steps:
+1. **CloudFormation Stack Stuck in "CREATE_IN_PROGRESS"**: 
+   * Go to the link above, search `CloudFormation`, and check the "Events" tab. It will mathematically tell you exactly why (usually IAM permission caps).
+2. **Docker Fails to Push (Access Denied)**: 
+   * Ensure you genuinely have the AWS CLI successfully installed locally and `aws configure` has been run natively with Active keys.
+3. **Application Running but Blank Dashboard**: 
+   * Search `ECS` in the AWS Console, click `RealEstateDemandCluster`, click `Tasks`, and check the "Logs" tab to natively see Python's console output strictly live inside the isolated container securely.
+
+---
+
 ### 🏗️ Physical Cloud Deployment Architecture Matrix
 
 ```mermaid
