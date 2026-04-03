@@ -215,16 +215,18 @@ To break this, we formally sourced explicit public APIs (`06_external_feature_ex
 ### ❌ Track 07A / 08A: The "Collinearity Trap" (Total Noise)
 We first injected ALL macro variables (Interest Rates, Search volume). 
 **The Result:** The models fell into a massive mathematical phenomenon known as the "Collinearity Trap". Because Google Trends and National Interest Rates were identically static for every single house sold in London in a single year, the algorithms drowned in numerical noise searching for geographic variance that didn't exist!
-* **XGBoost Error:** Skyrocketed by +£2,151 as it chased false interest rate splits.
-* **XGBoost Speed:** Collapsed to ~3.65s attempting to logically parse massive Google integer arrays.
+#### 📊 Chart 1: The Error Shift Breakdown (`04` Baseline vs `07A` Macro Track)
+**Purpose:** This chart directly visually compares the mathematical performance difference between the Baseline Models (which were fed strictly `Latitude + Longitude`) against the exact same models burdened with the `Track 07A` API trap (fed `OSM Distances + Google Trends + Google News + Bank of England Rates`). 
+**Analysis:** You can visibly see the blue bar (the "Enhanced" model) is actually strictly *higher* (worse error) than the red bar for XGBoost due to the collinearity trap.
 
-#### 📊 Chart 1: The Error Shift Breakdown (`04` vs `07A`)
 ![07A Vs 04 Feature Impact Map](07A_Vs_04_chart_feature_impact_comparison.png)
 *(Above: Direct geometric error shift explicitly demonstrating the 'Collinearity Crash')*
 
-#### 📊 Chart 2: `08A` Macro Topology Model Collapse
+#### 📊 Chart 2: The `08A` Macro Topology Model Collapse
+**Purpose:** This chart completely isolates strictly the `Track 07A/08A` environment (modeling strictly the data loaded with all 4 APIs: `OSM + Trends + News + Rates`). It is solely comparing the three AI models against each other to see which algorithm survived the noise.
+**Analysis:** It proves visibly that LightGBM's leaf-wise histogram bucketing successfully bypassed the economic noise (£401,553), while depth-wise XGBoost algorithmically severely struggled (£412,490) trying to physically map static interest-rates against spatial topology!
+
 ![08A Error Map](08A_chart_model_mae_comparison.png)
-*(Notice XGBoost actively dropping in performance structurally)*
 
 ### ✅ Track 07B / 08B: Pure OSM Geography (The Final Victor)
 We deleted the Google and World Bank macro-noise and fed the exact same models **strictly OpenStreetMap (OSM) Train Station distances**.
