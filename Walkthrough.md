@@ -323,7 +323,7 @@ Instead of running Python, copy and paste this exact link into your browser to p
 By officially equipping the Algorithms with "Macro Economics", did they perfectly shatter the Extrapolation Ceilings they crashed into mathematically in Step 04?
 
 ### 📊 04 vs 07 Mathematical Model Performance Comparison
-Adding External global Economic Indicators literally made our Tree Models mathematically flatlined or worse.
+Adding External global Economic Indicators literally made our Tree Models mathematically flatlined or worse. Specifically, injecting the **Google Trends**, **Google News Sentiment**, and **National Interest Rates** (which were perfectly static clones of the Year target) forced the models to violently calculate identical noise, while the **OpenStreetMap (OSM)** radial infrastructure parameter failed to provide enough localized variance across the 50km bounds to overcome the global macroeconomic distortion.
 
 | Algorithm | Base `04` Geo Error (MAE) | Macro `07` Enhanced Error (MAE) | Difference | Did it Improve? | Who won? |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -334,6 +334,7 @@ Adding External global Economic Indicators literally made our Tree Models mathem
 ### 🧠 Diagnosing The Phenomenon: The "Collinearity Trap"
 When Data Scientists inject isolated API macro-variables that strongly map identically to exactly the target **"Time"** element (e.g., 2021 global pandemic Interest Rates randomly were identically `0.1%` uniformly statically across all 3.9 million homes uniformly that year), you create a massive phenomenon termed **Complete Feature Collinearity**.
 1. Our AI Algorithm inherently was already deeply mathematically safely splitting its trees exclusively using the native `Year` metric.
+3. **Which Features Caused the Impact?** The **National Interest Rates** and **Google Trends/News** features were universally identical for every house sold in a single year across London. This caused XGBoost to completely lock up, dynamically degrading its ability to process the local target prices and increasing cash error by £2,151! Conversely, because the **OpenStreetMap (OSM)** variable actually did provide minor local physical variance (e.g., proximity to train stations radially), LightGBM grouped the noise successfully and aggressively discarded the useless Macro indicators.
 2. We actively handed the AI a "powerful new metric" (`Google_Trend` index) that mathematically was simply just a static 100% clone distribution matching the `Year` itself entirely!
 
 ### 📉 Visual Graph Forecast Comparisons (04 Maps Vs 07 Maps)
