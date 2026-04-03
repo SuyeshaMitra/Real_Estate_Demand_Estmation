@@ -86,7 +86,7 @@ Open your terminal in the project folder. You never have to log into AWS again.
 ## 🔄 Updating Algorithms
 
 
-If you edit `07_Features_LightGBM_modeling.py` internally locally, follow this strictly to jump the changes safely to the internet cloud:
+If you edit `07B_OSM_LightGBM_modeling.py` internally locally, follow this strictly to jump the changes safely to the internet cloud:
 1. Repeat the **ECR Push Commands** exactly as Step 2 (rebuilding the container locally).
 2. Go to **AWS ECS** -> **Clusters** -> `RealEstateDemandCluster`.
 3. Select your Service (`AI-Engine-Service`) -> Click **Update**.
