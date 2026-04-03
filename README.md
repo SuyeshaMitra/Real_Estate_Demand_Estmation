@@ -218,6 +218,9 @@ We first injected ALL macro variables (Interest Rates, Search volume).
 * **XGBoost Error:** Skyrocketed by +£2,151 as it chased false interest rate splits.
 * **XGBoost Speed:** Collapsed to ~3.65s attempting to logically parse massive Google integer arrays.
 
+![07A Vs 04 Feature Impact Map](07A_Vs_04_chart_feature_impact_comparison.png)
+*(Above: Direct geometric error shift explicitly demonstrating the 'Collinearity Crash')*
+
 ![08A Error Map](08A_chart_model_mae_comparison.png)
 *(Notice XGBoost actively dropping in performance structurally)*
 

@@ -20,8 +20,8 @@ x = range(len(models))
 width = 0.35
 
 # Plot side by side performance geometries
-bars1 = ax.bar([i - width/2 for i in x], mae_04, width, label='04 Baseline (Geo Only)', color='#FF9999')
-bars2 = ax.bar([i + width/2 for i in x], mae_06, width, label='06 Enhanced (Macro + Geo)', color='#66B2FF')
+bars1 = ax.bar([i - width/2 for i in x], mae_04, width, label='04 Baseline (Lat/Lon Only)', color='#FF9999')
+bars2 = ax.bar([i + width/2 for i in x], mae_06, width, label='07A Enhanced (OSM + Trends + News + BoE Rates)', color='#66B2FF')
 
 # Add descriptive structural tracking texts
 ax.set_title('Spatial Extrapolation Limit Test\n(Did External Variables Break the Ceiling?)', fontsize=14, pad=15)
