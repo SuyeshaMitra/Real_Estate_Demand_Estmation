@@ -109,11 +109,11 @@ df['old_new_code'] = df['old_new'].astype('category').cat.codes
 # Define final array of input metrics the model views determining price
 
 # ==============================================================================
-# --- STEP 6.5: EXTERNAL MACRO FEATURE INJECTIONS (OSM, GOOGLE TRENDS, GOOGLE NEWS) ---
+# --- STEP 6.5: EXTERNAL MACRO FEATURE INJECTIONS (OSM, GOOGLE TRENDS, GOOGLE NEWS, WORLD BANK) ---
 # WHY WE ARE DOING THIS: In Step 06 ('06_external_feature_extraction.py'), we proved that we could 
-# hit OpenStreetMap, Google Trends, and Google News APIs to get raw JSON/XML surrounding a property.
-# However, pinging Google 3.9 Million times live right here would instantly ban our IP address.
-# Therefore, we synthetically "inject" those exact extracted global environments down below:
+# hit OpenStreetMap, Google Trends, Google News, and World Bank APIs to get raw JSON/XML surrounding a property and testing economic vectors.
+# However, pinging Google or the World Bank 3.9 Million times live right here would instantly fundamentally ban our IP address.
+# Therefore, we synthetically "inject" those exact identically extracted global environments mathematically down below:
 print("Merging External Macro-economic, Infrastructure, and Sentiment indicators...")
 
 # FEATURE 1: GOOGLE TRENDS & GOOGLE NEWS (The Economic Leading Indicator)
