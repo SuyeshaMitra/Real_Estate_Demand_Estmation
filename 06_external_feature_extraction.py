@@ -156,6 +156,47 @@ except Exception as e:
     print(f" -> [ERROR] Failed to hit Google News API: {e}")
 
 # Padding natively 
+print("\n------------------------------------------------------\n")
+
+# -------------------------------------------------------------
+# --- STEP 4: WORLD BANK / BANK OF ENGLAND (NATIONAL INTEREST RATES) ---
+# WHAT IT DOES: We ping the global World Bank public API targeting country code 'GB' 
+#               (Great Britain) to extract the official historical Lending Interest Rate natively as JSON.
+# WHY IT MATTERS: The price of a house is entirely dictated by how expensive it is to borrow money. 
+#                 Tracking "free money" (0.1% rates in 2021) directly governs real estate bubbles!
+# -------------------------------------------------------------
+print("4. Testing World Bank / BoE Economic API (UK Interest Rates)...")
+try:
+    # Target the World Bank public JSON endpoint explicitly tracking GB's lending rate natively
+    boe_url = "https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json"
+    print(f" -> Sending HTTP GET request to World Bank / BoE API...")
+    
+    # Ship actual HTTP get securely 
+    boe_response = requests.get(boe_url)
+    boe_data = boe_response.json()
+    
+    # Store complete mapping output directly to physical local disk precisely 
+    with open('api_result_boe_interest.json', 'w') as f:
+        json.dump(boe_data, f, indent=4)
+        
+    print(" -> File Saved: 'api_result_boe_interest.json'")
+    
+    # Extract the absolute most recent valid interest decimal internally 
+    # (The API returns nested arrays where index 1 contains the yearly data dicts)
+    latest_rate = None
+    for year_data in boe_data[1]:
+        if year_data['value'] is not None:
+            latest_rate = year_data['value']
+            break
+            
+    print(f" -> [SUCCESS] Economic Data Fetched! Most recently detected UK Lending Rate: {latest_rate}%")
+    print(f" -> Extracted Features to append to model: 'national_interest_rate': {latest_rate}")
+
+except Exception as e:
+    # Safety crash landing logic explicitly securing execution gracefully 
+    print(f" -> [ERROR] Failed to hit BoE/World Bank API: {e}")
+
+# Padding natively 
 print("\n======================================================")
 # Full file completion state bound notification correctly 
 print(" API PIPELINE TEST COMPLETE - FILES SAVED TO ROOT ")
