@@ -35,7 +35,9 @@ graph TD
     subgraph Machine Learning Engine
         F --> G{Train/Test Split}
         
-        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models[04: Baseline Spatial Models]
+        C -.->|"Tabular CSV Data (No Lat/Lon)"| Baseline[03: Non-Spatial Baseline (4 Models)]
+        
+        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models[04: 3 Spatial Models]
         
         G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models[07A: All Features]
         class A_Models highlight;
@@ -43,7 +45,8 @@ graph TD
         G -->|"Train Subset: Clean Geo<br>(OSM Stations ONLY)"| B_Models[07B: OSM Only]
         class B_Models highlightB;
         
-        Base_Models -->|"Standard Accuracy Baseline"| I[5-Year Forecast Validator]
+        Baseline -.->|"Baseline Analytics"| I[5-Year Forecast Validator]
+        Base_Models -->|"Standard Accuracy"| I
         A_Models -.->|"Collinearity Crash"| I
         B_Models ==>|"Supreme Accuracy Leader"| I
     end
@@ -73,8 +76,8 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ---
 
-## 🤖 The 3 Spatial Models & Rationale
-Real estate pricing is dictated heavily by exact location. We built 3 distinct Tree-Based ML models to observe how varying mathematical approaches manage geometric spatial proximity differently.
+## 🤖 The Geospatial Transition (Why 3 Models?)
+Because the Neural Network completely crashed during the `03` Tabular Baseline test phase (£546,571 MAE), we permanently excluded it from the rigorous hardware-heavy Geospatial trials. Real estate pricing is dictated precisely by physical location. We built **3 distinct Tree-Based ML models** (`04A`, `04B`, `04C`) to observe how varying mathematical approaches manage geometric spatial proximity differently once Latitude and Longitude are properly supplied.
 
 ### 1. Geospatial Random Forest (Ensemble Averaging)
 * **What it does**: Random Forests draw hard localized bounding boxes over latitude and longitude. It grows thousands of independent, deeply nested trees (`max_depth=20`) and averages their outputs.
@@ -110,8 +113,8 @@ The following charts explicitly graph the spatial performance difference between
 | **3. LightGBM (Leaf-wise)** | **£401,075🏆** | **~0.6 sec🏆** | **Fastest, Best overall accuracy, mathematically hyper-focused.** | Can aggressively overfit small neighborhoods without `min_child_samples` bounds. |
 
 ### Conclusion & Explanation: Why LightGBM Won
-**LightGBM achieved the lowest overall average error (MAE: £401,075) outperforming BOTH XGBoost and Random Forest.**
-Because longitude and latitude are continuous float numbers, finding geographic tree split-points is computationally massive. Because LightGBM bins continuous geographical features into discrete statistical histograms and splits **only the leaves with the highest errors**, it accurately carved out exactly where the most volatile London wealth-pockets lay, rather than forcing symmetric splits across the entire map uniformly like XGBoost. By doing this, it reduced error by another £9,000 per house and achieved it at 5x the processing speed! Ultimately, **LightGBM is the ultimate deployment model.**
+**LightGBM achieved the absolute highest prediction supremacy iteratively across the entire pipeline, functionally defeating Neural Networks, XGBoost, and Random Forest.**
+In the `03` tabular baseline test, LightGBM bypassed the Neural Network's catastrophic failure by utilizing algorithmic binning instead of simulated deep neuro-paths. When injected with continuous float coordinate arrays in the `04` geospatial phase (latitude/longitude), finding geographic tree split-points became computationally massive. Because LightGBM natively partitions continuous geographical features into discrete statistical histograms and splits **only the leaves with the highest architectural errors**, it successfully carved out exactly where the most volatile London wealth-pockets lay. It structurally defeated XGBoost because it bypassed forcing symmetric splits across the entire physical map uniformly, slashing computation execution times drastically. By sweeping the 4-model baseline evaluations and natively dominating spatial metrics, **LightGBM is the ultimate deployment model.**
 
 ---
 
