@@ -33,19 +33,19 @@ graph TD
     end
 
     subgraph Machine Learning Engine
-        F --> G{Train/Test Split}
+        F --> G{"Train/Test Split"}
         
-        C -.->|"Tabular CSV Data (No Lat/Lon)"| Baseline[03: Non-Spatial Baseline (4 Models)]
+        C -.->|"Tabular CSV Data (No Lat/Lon)"| Baseline["03: Non-Spatial Baseline (4 Models)"]
         
-        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models[04: 3 Spatial Models]
+        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models["04: 3 Spatial Models"]
         
-        G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models[07A: All Features]
+        G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models["07A: All Features"]
         class A_Models highlight;
         
-        G -->|"Train Subset: Clean Geo<br>(OSM Stations ONLY)"| B_Models[07B: OSM Only]
+        G -->|"Train Subset: Clean Geo<br>(OSM Stations ONLY)"| B_Models["07B: OSM Only"]
         class B_Models highlightB;
         
-        Baseline -.->|"Baseline Analytics"| I[5-Year Forecast Validator]
+        Baseline -.->|"Baseline Analytics"| I["5-Year Forecast Validator"]
         Base_Models -->|"Standard Accuracy"| I
         A_Models -.->|"Collinearity Crash"| I
         B_Models ==>|"Supreme Accuracy Leader"| I
