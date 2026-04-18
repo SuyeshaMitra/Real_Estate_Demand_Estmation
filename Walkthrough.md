@@ -83,25 +83,24 @@ y_train = np.log1p(train_df['price'])
 ### ❓ What are we trying to do here? (The Baseline Test)
 Think of File `03` as the **"Baseline Test."** In data science, before you spend hours doing complex math and writing advanced code, you must first build a simple, basic model to see if it's even necessary. We ask the AI to guess house prices using extremely basic, surface-level information: *Year, Month, Property Type, Old/New, and District Name*. We want to see how accurate an AI can be *purely by looking at basic text categories*. 
 
-### 🤖 Why use Random Forest and Neural Networks (MLP)?
-* **Why Random Forest?** Random Forest is the industry's ultimate "Reliable Control Group." It almost never crashes, is easy to set up, and always gives a "decent" answer. If we want a solid baseline, Random Forest is the gold standard.
-* **Why Neural Networks (MLP)?** We specifically included a Neural Network as a wildcard. People often assume that Neural Networks are automatically the smartest, so they will perform best. This tests that theory! (Spoiler: Neural Networks actually tend to perform *worse* than Random Forests on basic tabular spreadsheets). 
-* **Why wait on XGBoost and LightGBM?** XGBoost and LightGBM are "heavy artillery" algorithms. Using them on basic text buckets (like the word "Croydon") is overkill. We explicitly save them for File `04` where their advanced math can actively take advantage of latitude and longitude coordinates.
+### 🤖 Why evaluate 4 Models (Random Forest, Neural Network, XGBoost, LightGBM)?
+* **Random Forest**: The industry's ultimate "Reliable Control Group." It almost never crashes, is easy to set up, and always gives a "decent" baseline (MAE £470k).
+* **Neural Networks (MLP)**: We specifically included a Neural Network as a wildcard. People assume Deep Learning is always the smartest. This proves otherwise! Neural Networks perform terribly on basic tabular CSVs lacking deep complexity (Worst MAE: £546k).
+* **XGBoost & LightGBM**: These are mathematically advanced "Gradient Boosters." We originally saved them strictly for the Geospatial step, but we test them here on basic text categories like District name to see if raw algorithmic power can beat a Random Forest without using Latitude/Longitude. LightGBM manages to pull ahead (MAE £456k), but XGBoost overfits the text categories completely (MAE £494k).
 
-### 📊 What do the two File 03 Plots signify?
-File `03` computes and generates two visual artifacts directly to your root folder:
-1. **`03_historical_trend.png`**: Before the AI even trains, this plots the *true* average real estate price in London from 2008 to 2022. **Significance & Decision Context**: It visually establishes the problem we are facing. We can definitively *see* that prices are aggressively rising, proving mathematically why we had to make the critical design decision to use Logarithm transformations (to compress and tame the inflation curve).
-2. **`03_forecast_validation.png`**: This is the visual proof of our baseline model. It draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data the AI was never previously allowed to see), and places a dotted line representing what the AI *predicted* would happen. **Significance & Decision Context**: If the dotted line roughly follows the solid line, it proves our AI mathematically understands the forward flow of time and confirms our baseline model structure works!
+### 📊 What do the five File 03 Plots signify?
+File `03` computes and generates five visual artifacts directly to your root folder:
+1. **`03_historical_trend.png`**: Before the AI even trains, this plots the *true* average real estate price in London from 2008 to 2022. **Significance & Decision Context**: It visually establishes the problem we are facing. We can definitively *see* that prices are aggressively rising.
+2. **`03_forecast_validation.png`**: This draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data), and places dotted lines representing what the AI *predicted* would happen. 
 
-   **Understanding the Graph Markers (Dots vs Crosses):**
-   The crosses (`x`) on the orange dashed line are simply data point markers used in the chart to help you visually tell the two lines apart. Here is exactly what you are looking at in that image:
-   * **The Blue Dots (`o`)**: These represent the TRUE average house prices in London for that exact year. For example, the blue dot over 2019.0 shows that the real average London property was sold for almost £950k that year.
-   * **The Orange Crosses (`x`)**: These represent the AI's PREDICTION for the average house price that year. The `x` over 2019.0 shows the AI incorrectly thought houses would only be worth about £575k.
+   💡 **Why is the gap between the models and reality so massive?**
+   What you are looking at right now is the exact visual proof of why we called File `03` the "Baseline Test". The 4 models plotted in this image were only given basic text words (like the district name "Croydon") to try and guess the price. The chart visually proves that *none* of the algorithms successfully tracked the 2019 London real estate boom, all under-predicting reality by £300,000+!
 
-   💡 **Why is the gap between them so massive?**
-   What you are looking at right now is the exact visual proof of why we called File `03` the "Baseline Test". The Random Forest model in this file was only given basic text words (like the district name "Croydon") to try and guess the price. The chart visually proves that the AI massively failed to understand the 2019 London real estate boom, under-predicting reality by almost £400,000!
-   
-   This huge visual failure is the exact reason we built the **Geospatial Models** in Files `04A`, `04B`, and `04C`. When you run those files and open their graphs, you will see the orange `x` line magically jump all the way up and tightly hug the true blue line, because Latitude and Longitude math allows the AI to finally "see" the wealthy neighborhoods!
+3. **`03_chart_model_mae_comparison.png` (Absolute Error)**: Demonstrates that **LightGBM** wins the error-margin contest natively (£456k), while the Neural Network spectacularly crashes (£546k).
+4. **`03_chart_model_accuracy_comparison.png` (Median Accuracy)**: Proves LightGBM achieves roughly **75.68% target accuracy** solely predicting from basic Categories.
+5. **`03_chart_model_speed_comparison.png` (Execution Processing Speed)**: Emphasizes that LightGBM accomplished its victory in a blisteringly fast ~1.63 seconds, while XGBoost suffered computational bloat at ~2.27 seconds.
+
+This huge visual failure on the forecast validation chart is the exact reason we built the **Geospatial Models** in Files `04A`, `04B`, and `04C`. When you run those files and open their graphs, you will see the actual predictions mathematically jump all the way up and tightly hug the true blue line, because Latitude and Longitude arrays allow the ML Trees to finally "see" the wealthy neighborhoods!
 
 ### 📏 Understanding the Evaluation Metrics
 To know how good or bad our model is, we grade its "test paper" using three metrics. Here is an explanation of what they mean, completely broken down, including example performance values we achieved later on by applying our **Top 3 Geospatial Models** (Random Forest, XGBoost, LightGBM) to those same metrics:

@@ -55,6 +55,24 @@ graph TD
 
 ---
 
+## 🧱 The Baseline Models (Non-Spatial)
+Before migrating to complex geographical mapping, we tested four algorithms (Random Forest, Neural Network, XGBoost, and LightGBM) on simple text-based district data (`03_trend_analysis_and_modeling.py`) to establish a non-spatial baseline.
+
+| Baseline Model | Mean Absolute Error (MAE) | Median Accuracy | Training Speed | Performance Conclusion |
+|----------------|---------------------------|-----------------|----------------|------------------------|
+| **LightGBM** | **£456,439** | **75.68%** | ~1.6 sec | Even without Lat/Lon coordinates, LightGBM dominates via histogram binning. |
+| **Random Forest** | £470,591 | 74.78% | **~0.4 sec** | Stable but struggles to define wealth pockets based merely on District names. |
+| **XGBoost** | £494,479 | 73.82% | ~2.3 sec | Severely overfits the noisy text-categories, causing massive error degradation. |
+| **Neural Network** | £546,571 | 65.93% | ~2.2 sec | Fails exceptionally hard. Tabular district data lacks the depth for deep learning. |
+
+### Baseline Output Visuals
+To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
+![Baseline MAE Comparison](03_chart_model_mae_comparison.png)
+![Baseline Accuracy Comparison](03_chart_model_accuracy_comparison.png)
+![Baseline Speed Comparison](03_chart_model_speed_comparison.png)
+
+---
+
 ## 🤖 The 3 Spatial Models & Rationale
 Real estate pricing is dictated heavily by exact location. We built 3 distinct Tree-Based ML models to observe how varying mathematical approaches manage geometric spatial proximity differently.
 

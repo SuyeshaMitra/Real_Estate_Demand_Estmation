@@ -12,6 +12,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 # Import the Multi-Layer Perceptron (Neural Network) regression algorithm
 from sklearn.neural_network import MLPRegressor
+# Import XGBoost and LightGBM regression algorithms
+from xgboost import XGBRegressor
+from lightgbm import LGBMRegressor
 # Import metrics to evaluate how well our models perform
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 # Import time module to benchmark model training speeds
@@ -96,6 +99,12 @@ X_test = test_df[features]
 # Isolate validation answers natively as raw correct values instead of logs for pure visual comparison
 y_test = test_df[target]  
 
+# Array to hold charting metrics dynamically
+plot_models = []
+plot_maes = []
+plot_times = []
+plot_accuracies = []
+
 # Output status
 print("Training Random Forest Regressor...")
 # Start recording time
@@ -122,8 +131,26 @@ mlp_time = time.time() - start_time
 # Display exact computing time
 print(f"Neural Network Training time: {mlp_time:.2f} seconds.")
 
+# Output status
+print("Training XGBoost Regressor...")
+# Start recording time
+start_time = time.time()
+xgb_model = XGBRegressor(n_estimators=100, max_depth=10, random_state=42)
+xgb_model.fit(X_train, y_train)
+xgb_time = time.time() - start_time
+print(f"XGBoost Training time: {xgb_time:.2f} seconds.")
+
+# Output status
+print("Training LightGBM Regressor...")
+# Start recording time
+start_time = time.time()
+lgbm_model = LGBMRegressor(n_estimators=100, num_leaves=64, random_state=42)
+lgbm_model.fit(X_train, y_train)
+lgbm_time = time.time() - start_time
+print(f"LightGBM Training time: {lgbm_time:.2f} seconds.")
+
 # Define an isolated helper function that prints standard benchmark statistics taking the name/model directly
-def evaluate_model(name, model):
+def evaluate_model(name, model, execution_time):
     # Generates log-based number answers based on validating against out-of-sample data points
     y_pred_log = model.predict(X_test)
     # Exponentiate the logs mathematically back to plain raw real GBP costs for interpretability
@@ -136,6 +163,16 @@ def evaluate_model(name, model):
     # Calculate R^2 representing overall accuracy variance the model natively accounted for
     r2 = r2_score(y_test, y_pred)
     
+    # Calculate Median Accuracy percentage natively
+    absolute_percentage_errors = np.abs((y_test - y_pred) / y_test)
+    median_accuracy_percentage = np.median(100 - (absolute_percentage_errors * 100))
+    
+    # Store dynamic stats
+    plot_models.append(name)
+    plot_maes.append(mae)
+    plot_times.append(execution_time)
+    plot_accuracies.append(median_accuracy_percentage)
+    
     # Spacing
     print(f"\n--- Model Evaluation: {name} ---")
     # Output the exact £ RMSE formatting visually with commas
@@ -144,25 +181,42 @@ def evaluate_model(name, model):
     print(f"MAE: £{mae:,.2f}")
     # Show R2 scoring matrix out of 1.0 peak
     print(f"R-Squared (out-of-sample): {r2:.4f}")
+    # Show median accuracy
+    print(f"Median Accuracy: {median_accuracy_percentage:.2f}%")
     
     # Function returns the generated physical predictions array
     return y_pred
 
 # Force function evaluations to execute over both loaded pre-trained models
-rf_pred = evaluate_model("Random Forest", rf_model)
-mlp_pred = evaluate_model("Neural Network", mlp_model)
+rf_pred = evaluate_model("Random Forest", rf_model, rf_time)
+mlp_pred = evaluate_model("Neural Network", mlp_model, mlp_time)
+xgb_pred = evaluate_model("XGBoost", xgb_model, xgb_time)
+lgbm_pred = evaluate_model("LightGBM", lgbm_model, lgbm_time)
 
 # Map the exact predictions back into the original dataset frame for a pure unified view
 test_df['rf_predicted_price'] = rf_pred
+test_df['mlp_predicted_price'] = mlp_pred
+test_df['xgb_predicted_price'] = xgb_pred
+test_df['lgbm_predicted_price'] = lgbm_pred
+
 # Compute group level aggregates displaying exact historic averages against averaged historic predictions per year
-yearly_test_trend = test_df.groupby('year').agg({'price': 'mean', 'rf_predicted_price': 'mean'}).reset_index()
+yearly_test_trend = test_df.groupby('year').agg({
+    'price': 'mean', 
+    'rf_predicted_price': 'mean',
+    'mlp_predicted_price': 'mean',
+    'xgb_predicted_price': 'mean',
+    'lgbm_predicted_price': 'mean'
+}).reset_index()
 
 # Draw one final 10x6 inch graph to demonstrate predictive performance
 plt.figure(figsize=(10, 6))
 # Create the true physical real data line using an 'O' marker for truth visualization
-plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", label="Actual Avg Price")
-# Create the Random Forest simulated future line using an 'X' marker and dashes mapped against the same timeline
-plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_predicted_price'], marker="x", linestyle="--", label="Forecasted Price (RF)")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", color="black", linewidth=2, label="Actual Avg Price")
+# Create predicted lines
+plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_predicted_price'], marker="x", linestyle="--", color="blue", label="Random Forest")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['mlp_predicted_price'], marker="s", linestyle="--", color="red", label="Neural Network")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['xgb_predicted_price'], marker="^", linestyle="--", color="green", label="XGBoost")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['lgbm_predicted_price'], marker="d", linestyle="--", color="purple", label="LightGBM")
 # Name the graph appropriately
 plt.title("5-Year Ahead Holdout Forecast Validation (2018-2022)")
 # Label Axis
@@ -178,5 +232,47 @@ plt.savefig("03_forecast_validation.png")
 # Tidy RAM
 plt.close()
 
+# ==============================================================================
+# --- AUTOMATED BAR CHART GENERATION ---
+# ==============================================================================
+plt.style.use('default')
+sns.set_theme(style="whitegrid", palette="muted")
+bar_colors = ['#FF9999', '#66B2FF', '#99FF99', '#DDA0DD']
+
+# MAE Comparison
+plt.figure(figsize=(10, 6))
+ax = sns.barplot(x=plot_models, y=plot_maes, hue=plot_models, palette=bar_colors, dodge=False)
+plt.title('Baseline Model Error (MAE) Comparison\n(Lower Error = Better)', fontsize=14, pad=15)
+plt.ylabel('Mean Absolute Error (£)', fontsize=12)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+for i, v in enumerate(plot_maes):
+    ax.text(i, v + 2000, f'£{v:,.0f}', ha='center', fontweight='bold', fontsize=11)
+plt.tight_layout()
+plt.savefig('03_chart_model_mae_comparison.png', dpi=200)
+plt.close()
+
+# Speed Comparison
+plt.figure(figsize=(10, 6))
+ax2 = sns.barplot(x=plot_models, y=plot_times, hue=plot_models, palette=bar_colors, dodge=False)
+plt.title('Execution Processing Speed (100k records)\n(Lower Time = Better)', fontsize=14, pad=15)
+plt.ylabel('Training Time (Seconds)', fontsize=12)
+for i, v in enumerate(plot_times):
+    ax2.text(i, v + 0.05, f'{v:.2f}s', ha='center', fontweight='bold', fontsize=11)
+plt.tight_layout()
+plt.savefig('03_chart_model_speed_comparison.png', dpi=200)
+plt.close()
+
+# Accuracy Comparison
+plt.figure(figsize=(10, 6))
+ax3 = sns.barplot(x=plot_models, y=plot_accuracies, hue=plot_models, palette=bar_colors, dodge=False)
+plt.title('Median Validation Accuracy %\n(Higher Accuracy = Better)', fontsize=14, pad=15)
+plt.ylabel('Baseline Target Accuracy (%)', fontsize=12)
+plt.ylim(50, 100) 
+for i, v in enumerate(plot_accuracies):
+    ax3.text(i, v + 0.5, f'{v:.2f}%', ha='center', fontweight='bold', fontsize=11)
+plt.tight_layout()
+plt.savefig('03_chart_model_accuracy_comparison.png', dpi=200)
+plt.close()
+
 # Exit cleanly informing process completed
-print("\nModeling and Analysis complete. Output charts are saved to artifacts.")
+print("\nModeling and Analytics complete. Output Line and Bar charts are saved locally.")
