@@ -81,6 +81,12 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 | **Overall Accuracy** | **75.68%** (Highest Accuracy) | LightGBM uses Leaf-wise growth. While Random Forest averages broadly, LightGBM actively isolates the absolute hardest-to-predict luxury homes and dynamically hyper-focuses splits entirely on them. |
 | **Compute Execution Speed** | **~1.6 sec** (Extremely Fast) | It bypasses forcing symmetric splits uniformly across the entire dataset like XGBoost, ignoring stable average zones completely to focus compute solely on breaking volatility. |
 
+**Mathematical Metric Calculation Example:**
+| Metric | Mathematical Formula Engine | Example Calculation Output (Based on 4 Models) |
+|--------|-----------------------------|------------------------------------------------|
+| **Mean Absolute Error (MAE)** | `MAE = Average( ABS(True_Price - Predicted_Price) )` | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
+| **Median Accuracy** | `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`. |
+
 ### Baseline Output Visuals
 To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
 ![Baseline MAE Comparison](03_chart_model_mae_comparison.png)
@@ -90,7 +96,9 @@ To scientifically prove the categorical limits of the baseline model, the algori
 ---
 
 ## 🤖 The Geospatial Transition
-*Note on Neural Networks: As clearly demonstrated in the tabular evaluation above, the multi-layer perception Neural Network system completely crashed (£546,571 error) predicting on structured tabular sheets. Because of this massive baseline failure, we formally dropped it from the pipeline.*
+![Failed Neural Network Forecast](03_forecast_validation.png)
+
+*Note on Neural Networks: Look extremely closely at the red dashed line (Neural Network) in the baseline chart above. Notice how it violently swings downwards away from the black true-price line spanning 2018-2022, creating a catastrophic £546,571 error when trying to predict on structured tabular sheets. Because of this massive baseline drift failure, we formally dropped it from the `04` pipeline completely.*
 
 Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 distinct Tree-Based ML models** (`04A`, `04B`, `04C`) to observe how varying mathematical approaches manage geometric spatial proximity differently once Latitude and Longitude are properly supplied via `pgeocode`.
 

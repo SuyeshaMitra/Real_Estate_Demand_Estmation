@@ -139,7 +139,11 @@ To know how good or bad our model is, we grade its "test paper" using three metr
 ---
 
 ## 📄 Step 4: Models 04A, 04B, 04C (The Geospatial Magic!)
-**The Goal**: We delete the text "Districts". We use an API to convert every single postcode into a physical Latitude and Longitude (X/Y axis dots on the Earth). Then we race 3 different advanced spatial models against each other.
+**The Goal**: We delete the text "Districts" that caused the Neural Network to crash out in `03`. We use an API to convert every single postcode into a physical Latitude and Longitude (X/Y axis dots on the Earth). Then we race 3 different advanced spatial models against each other.
+
+To visualize exactly how massively superior this is to the tabular models in the baseline, we executed `05B_spatial_forecast_validation.py` to aggregate the 3 spatial competitors into one line graph identically scaling the `2018-2022` test set:
+![Unified Spatial Validation Output](04_combined_spatial_forecast_validation.png)
+*(Note: As seen above, practically all models hug the black actual price line significantly closer than any of the baseline textual models were able to.)*
 
 ### Code Snippet 1: The Offline Geographic Locator
 ```python
