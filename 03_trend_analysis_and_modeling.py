@@ -217,37 +217,73 @@ test_df['mlp_predicted_price'] = mlp_pred
 test_df['xgb_predicted_price'] = xgb_pred
 test_df['lgbm_predicted_price'] = lgbm_pred
 
-# Compute group level aggregates displaying exact historic averages against averaged historic predictions per year
-yearly_test_trend = test_df.groupby('year').agg({
-    'price': 'mean', 
-    'rf_predicted_price': 'mean',
-    'mlp_predicted_price': 'mean',
-    'xgb_predicted_price': 'mean',
-    'lgbm_predicted_price': 'mean'
-}).reset_index()
+# Compute structured, granular error metrics rigorously ensuring evaluation limits are uniform
+models_dict = {'rf': 'Random Forest', 'mlp': 'Neural Network', 'xgb': 'XGBoost', 'lgbm': 'LightGBM'}
 
-# Draw one final 10x6 inch graph to demonstrate predictive performance
+for code in models_dict.keys():
+    # Calculate pure absolute error physically per single house record natively
+    test_df[f'{code}_abs_err'] = np.abs(test_df['price'] - test_df[f'{code}_predicted_price'])
+    # Floor accuracy strictly at 0% baseline removing negative drifts completely from skewing models
+    test_df[f'{code}_accuracy'] = np.clip(100 - (test_df[f'{code}_abs_err'] / test_df['price'] * 100), 0, 100)
+
+print("\n=======================================================")
+print("          --- 5-YEAR AGGREGATE SUMMARY (BY YEAR) ---           ")
+print("=======================================================")
+# Compute exact historical averages explicitly tracking the yearly error pattern completely isolated 
+yearly_test_trend = test_df.groupby('year').agg(
+    price=('price', 'mean'),
+    rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_acc=('rf_accuracy', 'median'),
+    mlp_predicted=('mlp_predicted_price', 'mean'), mlp_mae=('mlp_abs_err', 'mean'), mlp_acc=('mlp_accuracy', 'median'),
+    xgb_predicted=('xgb_predicted_price', 'mean'), xgb_mae=('xgb_abs_err', 'mean'), xgb_acc=('xgb_accuracy', 'median'),
+    lgbm_predicted=('lgbm_predicted_price', 'mean'), lgbm_mae=('lgbm_abs_err', 'mean'), lgbm_acc=('lgbm_accuracy', 'median')
+).reset_index()
+
+# Display terminal readout
+print(yearly_test_trend.to_string(index=False))
+
+print("\n=======================================================")
+print("      --- SEASONALITY AGGREGATE SUMMARY (BY MONTH) ---         ")
+print("=======================================================")
+# Compute exact historical monthly averages tracking the cyclic seasonality pattern error completely isolated 
+monthly_test_trend = test_df.groupby('month').agg(
+    price=('price', 'mean'),
+    rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_acc=('rf_accuracy', 'median'),
+    mlp_predicted=('mlp_predicted_price', 'mean'), mlp_mae=('mlp_abs_err', 'mean'), mlp_acc=('mlp_accuracy', 'median'),
+    xgb_predicted=('xgb_predicted_price', 'mean'), xgb_mae=('xgb_abs_err', 'mean'), xgb_acc=('xgb_accuracy', 'median'),
+    lgbm_predicted=('lgbm_predicted_price', 'mean'), lgbm_mae=('lgbm_abs_err', 'mean'), lgbm_acc=('lgbm_accuracy', 'median')
+).reset_index()
+
+# Display terminal readout
+print(monthly_test_trend.to_string(index=False))
+
+# Draw final graphs
 plt.figure(figsize=(10, 6))
-# Create the true physical real data line using an 'O' marker for truth visualization
 plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", color="black", linewidth=2, label="Actual Avg Price")
-# Create predicted lines
-plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_predicted_price'], marker="x", linestyle="--", color="blue", label="Random Forest")
-plt.plot(yearly_test_trend['year'], yearly_test_trend['mlp_predicted_price'], marker="s", linestyle="--", color="red", label="Neural Network")
-plt.plot(yearly_test_trend['year'], yearly_test_trend['xgb_predicted_price'], marker="^", linestyle="--", color="green", label="XGBoost")
-plt.plot(yearly_test_trend['year'], yearly_test_trend['lgbm_predicted_price'], marker="d", linestyle="--", color="purple", label="LightGBM")
-# Name the graph appropriately
-plt.title("5-Year Ahead Baseline Forecast Validation (LightGBM Performed Best)")
-# Label Axis
+plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_predicted'], marker="x", linestyle="--", color="blue", label="Random Forest")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['mlp_predicted'], marker="s", linestyle="--", color="red", label="Neural Network")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['xgb_predicted'], marker="^", linestyle="--", color="green", label="XGBoost")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['lgbm_predicted'], marker="d", linestyle="--", color="purple", label="LightGBM")
+plt.title("5-Year Ahead Baseline Forecast Validation")
 plt.xlabel("Year")
-# Label Axis
 plt.ylabel("Average Property Price (£)")
-# Ensure the legend differentiates truth lines vs artificial lines clearly
 plt.legend()
-# Turn down grids to show values sharply
 plt.grid(True)
-# Directly record chart visualization straight to disk for users
-plt.savefig("03_forecast_validation.png")
-# Tidy RAM
+plt.savefig("03_forecast_validation_yearly.png")
+plt.close()
+
+plt.figure(figsize=(10, 6))
+plt.plot(monthly_test_trend['month'], monthly_test_trend['price'], marker="o", color="black", linewidth=2, label="Actual Avg Price")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['rf_predicted'], marker="x", linestyle="--", color="blue", label="Random Forest")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['mlp_predicted'], marker="s", linestyle="--", color="red", label="Neural Network")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['xgb_predicted'], marker="^", linestyle="--", color="green", label="XGBoost")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['lgbm_predicted'], marker="d", linestyle="--", color="purple", label="LightGBM")
+plt.title("Monthly Seasonality Baseline Validation (Months 1-12)")
+plt.xlabel("Month")
+plt.ylabel("Average Property Price (£)")
+plt.xticks(range(1, 13))
+plt.legend()
+plt.grid(True)
+plt.savefig("03_forecast_validation_monthly.png")
 plt.close()
 
 # ==============================================================================
