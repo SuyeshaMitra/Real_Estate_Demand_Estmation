@@ -162,9 +162,13 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ## The Geospatial Transition (04 Models Detailed Analytics)
 
-**Query & Training Data Feed (Latitude + Longitude + Years: 2008-2017)**: 
-To construct the spatial matrix, we first parse the filtered resultset (`london_data.csv`) which contains our property timestamps. We then strictly query the **offline Great Britain (GB) geospatial resultset** via the `pgeocode` module (which natively downloads and queries the open-source [GeoNames GB.zip Dataset](http://download.geonames.org/export/zip/GB.zip)). This offline GB query maps every postal code into physical **Latitude** and **Longitude** coordinates.
-Once extracted, we merged the newly generated GB Lat/Lon targets directly alongside our historical temporal timestamps (**Years & Months: 2008 to 2017**) and physically export the completely unified matrix to **[london_geospatial_dataset.csv](london_geospatial_dataset.csv)**. This massive, unified geometric/time-series grid is then permanently fed identically into the Machine Learning algorithms below and serves as the master baseline dataset for all future modeling.
+**Pipeline Sequence & Training Data Generation (Generating `london_geospatial_dataset.csv`)**: 
+To construct the spatial matrix, the pipeline executes the following rigid sequence:
+1. **Temporal Filtering:** We first load the core `london_data.csv` dataset and strictly filter the property records down to our target 15-year historical block (**Years: 2008 to 2022**). 
+2. **Geospatial Mapping (No Time Dependency):** We extract the unique postal codes from those 15 years and pass them directly into the `pgeocode` module. `pgeocode` securely queries the **offline Great Britain (GB) geospatial resultset** (open-source [GeoNames GB.zip Dataset](http://download.geonames.org/export/zip/GB.zip)). *Note: This offline query operates strictly on static Postal Codes to retrieve physical **Latitude** and **Longitude** coordinates; it does not process or care about timestamp data.*
+3. **Merging & Exporting the Unified Grid:** Once the static Lat/Lon coordinates are successfully extracted, they are merged back onto the timestamped property records. We then physically export this completely unified matrix to **[london_geospatial_dataset.csv](london_geospatial_dataset.csv)**. 
+
+This resulting massive, offline geometric/time-series dataset is then permanently fed identically into the Machine Learning algorithms below (trained strictly on 2008-2017) and serves as the master baseline dataset for all future modeling.
 
 Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 Tree-Based ML models** (`Random Forest`, `XGBoost`, `LightGBM`) to observe how varying mathematical approaches manage geometric spatial proximity differently once `Latitude` and `Longitude` are properly extracted.
 
