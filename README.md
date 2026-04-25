@@ -273,25 +273,6 @@ All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and 
 
 ---
 
-## Detailed Technical File Reference & Execution Flow
-
-| File | What it does | Technical Details |
-|------|-------------|-------------------|
-| `01_data_exploration.py` | **Explores Raw Data** | Sniffs the 3.2GB `pp-complete.csv` using chunks. |
-| `02_data_preparation.py` | **Memory Management** | Streams 1,000,000 raw rows to extract `GREATER LONDON`. |
-| `04A_geospatial_Random_Forest_modeling.py` | **RF Spatial Engine** | Converts postcodes to geography. Fits depth=20 Random Forest. |
-| `04B_geospatial_XGBoost_modeling.py` | **Gradient Boost** | Runs XGBRegressor sequentially capturing spatial-gradient residuals. |
-| `04C_geospatial_LightGBM_modeling.py` | **LightGBM Engine** | Light-weight histogram modeling extracting optimal localized accuracy arrays. |
-
-### How to Run the App
-```bash
-pip install pandas numpy scikit-learn xgboost lightgbm pgeocode
-python 01_data_exploration.py
-python 04A_geospatial_Random_Forest_modeling.py
-python 04B_geospatial_XGBoost_modeling.py
-python 04C_geospatial_LightGBM_modeling.py
-```
-
 ## Breaking Extrapolation Limits: The "A vs B" Feature Matrix (`07` & `08`)
 
 While the Baseline (`04` & `05`) spatial models functioned brilliantly, Real Estate strictly suffers from **Extrapolation Ceilings**—Machine Learning trees cannot physically guess that a house is worth £1M if the maximum they saw during training in 2015 was £600k. 
