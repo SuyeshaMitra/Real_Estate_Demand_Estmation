@@ -272,9 +272,9 @@ This script executes and renders three gorgeous business-ready visualizations in
 Even the smartest algorithm (like LightGBM) cannot predict a housing market crash if it only looks at historical Latitude and Longitude. Algorithms are blind to the outside world. By explicitly querying Google and Maps for real-time human behavior and infrastructure, we give the model "eyes" into the real world.
 
 ### 1. KDTree "Last Mile" Proximity (Replacing Old Bounding Boxes)
-*   **What we take from Distance:** We don't just calculate arbitrary straight lines or "Is there a station within 1.5km?". We calculate the explicit **Haversine Euclidean distance (in exact Kilometers)** from the property to the absolute *closest* infrastructure node.
+*   **What we take from Distance (Exact Kilometers):** We don't use arbitrary max-radius bounds like "Is there a station within 1.5 miles?". Instead, the algorithm searches an infinite boundary to find the absolute *closest* infrastructure node to the property, and explicitly calculates the true **Haversine Euclidean distance (in exact Kilometers)**. 
 *   **What else we track:** We specifically track distance to the nearest `School`, `Hospital`, `Station`, and `Bank`. This allows the ML to inherently learn "Density". If a house is 0.5km from a station, 0.2km from a school, and 0.4km from a hospital, it is physically sitting in an ultra-premium high-density zone.
-*   **Why this matters (The Last Mile):** A simple "Yes/No" feature is heavily flawed. A property 0.1km from a station commands a drastically different premium than one 1.4km away, even though both are "Yes". KDTree feeds the AI the pure mathematical continuous float (e.g., `0.124 km`), teaching it exact walking-distance valuations.
+*   **Why this model is applied (The Last Mile):** A simple "Yes/No" feature is heavily flawed. A property 0.1km from a station commands a drastically different premium than one 1.4km away, even though both are "Yes". KDTree feeds the AI the pure mathematical continuous float (e.g., `0.124 km`), teaching it exact walking-distance valuations.
 *   **The Python Code Logic:**
     ```python
     # We load scipy's lightning fast spatial tree

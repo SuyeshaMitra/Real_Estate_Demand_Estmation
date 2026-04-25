@@ -239,22 +239,29 @@ To fundamentally resolve the limitations of pure temporal and coordinate models,
 ### A) Feature Resultset Extraction
 The pipeline successfully executed all API queries and generated 4 distinct physical output JSON/CSV artifacts representing the pure data from the 4 Data Providers. 
 
-### B) OSM API Invocation
-The script actively queried the OSM Overpass API to download the exact coordinates of every `School`, `Bank`, `Hospital`, and `Station` located across Central London.
+### Advanced Model Applications (The 4 External Data Providers)
 
-### C) KDTree Spatial Proximity (The "Last Mile" Connection)
-> [!IMPORTANT]
-> **Spatial Distance vs Bounding Boxes**
-> We do NOT simply check if a property is "within 1.5km" of a station. Instead, we use `scipy.spatial.cKDTree` to mathematically calculate the exact true Haversine distance (in kilometers) from *every single property's exact Latitude/Longitude* to the absolute closest infrastructure node! 
-> 
-> **Explore the learning on Last Mile connection:** A house 0.1km from a station commands a drastically different premium than one 1.2km away. The KDTree explicitly teaches the Machine Learning models how precise walking distances mathematically dictate housing valuations.
+To natively break the prediction limits of the baseline, we applied 4 advanced mathematical models to 4 external Data Provider APIs. Here is exactly why each model was chosen and what explicit resultset features were generated:
 
-### D & E) Google News SBERT Sentiment Analysis & Google Trends Volume
-> [!TIP]
-> **Contextual NLP > Keyword Counting**
-> We do NOT predict based on the volume of news (100 articles screaming "Housing Crash!" looks identical to 100 articles screaming "Housing Boom!"). 
-> 
-> Instead, we extract the live titles and use the advanced `sentence-transformers/all-MiniLM-L6-v2` **SBERT Model** to perform contextual Semantic Sentiment Analysis. We compute the Cosine Similarity between the news headlines and target concepts like "Housing Market Boom". This generates a dynamic mathematical float score that captures the true psychological sentiment of the market and feeds it directly into all 4 ML models.
+#### 1. OpenStreetMap (OSM) API
+*   **Model Applied**: `scipy.spatial.cKDTree` (Haversine Spatial Mathematics)
+*   **Why the Model is Applied ("Last Mile" Proximity)**: We explicitly DO NOT use bounded boxes like "Is there a station within 1.5 miles?". Bounding boxes are mathematically rigid. Instead, the KDTree searches an infinite boundary to instantly find the absolute closest node to the property, and applies the Haversine formula to compute the exact geographic Great-Circle distance over the curvature of the earth. A house 0.1km from a station commands a drastically different premium than one 1.2km away. The KDTree explicitly teaches the ML algorithms how precise walking distances mathematically dictate valuations.
+*   **Resultset Extracted**: `distance_to_nearest_school_km`, `distance_to_nearest_hospital_km`, `distance_to_nearest_station_km`, `distance_to_nearest_bank_km`.
+
+#### 2. Google News RSS API
+*   **Model Applied**: HuggingFace `sentence-transformers` (SBERT Semantic NLP)
+*   **Why the Model is Applied (Sentiment vs Volume)**: We explicitly DO NOT predict based on the volume of news (100 articles screaming "Housing Crash!" looks identical to 100 articles screaming "Housing Boom!" if you just count volume). Instead, we use SBERT to perform contextual **Semantic Sentiment Analysis**. We compute the Cosine Similarity between live news headlines and our target anchors ("Housing Boom/Crash"). This generates a dynamic float score capturing the true psychological market sentiment without relying on hardcoded dictionary keywords (like VADER).
+*   **Resultset Extracted**: `sbert_sentiment_index` (A continuous float from -1.0 to +1.0).
+
+#### 3. Google Trends API
+*   **Model Applied**: Temporal Demand Scaling
+*   **Why the Model is Applied (Leading vs Lagging Indicators)**: Housing prices "lag" reality because buying a property takes months of closing bureaucracy. Conversely, internet searches "lead" reality; people immediately search Google the second mortgage rates drop. By integrating temporal search volume, we allow the ML models to predict sudden housing bubbles before the physical transaction data even catches up.
+*   **Resultset Extracted**: `google_trends_volume` (A 0-to-100 normalized search index mapped month-by-month).
+
+#### 4. World Bank (Bank of England) API
+*   **Model Applied**: Macroeconomic Base Rate Matrix
+*   **Why the Model is Applied**: The physical price of a house is entirely dictated by how expensive it is to borrow money from a bank. By historically mapping the exact national Bank of England lending interest rate percentages (e.g., the 0.1% rates during the 2021 pandemic), we teach the algorithm to scale its baseline real estate predictions aggressively based on the availability of "free money".
+*   **Resultset Extracted**: `boe_interest_rate` (The true national lending percentage mapped year-by-year).
 
 ### API Processing Timeline (Train vs Test)
 All API tracking logic is mapped historically. The Models aggressively train on the **Test Data (2008 to 2017)** API variance, and physically execute their forecasts strictly on the holdout **Next 5 Years (2018 to 2022)** block.
