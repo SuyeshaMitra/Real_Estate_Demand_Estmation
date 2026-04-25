@@ -2,7 +2,7 @@
 
 This repository contains an end-to-end data engineering and machine learning pipeline to analyze, process, and forecast UK property pricing based on the HM Land Registry dataset. We enhanced predictive capacity by converting string postcodes into physical geospatial mapping (latitude/longitude) using `pgeocode` and implemented three state-of-the-art tree-based ML architectures mapping spatial variance.
 
-## 🏗️ High-Level Architecture
+## High-Level Architecture
 
 The system handles extremely large datasets (3.2 GB raw CSV) efficiently using a chunk-streaming architecture. Geographic APIs map every property to its true Earth location to feed independent ML models.
 
@@ -58,7 +58,7 @@ graph TD
 
 ---
 
-## 🧱 The Baseline Models (Non-Spatial)
+## The Baseline Models (Non-Spatial)
 Before migrating to complex geographical mapping, we tested four algorithms (Random Forest, Neural Network, XGBoost, and LightGBM) on simple text-based district data (`03_trend_analysis_and_modeling.py`) to establish a non-spatial baseline.
 
 **Training & Evaluation Setup:**
@@ -87,7 +87,7 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 | **Mean Absolute Error (MAE)** | `MAE = Average( ABS(True_Price - Predicted_Price) )` | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
 | **Median Accuracy** | `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`. |
 
-### 📊 Baseline Models Detailed Analytics (Time-Series Breakdown)
+### Baseline Models Detailed Analytics (Time-Series Breakdown)
 
 #### A) Comprehensive Metric Validation
 
@@ -228,7 +228,7 @@ Directly plots exactly how the 3 spatial machine learning models historically dr
 Plots this same validation explicitly tracking the 1-12 month cyclical cycle.
 ![Geospatial Monthly Validation](04_forecast_validation_monthly.png)
 
-## 🌍 External Ecosystem API Feature Extraction
+## External Ecosystem API Feature Extraction
 
 To further optimize forecasting accuracy, we designed `06_external_feature_extraction.py` to tap into open, free public APIs. By parsing these datasets and feeding them directly into our ML tree nodes, we can mathematically tune the engines to capture real-time spatial and psychological demand. 
 
@@ -265,7 +265,7 @@ All 3 API outputs run live and successfully export physical test examples to the
 
 ---
 
-## ⚙️ Detailed Technical File Reference & Execution Flow
+## Detailed Technical File Reference & Execution Flow
 
 | File | What it does | Technical Details |
 |------|-------------|-------------------|
@@ -284,29 +284,29 @@ python 04B_geospatial_XGBoost_modeling.py
 python 04C_geospatial_LightGBM_modeling.py
 ```
 
-## 🚀 Breaking Extrapolation Limits: The "A vs B" Feature Matrix (`07` & `08`)
+## Breaking Extrapolation Limits: The "A vs B" Feature Matrix (`07` & `08`)
 
 While the Baseline (`04` & `05`) spatial models functioned brilliantly, Real Estate strictly suffers from **Extrapolation Ceilings**—Machine Learning trees cannot physically guess that a house is worth £1M if the maximum they saw during training in 2015 was £600k. 
 
 To break this, we formally sourced explicit public APIs (`06_external_feature_extraction.py`) targeting Geopolitics (Google News), Macro Economics (World Bank Interest Rates), and Local Geography (OpenStreetMap distances). We tested exactly how they structurally impacted XGBoost and LightGBM using an isolated split track framework.
 
-### ❌ Track 07A / 08A: The "Collinearity Trap" (Total Noise)
+### Track 07A / 08A: The "Collinearity Trap" (Total Noise)
 We first injected ALL macro variables (Interest Rates, Search volume). 
 **The Result:** The models fell into a massive mathematical phenomenon known as the "Collinearity Trap". Because Google Trends and National Interest Rates were identically static for every single house sold in London in a single year, the algorithms drowned in numerical noise searching for geographic variance that didn't exist!
-#### 📊 Chart 1: The Error Shift Breakdown (`04` Baseline vs `07A` Macro Track)
+#### Chart 1: The Error Shift Breakdown (`04` Baseline vs `07A` Macro Track)
 **Purpose:** This chart directly visually compares the mathematical performance difference between the Baseline Models (which were fed strictly `Latitude + Longitude`) against the exact same models burdened with the `Track 07A` API trap (fed `OSM Distances + Google Trends + Google News + Bank of England Rates`). 
 **Analysis:** You can visibly see the blue bar (the "Enhanced" model) is actually strictly *higher* (worse error) than the red bar for XGBoost due to the collinearity trap.
 
 ![07A Vs 04 Feature Impact Map](07A_Vs_04_chart_feature_impact_comparison.png)
 *(Above: Direct geometric error shift explicitly demonstrating the 'Collinearity Crash')*
 
-#### 📊 Chart 2: The `08A` Macro Topology Model Collapse
+#### Chart 2: The `08A` Macro Topology Model Collapse
 **Purpose:** This chart completely isolates strictly the `Track 07A/08A` environment (modeling strictly the data loaded with all 4 APIs: `OSM + Trends + News + Rates`). It is solely comparing the three AI models against each other to see which algorithm survived the noise.
 **Analysis:** It proves visibly that LightGBM's leaf-wise histogram bucketing successfully bypassed the economic noise (£401,553), while depth-wise XGBoost algorithmically severely struggled (£412,490) trying to physically map static interest-rates against spatial topology!
 
 ![08A Error Map](08A_chart_model_mae_comparison.png)
 
-### ✅ Track 07B / 08B: Pure OSM Geography (The Final Victor)
+### Track 07B / 08B: Pure OSM Geography (The Final Victor)
 We deleted the Google and World Bank macro-noise and fed the exact same models **strictly OpenStreetMap (OSM) Train Station distances**.
 **The Result:** Because physical infrastructure actually natively changes aggressively from street to street, the ML models successfully seized the valid spatial geometry!
 * **LightGBM Error:** Successfully broke the £400k barrier, aggressively hitting £398,540 in total global error!
@@ -317,7 +317,7 @@ We deleted the Google and World Bank macro-noise and fed the exact same models *
 
 ---
 
-## ☁️ Cloud Deployment (Zero-Cost Fargate MVP)
+## Cloud Deployment (Zero-Cost Fargate MVP)
 Architecturally, attempting to execute this Machine Learning framework securely relies natively on heavy parallel processing memory bounds.
 
 To seamlessly dynamically host the AI Engine completely to the internet cleanly for $0.00 infrastructure drain:
@@ -325,12 +325,12 @@ To seamlessly dynamically host the AI Engine completely to the internet cleanly 
 * Infrastructure is structurally entirely automated fundamentally via `aws_cloudformation.yaml`.
 * The entire ~20MB Geolocation Coordinate offline mapping bounds runs locally memory-frozen inside the `Dockerfile`, eliminating needing expensive external RAG storage entirely!
 
-### ⚡ The "1-Click" Novice Wrapper
+### The "1-Click" Novice Wrapper
 We have strictly automated away all complex AWS Cloud deployment knowledge by combining Docker builds, ECR pushes, and CloudFormation infrastructure maps directly into a single wrapper script.
 Just blindly run `.\cloud_power_manager.bat deploy` locally to physically launch the entire pipeline dynamically without opening an AWS Console!
 
 
-### 🏗️ Physical AWS Cloud Architecture Diagram
+### Physical AWS Cloud Architecture Diagram
 
 ```mermaid
 graph TD
