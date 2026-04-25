@@ -114,6 +114,9 @@ To determine how "accurate" a machine learning model is, we cannot just look at 
 Because standard globally averaged numbers can mathematically mask seasonal failures, the Python script natively breaks predictions out chronologically tracking structural degradation points.
 * **5-Year View:** We explicitly track the absolute MAE and Accuracy dynamically across the 2018-2022 holdout block. 
 * **Monthly View:** We fold the historic time-series back exclusively over the 12 calendar months (`1 to 12`) to explicitly track the seasonality pattern.
+  * **Explanation:** Instead of tracking 2018, 2019, 2020 chronologically, the pipeline takes *all* Januaries across the entire 5-year holdout block and averages their errors together into "Month 1". It then averages all Februaries into "Month 2", and so on up to "Month 12". 
+  * **Why we do this:** This mathematically exposes the cyclical real-estate "seasonality" (e.g., the fact that housing transaction volumes and errors predictably spike every single Spring, regardless of what year it is). 
+  * **Supporting Evidence:** You can visibly observe this cyclical pattern occurring in the **Forecast Validation Chart - Monthly** (embedded below in Section B), where the black true-price line and every model's prediction error sharply spikes specifically at `Month 3` (March).
 
 **vi) Error Pattern on Years and Months Wise Separately**
 
