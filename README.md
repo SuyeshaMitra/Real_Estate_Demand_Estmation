@@ -269,7 +269,7 @@ Below is the dashboard tracking the actual extracted resultsets, what specific i
 | **Google Trends** (Macro Volume) | `keyword="London house prices"`<br>`geo="GB-ENG"`<br>`timeframe="2008-01-01 to 2022-12-31"` | [Invoke Google Trends in Browser](https://trends.google.com/trends/explore?date=2008-01-01%202022-12-31&geo=GB-ENG&q=London%20house%20prices) | [`api_result_google_trends.csv`](api_result_google_trends.csv) | Extracted exact monthly search volumes scaling from 0 to 100 indexed over the 15-year timeline. |
 | **World Bank (BoE)** (National Rates) | `country="GB"`<br>`indicator="FR.INR.LEND"`<br>`date="2008:2022"`<br>`format="json"` | [Invoke World Bank API](https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json&date=2008:2022) | [`api_result_boe_interest.json`](api_result_boe_interest.json) | Extracted the physical `value` representing the exact Bank of England lending interest rate percentage for every single year. |
 
-All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and natively exported into the absolute master dataset: **[`london_geospatial_enriched_dataset.csv`](london_geospatial_enriched_dataset.csv)** which completely powers all `07` ML models. *(Note: This file is 253MB and is explicitly `.gitignored` to prevent GitHub crashes, so this link only resolves locally on your hard drive)*.
+All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and natively exported into the absolute master dataset: **`london_geospatial_enriched_dataset.csv`** which completely powers all `07` ML models. *(Note: This file is 253MB and is explicitly `.gitignored` to prevent GitHub crashes, so it is only available physically on your local hard drive after running the `06` scripts)*.
 
 ---
 
