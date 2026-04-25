@@ -229,13 +229,13 @@ If you open the `04` Geospatial plots and compare them to the original `03` plot
    When explicitly overlaying the three AI outputs, where is the mathematical break or difference? Because all 3 models suffer from the Extrapolation penalty mentioned above, their "Orange AI" lines will never successfully hit the £900k blue true line. However, the internal variance of how they behave *beneath* that ceiling differs drastically:
    
    * **04A (Random Forest)**: Creates a very rigid, flat, safe plateau. It is mathematically hesitant to make wild guesses, leaving it generally furthest from the true reality curve.
-     ![04A RF Forecast](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/04A_forecast_validation.png)
+     ![04A RF Forecast](04A_forecast_validation.png)
    
    * **04B (XGBoost)**: Gradient boosting explicitly chases errors. You will see its orange line natively bending with significantly higher volatility trying desperately to scale up and catch the massive historical upward trend.
-     ![04B XGB Forecast](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/04B_forecast_validation.png)
+     ![04B XGB Forecast](04B_forecast_validation.png)
    
    * **04C (LightGBM - The Victor)**: Because LightGBM dynamically forces discrete coordinate buckets on the absolutely highest-error neighborhoods (usually the wealthy districts currently dominating the inflation curve), its spatial prediction line mathematically pulls the closest to the "True Blue" actual line out of all 3 algorithms!
-     ![04C LGBM Forecast](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/04C_forecast_validation.png)
+     ![04C LGBM Forecast](04C_forecast_validation.png)
 
 ---
 
@@ -249,19 +249,19 @@ This script executes and renders three gorgeous business-ready visualizations in
   * **Result**: Visually proves mathematically that **LightGBM** absolutely dominates the competition achieving the lowest physical cash error margin (£401k). XGBoost takes silver (£410k), and Random Forest loses (£424k).
   * **Why it Won against Random Forest**: Random Forest politely averages out wrong guesses locally. 
   * **Why it Won against XGBoost**: XGBoost uses "Level-wise" tree building (it mathematically checks the entire map of London equally). LightGBM uses futuristic "Leaf-wise" tree building. It completely abandons stable neighborhoods and exclusively aggressively drills downward into highly volatile outlier neighborhoods until the extreme housing error collapses!
-  ![MAE Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_mae_comparison.png)
+  ![MAE Comparison](05_chart_model_mae_comparison.png)
 
 * **`05_chart_model_accuracy_comparison.png`** (The Business Scorecard)
   * **Result**: Converts abstract raw currency (£) geometric errors into a completely flat Business "% Accuracy" scorecard for non-technical stakeholders. LightGBM hits ~91%, XGBoost hits ~87%, and Random Forest hits ~85%.
   * **Why it Won against Random Forest**: Random Forest mathematically acts like a massive committee. It is terrified of guessing extreme £10M+ mansion prices because it plays it safe.
   * **Why it Won against XGBoost**: XGBoost tries to predict those extreme mansions too, but because it builds trees symmetrically across all bounds, it wastes massive computing capacity checking normal cheap houses over and over. LightGBM's asymmetric geometry is natively hyper-optimized for predicting extreme outliers perfectly.
-  ![Accuracy Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_accuracy_comparison.png)
+  ![Accuracy Comparison](05_chart_model_accuracy_comparison.png)
 
 * **`05_chart_model_speed_comparison.png`** (The Killing Blow)
   * **Result**: Not only is LightGBM definitively the most accurate financially, it literally trains itself completely on a standard machine in just ~0.5 seconds! Random Forest trails behind (~1.2s), and XGBoost spectacularly crashes into dead last place requiring a massive heavy ~3.5+ seconds.
   * **Why it Won against Random Forest**: Random Forest physically is forced to train hundreds of independent trees over millions of rows, generating insane overhead bloat.
   * **Why it Won against XGBoost**: XGBoost famously does exact calculations on massive floating-point decimals (checking if `Latitude 51.3432` is worse than `51.3433`). LightGBM intelligently converts all complex floating-point GPS coordinates into simple integer "Histograms" on step 1. By operating strictly using pure integer math under-the-hood, LightGBM totally breaks the CPU limits holding back XGBoost!
-  ![Speed Comparison](file:///c:/Users/SuyeshaM/MyDatas/DS_AI_BLR/Probono_Prf/Prof_SDs/Idea_1/Real_Estate_Demand_Estmation/05_chart_model_speed_comparison.png)
+  ![Speed Comparison](05_chart_model_speed_comparison.png)
 
 ---
 
@@ -271,21 +271,48 @@ This script executes and renders three gorgeous business-ready visualizations in
 ### Why do ML Models need External API Features?
 Even the smartest algorithm (like LightGBM) cannot predict a housing market crash if it only looks at historical Latitude and Longitude. Algorithms are blind to the outside world. By explicitly querying Google and Maps for real-time human behavior and infrastructure, we give the model "eyes" into the real world.
 
-### Code Snippet 1: OpenStreetMap (OSM) - The Infrastructure Feature
-```python
-overpass_query = f"""
-[out:json];
-(
-  node["public_transport"="station"](around:1500,51.3734,0.0881);
-);
-"""
-data = requests.get("http://overpass-api.de/api/interpreter", params={'data': overpass_query})
-```
-* **What it does**: Instead of just using a raw latitude, we ask the massive open-source mapping database (OpenStreetMap API) *"How many train stations are located exactly within 1500 meters of this house?"*
-* **Features Extracted**: `stations_within_1.5km` and `schools_within_1.5km` via JSON array counts.
-* **The Data Science Explanation**: When plotting pure Latitude/Longitude, models like Random Forest aggressively average geographically neighboring houses. But two identical houses separated by a train track can have drastically different values. By engineering a new feature column physically quantifying local infrastructure transit density, we mathematical force the Random Forest to split its decision node based on train-station proximity, destroying the "blind average" problem entirely and radically increasing localized precision.
+### 1. KDTree "Last Mile" Proximity (Replacing Old Bounding Boxes)
+*   **What we take from Distance:** We don't just calculate arbitrary straight lines or "Is there a station within 1.5km?". We calculate the explicit **Haversine Euclidean distance (in exact Kilometers)** from the property to the absolute *closest* infrastructure node.
+*   **What else we track:** We specifically track distance to the nearest `School`, `Hospital`, `Station`, and `Bank`. This allows the ML to inherently learn "Density". If a house is 0.5km from a station, 0.2km from a school, and 0.4km from a hospital, it is physically sitting in an ultra-premium high-density zone.
+*   **Why this matters (The Last Mile):** A simple "Yes/No" feature is heavily flawed. A property 0.1km from a station commands a drastically different premium than one 1.4km away, even though both are "Yes". KDTree feeds the AI the pure mathematical continuous float (e.g., `0.124 km`), teaching it exact walking-distance valuations.
+*   **The Python Code Logic:**
+    ```python
+    # We load scipy's lightning fast spatial tree
+    from scipy.spatial import cKDTree
+    
+    # We feed it the Lat/Lon of every single hospital in London
+    tree = cKDTree(hospitals_list)
+    
+    # We query the exact closest hospital for all 1.6 Million properties instantly
+    distances, indices = tree.query(property_coords, k=1)
+    
+    # We apply the Haversine formula to convert the spatial gap into exact Kilometers
+    df['distance_to_nearest_hospital_km'] = haversine_km(distances)
+    ```
 
-### Code Snippet 2: Google Trends - The Macroeconomic Feature
+### 2. Google News RSS: SBERT Semantic Sentiment (Why SBERT and not VADER?)
+*   **Sentiment Analysis on What?** We perform sentiment analysis directly on the **Live Headline Titles** published by major news outlets (extracted dynamically via the Google News RSS feed for the query "London Real Estate").
+*   **Why SBERT over classic models (like VADER or TextBlob)?**
+    *   Classic models (like VADER) use a rigid dictionary. They see the word "Crash" and instantly score it `-1.0`. They see "Drop" and score it `-0.5`. 
+    *   **The Problem:** If a headline says *"London mortgage rates drop, sparking massive buyer demand"*, VADER sees the word "drop" and flags the article as Negative! 
+    *   **The SBERT Solution:** SBERT (`sentence-transformers/all-MiniLM-L6-v2`) is a Deep Learning Neural Network built by HuggingFace. It doesn't read words; it reads **Context**.
+*   **How SBERT works (Layman Example):**
+    We give SBERT two "Anchor" sentences:
+    1. *Anchor Bullish:* "The London housing market is booming and prices are rising."
+    2. *Anchor Bearish:* "The London housing market is crashing and sales have halted."
+    
+    We feed it a live headline: *"Buyers flood the market as London flats see unexpected bidding wars."*
+    
+    SBERT converts this sentence into a 384-dimensional mathematical vector and calculates the **Cosine Similarity** against our anchors. It realizes this headline contextually matches the "Bullish" anchor, even though it contains zero matching keywords!
+*   **The Result Value:**
+    ```python
+    bull_score = 0.824 # High similarity to a booming market
+    bear_score = 0.112 # Low similarity to a crashing market
+    net_sentiment = bull_score - bear_score
+    # Result Value: +0.712 (A strongly positive/bullish float fed to the AI)
+    ```
+
+### 3. Google Trends - The Macroeconomic Feature
 ```python
 pytrend = TrendReq(hl='en-GB')
 pytrend.build_payload(["London mortgage"], timeframe='2018-01-01 2022-12-31')
@@ -293,18 +320,7 @@ interest_df = pytrend.interest_over_time()
 ```
 * **What it does**: It searches Google's internal API to find out how many people were Googling the word "Mortgage" during the week that house was sold.
 * **Features Extracted**: `macro_demand_index` (A 0-to-100 indexed volume metric).
-* **The Data Science Explanation**: Housing prices "lag" reality because buying a property takes months of closing bureaucracy. Conversely, internet searches "lead" reality; people immediately search Google when mortgage rates drop. In Data Science, utilizing leading systemic economic indicators drastically prevents models from falling behind the curve, optimizing their test-set accuracy on highly volatile forward-looking datasets.
-
-### Code Snippet 3: Google News RSS (Geopolitical Sentiment Tracking)
-```python
-news_url = "https://news.google.com/rss/search?q=London+Real+Estate"
-news_response = requests.get(news_url)
-root = ET.fromstring(news_response.content)
-article_count = len(root.findall('.//item'))
-```
-* **What it does**: It queries the public Google News server, looking specifically for articles talking about the London housing market. It physically parses the raw XML feed.
-* **Features Extracted**: `weekly_news_volume` (An integer count tracking global media attention limits).
-* **The Data Science Explanation**: ML algorithms often fail when completely unpredictable systemic risks occur (like a sudden mortgage banking collapse). This logic acts as a circuit breaker. By converting the volume of real estate news into a `weekly_news_volume` variable, the exact same model suddenly gains the ability to identify anomalous bursts in public sentiment and scale its geographic predictions down accordingly.
+* **The Data Science Explanation**: Housing prices "lag" reality because buying a property takes months of closing bureaucracy. Conversely, internet searches "lead" reality; people immediately search Google when mortgage rates drop. In Data Science, utilizing leading systemic economic indicators drastically prevents models from falling behind the curve.
 
 ### 💾 Validating the API Data (Saved to Root)
 Once `06_external_feature_extraction.py` finishes, it mathematically validates the concepts by physically exporting the 3 external API data schemas to your root folder:
