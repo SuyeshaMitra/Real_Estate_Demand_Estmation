@@ -338,14 +338,43 @@ boe_response = requests.get(boe_url)
 * **Features Extracted**: `national_interest_rate`
 * **The Data Science Explanation**: The price of a house is entirely dictated by how expensive it is to borrow money. Tracking "free money" (0.1% rates in 2021) directly governs real estate bubbles!
 
-**💡 Wait, how does Python actually do this? Can I see it myself?**
-Absolutely. Python is doing nothing more than sending an invisible web browser link (an HTTP GET request) and saving the text that comes back. You can do the exact same thing right now! 
-Instead of running Python, copy and paste this exact link into your browser to pull the exact same JSON mapping data for the London `BR6 7FN` property we tested in the scripts:
-`http://overpass-api.de/api/interpreter?data=[out:json];node[%22amenity%22=%22school%22](around:1500,51.3734,0.0881);out;`
+### Advanced Model Applications (The 4 External Data Providers)
+To natively break the prediction limits of the baseline, we applied 4 advanced mathematical models to 4 external Data Provider APIs. Here is exactly why each model was chosen and what explicit resultset features were generated:
 
-**What this proves**: Data Science 'APIs' are not magic. They are literally just normal websites that output naked computer-text (like JSON arrays) instead of rendering pretty human pictures and buttons. Python simply acts as a lightning-fast robotic web browser reading that text!
+#### 1. OpenStreetMap (OSM) API
+*   **Model Applied**: `scipy.spatial.cKDTree` (Haversine Spatial Mathematics)
+*   **Why the Model is Applied ("Last Mile" Proximity)**: We explicitly DO NOT use bounded boxes like "Is there a station within 1.5 miles?". Bounding boxes are mathematically rigid. Instead, the KDTree searches an infinite boundary to instantly find the absolute closest node to the property, and applies the Haversine formula to compute the exact geographic Great-Circle distance over the curvature of the earth. A house 0.1km from a station commands a drastically different premium than one 1.2km away. The KDTree explicitly teaches the ML algorithms how precise walking distances mathematically dictate valuations.
+*   **Resultset Extracted**: `distance_to_nearest_school_km`, `distance_to_nearest_hospital_km`, `distance_to_nearest_station_km`, `distance_to_nearest_bank_km`.
 
+#### 2. Google News RSS API
+*   **Model Applied**: HuggingFace `sentence-transformers` (SBERT Semantic NLP)
+*   **Why the Model is Applied (Sentiment vs Volume)**: We explicitly DO NOT predict based on the volume of news (100 articles screaming "Housing Crash!" looks identical to 100 articles screaming "Housing Boom!" if you just count volume). Instead, we use SBERT to perform contextual **Semantic Sentiment Analysis**. We compute the Cosine Similarity between live news headlines and our target anchors ("Housing Boom/Crash"). This generates a dynamic float score capturing the true psychological market sentiment without relying on hardcoded dictionary keywords (like VADER).
+*   **Resultset Extracted**: `sbert_sentiment_index` (A continuous float from -1.0 to +1.0).
 
+#### 3. Google Trends API
+*   **Model Applied**: Temporal Demand Scaling
+*   **Why the Model is Applied (Leading vs Lagging Indicators)**: Housing prices "lag" reality because buying a property takes months of closing bureaucracy. Conversely, internet searches "lead" reality; people immediately search Google the second mortgage rates drop. By integrating temporal search volume, we allow the ML models to predict sudden housing bubbles before the physical transaction data even catches up.
+*   **Resultset Extracted**: `google_trends_volume` (A 0-to-100 normalized search index mapped month-by-month).
+
+#### 4. World Bank (Bank of England) API
+*   **Model Applied**: Macroeconomic Base Rate Matrix
+*   **Why the Model is Applied**: The physical price of a house is entirely dictated by how expensive it is to borrow money from a bank. By historically mapping the exact national Bank of England lending interest rate percentages (e.g., the 0.1% rates during the 2021 pandemic), we teach the algorithm to scale its baseline real estate predictions aggressively based on the availability of "free money".
+*   **Resultset Extracted**: `boe_interest_rate` (The true national lending percentage mapped year-by-year).
+
+### API Processing Timeline (Train vs Test)
+All API tracking logic is mapped historically. The Models aggressively train on the **Test Data (2008 to 2017)** API variance, and physically execute their forecasts strictly on the holdout **Next 5 Years (2018 to 2022)** block.
+
+### The Unified API Resultset Dashboard
+Below is the dashboard tracking the actual extracted resultsets, what specific inputs were passed to the API, live browser invocation links to physically validate the data, and exactly what extracted parameters were returned:
+
+| Data Provider / API | Input Parameters Given | Live Browser Invocation (Click to Test) | Extracted Output Artifact | Extracted Result Parameters Got |
+|---------------------|------------------------|-----------------------------------------|---------------------------|----------------------------------|
+| **OSM Overpass API** (Infrastructure) | `amenity=hospital`, `amenity=school`, `amenity=bank`, `station`<br>Bounding Box: `[51.4,-0.2,51.6,0.1]` (Central London) | [Invoke OSM Overpass in Browser](http://overpass-turbo.eu/?Q=[out:json];node[%22amenity%22=%22hospital%22](51.4,-0.2,51.6,0.1);out;) | `api_result_osm.json` | Extracted the absolute physical Lat/Lon coordinates (e.g. `lat: 51.503`, `lon: -0.119`) and `tags` of every matched infrastructure node natively. |
+| **Google News RSS** (Sentiment) | `query="London+Real+Estate"`<br>Target anchors: `"Housing Boom"`, `"Housing Crash"` | [Invoke Google News RSS](https://news.google.com/rss/search?q=London+Real+Estate) | `api_result_google_news.xml` | Extracted actual XML `title` strings, ran SBERT Cosine Similarity, and returned mathematical `net_sentiment` floats (e.g. `+0.85` or `-0.30`). |
+| **Google Trends** (Macro Volume) | `keyword="London house prices"`<br>`geo="GB-ENG"`<br>`timeframe="2008-01-01 to 2022-12-31"` | [Invoke Google Trends in Browser](https://trends.google.com/trends/explore?date=2008-01-01%202022-12-31&geo=GB-ENG&q=London%20house%20prices) | `api_result_google_trends.csv` | Extracted exact monthly search volumes scaling from 0 to 100 indexed over the 15-year timeline. |
+| **World Bank (BoE)** (National Rates) | `country="GB"`<br>`indicator="FR.INR.LEND"`<br>`date="2008:2022"`<br>`format="json"` | [Invoke World Bank API](https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json&date=2008:2022) | `api_result_boe_interest.json` | Extracted the physical `value` representing the exact Bank of England lending interest rate percentage for every single year. |
+
+All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and natively exported into the absolute master dataset: **`london_geospatial_enriched_dataset.csv`** which completely powers all `07` ML models. *(Note: This file is 253MB and is explicitly `.gitignored` to prevent GitHub crashes, so it is only available physically on your local hard drive after running the `06` scripts).*
 ---
 
 ## 📄 Step 7: Executing The AI Extrapolation Boundary Test (Evaluating `07` Features)
