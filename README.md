@@ -87,61 +87,45 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 | **Mean Absolute Error (MAE)** | `MAE = Average( ABS(True_Price - Predicted_Price) )` | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
 | **Median Accuracy** | `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`. |
 
-### 🔍 Granular Time-Series Error Analysis (Years vs Months)
-Because standard globally averaged numbers can mathematically mask seasonal failures, the Python script natively breaks predictions out chronologically tracking structural degradation points.
-* **The Accuracy Bounding Rule**: During localized testing, if an algorithmic model guesses £1,000,000 on a £400,000 property, the math indicates a `150% Error`. The pipeline institutes a rigorous fail-safe rule mathematically flooring accuracy explicitly at **`0%`** (`np.clip(accuracy, 0, 100)`). A totally errant negative-accuracy prediction constitutes a total failure and operates strictly as a zero-confidence metric protecting median validation scaling.
-* **Consistent Auditing Over Features**: The system executes explicit validation over all 4 baseline algorithms identically enforcing `Features = ['year', 'month', 'property_code', 'old_new_code', 'duration_code', 'district_code']`.
+### 📊 Baseline Models Detailed Analytics (Time-Series Breakdown)
 
-#### A. 5-Year Yearly Breakdown Observation
-When strictly plotting predicted error tracking natively separated by the 2018-2022 holdout years independently:
-* During the **2021 Post-Pandemic Spike**, LightGBM's Error Margin collapsed impressively down to **£400,395** establishing a peak **76.68% Median Accuracy** as its histogram bucketing seamlessly captured generalized neighborhood wealth migration patterns structurally faster than standard regression equations could.
-* **XGBoost & RandomForest** consistently displayed ~3% worse tracking comparatively across all isolated 5-year testing brackets natively displaying computational weakness scaling text descriptors over long-range chronological timelines.
+#### A) Comprehensive Metric Validation
 
-#### B. Monthly Seasonality Breakdown Observation
-When actively sorting all historical holdout lines solely by individual chronological Month (`1 - 12`):
-* The lowest error margins explicitly occur in the dead of Winter (`Month 2: February`), where LightGBM error margin shrunk intensely to **£355,499 MAE (76.46% accuracy)**.
-* Maximum failure drift aggressively triggered uniformly across all 4 machine learning pipelines exactly tracking the Spring Real-Estate Rush (`Month 3: March`), where pure transactional volatility caused LightGBM's absolute variance to explode massively up to **£574,759 MAE**.
-* **Analysis**: Neural Networks predictably demonstrated complete failure to map seasonality structurally, hovering near `65%` accuracy unconditionally, regardless of temporal variance, confirming physical text patterns hold insufficient logic-linkage for deep layer nodes.
-
-### Baseline Output Visuals
-To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
-![Baseline MAE Comparison](03_chart_model_mae_comparison.png)
-![Baseline Accuracy Comparison](03_chart_model_accuracy_comparison.png)
-![Baseline Speed Comparison](03_chart_model_speed_comparison.png)
-
----
-
-## 📊 Baseline Models Detailed Analytics (Time-Series Breakdown)
-
-### A) Comprehensive Metric Validation
-
-#### i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed
+**i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed**
 We benchmarked 4 regression models. The baseline performance is:
 * **LightGBM (Winner):** MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
 * **Random Forest:** MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
 * **XGBoost:** MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
 * **Neural Network:** MAE: £546,571 | Accuracy: 65.93% | Speed: ~2.93s
 
-#### ii) Accurate Values Across Models
+**ii) Accurate Values Across Models**
 The execution strictly ensures that **values are completely accurate across models**, calculated identically over the identical test dataset. In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly across all models.
 
-#### iii) Explore Accuracy and the Bounding Rule
-**The Accuracy Rule:** The system strictly calculates the absolute physical percentage variance (`(True_Price - Predicted_Price) / True_Price`) and subtracts it from 100%. 
-Crucially, to mathematically define a stable median without severe negative drifts from catastrophic individual guesses, the pipeline now rigorously bounds accuracy strictly with an absolute floor of **`0%`** (`np.clip(accuracy, 0, 100)`). This logic forces all models to accurately reflect their median reliability gracefully.
+**iii) Explore Accuracy and the Bounding Rule**
+**The Accuracy Bounding Rule:** During localized testing, if an algorithmic model guesses £1,000,000 on a £400,000 property, the math indicates a 150% Error. The pipeline institutes a rigorous fail-safe rule mathematically flooring accuracy explicitly at 0% (`np.clip(accuracy, 0, 100)`). A totally errant negative-accuracy prediction constitutes a total failure and operates strictly as a zero-confidence metric protecting median validation scaling.
 
-#### iv) Consistent Calculations Over All Features
-All the absolute mathematical variance logic calculations (MAE & Accuracy) are verified to run mathematically parallel, executing identical validation loops uniformly traversing the identical feature columns (`year`, `month`, `property_code`, `old_new_code`, `duration_code`, `district_code`). 
+**iv) Consistent Calculations Over All Features**
+**Consistent Auditing Over Features:** The system executes explicit validation over all 4 baseline algorithms identically enforcing `Features = ['year', 'month', 'property_code', 'old_new_code', 'duration_code', 'district_code']`.
 
-#### v) Calculate Accuracy, Error and Speed - For 5 Years + Every Monthly Average
-Because standard global average metrics can accidentally mask temporal failures, the framework algorithmically splits predictions chronologically to view error patterns Year-by-Year and Month-by-Month independently.
+**v) Calculate Accuracy, Error and Speed - For 5 Years + Every Monthly Average**
+Because standard globally averaged numbers can mathematically mask seasonal failures, the Python script natively breaks predictions out chronologically tracking structural degradation points.
 * **5-Year View:** We explicitly track the absolute MAE and Accuracy dynamically across the 2018-2022 holdout block. 
 * **Monthly View:** We fold the historic time-series back exclusively over the 12 calendar months (`1 to 12`) to explicitly track the seasonality pattern.
 
-#### vi) Error Pattern on Years and Months Wise Separately
-* **Yearly Observation**: During the post-pandemic housing surge in **2021**, LightGBM's Error margin actively shrank significantly to **£400,395**, resulting in a peak accuracy of **76.68%**. Conversely, Random Forest drifted up to ~£414,260 MAE in the exact same year.
-* **Monthly Observation**: The absolute lowest model error happens uniformly across all Tree models in **February (Month 2)** (LightGBM shrinks down to **£355,499** error). Maximum error occurs aggressively during the spring listing boom in **March (Month 3)**, where LightGBM error artificially inflates to £574,759 natively tracking real-estate volume volatility.
+**vi) Error Pattern on Years and Months Wise Separately**
 
-### B) Predictive Baseline Visualizations
+**A. 5-Year Yearly Breakdown Observation**
+When strictly plotting predicted error tracking natively separated by the 2018-2022 holdout years independently:
+* During the **2021 Post-Pandemic Spike**, LightGBM's Error Margin collapsed impressively down to **£400,395** establishing a peak **76.68% Median Accuracy** as its histogram bucketing seamlessly captured generalized neighborhood wealth migration patterns structurally faster than standard regression equations could.
+* **XGBoost & RandomForest** consistently displayed ~3% worse tracking comparatively across all isolated 5-year testing brackets natively displaying computational weakness scaling text descriptors over long-range chronological timelines.
+
+**B. Monthly Seasonality Breakdown Observation**
+When actively sorting all historical holdout lines solely by individual chronological Month (1 - 12):
+* The lowest error margins explicitly occur in the dead of Winter (**Month 2: February**), where LightGBM error margin shrunk intensely to **£355,499 MAE** (76.46% accuracy).
+* Maximum failure drift aggressively triggered uniformly across all 4 machine learning pipelines exactly tracking the Spring Real-Estate Rush (**Month 3: March**), where pure transactional volatility caused LightGBM's absolute variance to explode massively up to **£574,759 MAE**.
+* **Analysis**: Neural Networks predictably demonstrated complete failure to map seasonality structurally, hovering near 65% accuracy unconditionally, regardless of temporal variance, confirming physical text patterns hold insufficient logic-linkage for deep layer nodes.
+
+#### B) Predictive Baseline Visualizations
 
 Below are the physically generated structured charts proving the analytics above for the 4 models:
 
@@ -156,6 +140,12 @@ Directly plots exactly how the 4 machine learning models (dashed lines) historic
 **3. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Monthly**
 Plots this same validation against the 1-12 month cyclical cycle.
 ![Monthly Validation](03_forecast_validation_monthly.png)
+
+### Baseline Output Visuals
+To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
+![Baseline MAE Comparison](03_chart_model_mae_comparison.png)
+![Baseline Accuracy Comparison](03_chart_model_accuracy_comparison.png)
+![Baseline Speed Comparison](03_chart_model_speed_comparison.png)
 
 ---
 
