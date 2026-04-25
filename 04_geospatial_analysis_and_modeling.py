@@ -71,6 +71,10 @@ df = df.merge(postcode_map, on='postcode', how='left')
 df = df.dropna(subset=['latitude', 'longitude'])
 print(f"Remaining records with valid coordinates: {len(df)}")
 
+# --- STEP 7: EXPORTING THE UNIFIED RESULTSET ---
+print("Saving unified spatial resultset for future use...")
+df.to_csv('london_geospatial_dataset.csv', index=False)
+
 # Feature Engineering step map text categorical types into integer codes
 df['property_code'] = df['property_type'].astype('category').cat.codes
 df['old_new_code'] = df['old_new'].astype('category').cat.codes

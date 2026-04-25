@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 # Import seaborn as a wrapper over matplotlib
 import seaborn as sns
 # Import pgeocode for translating postcodes into latitude/longitude coordinates
-import pgeocode
 # Import time module to benchmark
 import time
 # Import Random Forest machine learning algorithm
@@ -16,97 +15,10 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 # Print status to terminal
-print("Loading Greater London dataset...")
-# Load the filtered London CSV data into a pandas dataframe
-df = pd.read_csv('london_data.csv')
+print("Loading Unified Geospatial London dataset...")
+# Load the pre-mapped geospatial dataset directly, bypassing the pgeocode query pipeline
+df = pd.read_csv('london_geospatial_dataset.csv')
 
-# Drop any rows missing key critical data ensuring quality inputs
-df = df.dropna(subset=['price', 'date_of_transfer', 'postcode'])
-
-# Print status to terminal
-print("Parsing dates...")
-# Convert transfer date string column to a datetime object
-df['date_of_transfer'] = pd.to_datetime(df['date_of_transfer'])
-# Extract the year into a numeric column feature
-df['year'] = df['date_of_transfer'].dt.year
-# Extract the month into a numeric column feature
-df['month'] = df['date_of_transfer'].dt.month
-
-# Filter dataset to only include the 2008-2022 15-year window
-df = df[(df['year'] >= 2008) & (df['year'] <= 2022)].copy()
-
-# Trend analysis: Price vs Year
-print("Generating 4A Historical Trend Plot...")
-yearly_trend = df.groupby('year')['price'].mean().reset_index()
-plt.figure(figsize=(10, 6))
-sns.lineplot(data=yearly_trend, x='year', y='price', marker="o")
-plt.title("Historical Price Trend in Greater London (2008 - 2022)")
-plt.xlabel("Year")
-plt.ylabel("Average Property Price (£)")
-plt.grid(True)
-plt.savefig("04A_historical_trend.png")
-plt.close()
-
-# ==============================================================================
-# --- STEP 1: ISOLATING UNIQUE POSTCODES ---
-print("Extracting unique postcodes for Geospatial mapping...")
-# Instead of querying the database 3.9 million times (once for every row in the long CSV),
-# we isolate only the UNIQUE postcodes (e.g., roughly 300,000 exact streets) to minimize work.
-unique_postcodes = df['postcode'].unique()
-print(f"Extracted {len(unique_postcodes)} unique postcodes.")
-
-# --- STEP 2: INITIALIZING THE OFFLINE DATABASE ('nom') ---
-print(f"Fetching Latitude and Longitude using pgeocode...")
-# 'pgeocode' is an open-source library that downloads the geonames.org geographic database 
-# and explicitly stores it locally securely on your computer's hard drive (inside your python site-packages).
-# 'nom' stands for Nominatim. Passing ('gb') tells Python to load the Great Britain offline database into active memory.
-nom = pgeocode.Nominatim('gb')
-print("\n--- Output element: nom ---")
-print("Search Engine Memory Object:", nom)
-print("Physical Offline Database Location:", nom._data_path)
-print("Internal Database Schema Glimpse (First 5 records):\n", nom._data[['postal_code', 'place_name', 'latitude', 'longitude']].head(5))
-
-# --- STEP 3: PREPARING THE QUERY STRING ---
-# UK postcodes have two halves (e.g., "BR6 7FN"). The first half ("BR6") is called the 'outcode'.
-# To radically speed up the offline spatial mapping and ensure 100% match rates, we strip " 7FN" and just search for "BR6".
-outcodes = pd.Series(unique_postcodes).str.split(' ').str[0]
-print("\n--- Output element: outcodes (First 5) ---")
-print(outcodes.head())
-
-# --- STEP 4: QUERYING THE OFFLINE DATABASE ---
-# We pass the cleaned list of outcodes to 'nom.query_postal_code()'. 
-# Because the database is sitting offline locally on your hard drive, it can instantly search hundreds of thousands 
-# of outcodes and return their Latitude and Longitude mathematically in less than 2 seconds without using the internet!
-geo_data = nom.query_postal_code(outcodes.tolist())
-print("\n--- Output element: geo_data (First 5 rows) ---")
-print(geo_data.head())
-
-# --- STEP 5: CREATING THE MASTER GEOSPATIAL MAP (Matching Found!) ---
-# 'geo_data' now holds the raw X and Y coordinates. We need to pair them cleanly back to the original full "BR6 7FN" string format.
-# We build a 'dictionary dataframe' (called postcode_map) aligning the exact original postcodes against their newly fetched coordinates.
-postcode_map = pd.DataFrame({
-    'postcode': unique_postcodes,
-    'latitude': geo_data['latitude'].values,
-    'longitude': geo_data['longitude'].values
-})
-print("\n--- Output element: postcode_map (First 5 matching records) ---")
-print(postcode_map.head())
-
-# --- STEP 6: SENDING IT TO THE MAIN DATASET (Preparing for the Model) ---
-print("Merging Geospatial data back to main dataset...")
-# We take the gigantic 3.9 million row dataset ('df') and mathematically "Merge" (join) the small 'postcode_map' onto it.
-# Every row in the long CSV looks at its 'postcode', walks directly over to the postcode_map, grabs the exact matching Lat/Lon,
-# and permanently adds those 2 columns to itself. The dataset is now ready to be sent to the AI Model!
-df = df.merge(postcode_map, on='postcode', how='left')
-print("\n--- Output element: df (First 5 rows showcasing newly merged latitude/longitude) ---")
-print(df[['postcode', 'latitude', 'longitude']].head())
-# ==============================================================================
-# ==============================================================================
-
-# Track dataset size before dropping bad geospatial data
-initial_len = len(df)
-# Drop any rows where we failed to convert the postcode to valid coordinates
-df = df.dropna(subset=['latitude', 'longitude'])
 # Print how many rows were dropped due to mapping failures
 print(f"Dropped {initial_len - len(df)} records due to missing geospatial data. Remaining: {len(df)}")
 
