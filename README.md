@@ -91,8 +91,7 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 
 #### A) Comprehensive Metric Validation
 
-**i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed**
-We benchmarked 4 regression models. The baseline performance is:
+**i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed -** We benchmarked 4 regression models. The baseline performance is:
 * **LightGBM (Winner):** MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
 * **Random Forest:** MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
 * **XGBoost:** MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
