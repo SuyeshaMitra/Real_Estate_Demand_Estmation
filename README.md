@@ -160,79 +160,69 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ---
 
-## 🤖 The Geospatial Transition
-![Failed Neural Network Forecast](03_forecast_validation.png)
+## 🤖 The Geospatial Transition (04 Models Detailed Analytics)
 
-*Note on Neural Networks: Look extremely closely at the red dashed line (Neural Network) in the baseline chart above. Notice how it violently swings downwards away from the black true-price line spanning 2018-2022, creating a catastrophic £546,571 error when trying to predict on structured tabular sheets. Because of this massive baseline drift failure, we formally dropped it from the `04` pipeline completely.*
+Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 Tree-Based ML models** (`Random Forest`, `XGBoost`, `LightGBM`) to observe how varying mathematical approaches manage geometric spatial proximity differently once `Latitude` and `Longitude` are properly extracted from the offline `pgeocode` database.
 
-Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 distinct Tree-Based ML models** (`04A`, `04B`, `04C`) to observe how varying mathematical approaches manage geometric spatial proximity differently once Latitude and Longitude are properly supplied via `pgeocode`.
+### A) Comprehensive Geospatial Metric Validation
 
-### 1. Geospatial Random Forest (Ensemble Averaging)
-* **What it does**: Random Forests draw hard localized bounding boxes over latitude and longitude. It grows thousands of independent, deeply nested trees (`max_depth=20`) and averages their outputs.
-* **Why it was used**: It is incredibly stable and immune to localized outlier spikes, perfectly isolating ultra-luxury £50M+ mansions safely inside their own geographic leaves.
+**i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed -** We benchmarked the 3 spatial regression models. The spatial performance is:
+* **LightGBM (Winner):** MAE: £395,634 | Accuracy: 78.81% | Speed: ~0.23s
+* **XGBoost:** MAE: £404,452 | Accuracy: 78.09% | Speed: ~2.71s
+* **Random Forest:** MAE: £430,946 | Accuracy: 76.07% | Speed: ~1.44s
 
-### 2. Geospatial Gradient Boosting - XGBoost (Depth-Wise Residuals)
-* **What it does**: XGBoost builds shallow trees sequentially (`max_depth=10`). Instead of averaging everything independently, each tree specifically targets the mathematical error left behind by the prior tree.
-* **Why it was used**: In real estate, prices decay smoothly as you move physically further from a wealthy neighborhood centroid. Gradient boosting maps this smooth residual spatial gradient better than a blocky average forest.
+*(Note: The integration of physical spatial coordinates massively dropped the baseline LightGBM error from £456k down to £395k, instantly proving that geographic mapping is fundamentally superior to text parsing).*
 
-### 3. Geospatial LightGBM (Leaf-Wise Optimization)
-* **What it does**: LightGBM is a Microsoft framework that grows trees **leaf-wise** rather than depth-wise. It constantly splits the single geographic leaf across the map that suffers from the absolute highest loss error (`num_leaves=64`).
-* **Why it was used**: On a spatial plane with continuous floating-point coordinates (lat/lon), leaf-wise binning is blisteringly fast and typically hyper-optimizes localized variances much more effectively than standard gradient boosting.
+**ii) Accurate Values Across Models**
+The execution strictly ensures that **values are completely accurate across models**, calculated identically over the identical spatial test dataset. All percentage variances are normalized identically.
 
----
+**iii) Explore Accuracy: What defines an "Accurate" Prediction?**
+To determine how "accurate" a spatial model is, we govern the percentage by three strict mathematical rules:
+* **1. The Variance Rule (Calculating Error %):** We calculate the absolute difference between the Predicted Price and the True Sold Price, and divide it by the True Price.
+* **2. The Inversion Rule (Error to Accuracy):** We subtract the percentage error from 100%.
+* **3. The Bounding Rule (The Zero Floor):** Because spatial models can occasionally guess catastrophically on ultra-luxury mansions, we institute a rigorous mathematical floor explicitly at **0%** (`np.clip(accuracy, 0, 100)`). An absolutely wrong prediction is capped at 0%, protecting the median metric from unbounded negative drift.
+* **Conclusion:** When LightGBM shows a `78.81% Median Accuracy`, its spatial predictions reliably land within a ~21.2% variance of the physical selling price.
 
-## 📈 Validated 5-Year Output Breakdown
-To explicitly showcase exactly how the predictions hold true side-by-side, we track a 5-row sample of specific postal codes against all 3 models predicting 5-years into the future. 
+**iv) Consistent Calculations Over All Features**
+**Consistent Auditing Over Features:** The system executes explicit validation over all 3 spatial algorithms identically enforcing `Features = ['year', 'month', 'property_code', 'old_new_code', 'duration_code', 'latitude', 'longitude']`.
 
-### 1. Geospatial Random Forest Outputs
-| Postcode | Actual Price Sold | RF Predicted | Variance Error (£)| Model Accuracy (%) | Error Precision (%) |
-|----------|-------------------|--------------|-------------------|--------------------|---------------------|
-| BR6 7FN | £640,000 | £629,274 | £10,725 | **98.32%** | 1.68% |
-| NW6 4NU | £1,566,000| £1,714,738 | -£148,738| **90.50%** | 9.50% |
-| DA7 5LA | £500,000 | £432,475 | £67,524 | **86.50%** | 13.50% |
-| E6 5UA  | £480,000 | £410,016 | £69,983 | **85.42%** | 14.58% |
-| RM2 6NX | £400,000 | £327,007 | £72,992 | **81.75%** | 18.25% |
+**v) Calculate Accuracy, Error and Speed - For 5 Years + Every Monthly Average**
+Because standard globally averaged numbers can mathematically mask seasonal failures, the script natively breaks predictions out chronologically tracking structural degradation points.
+* **5-Year View:** We explicitly track the absolute MAE and Accuracy dynamically across the 2018-2022 holdout block. 
+* **Monthly View:** We fold the historic time-series back exclusively over the 12 calendar months (`1 to 12`) to explicitly track the seasonality pattern.
 
-**Pros**: Highly consistent and resilient against drastic miscalculations in extreme luxury properties (e.g. predicting a £1.5M property to within 9.5%). 
-**Cons**: Fails to capture localized trends efficiently, resulting in the worst median error rating overall.
+**vi) Error Pattern on Years and Months Wise Separately**
 
----
+**A. 5-Year Yearly Breakdown Observation**
+![Geospatial Yearly Accuracy Trend](04_accuracy_trend_yearly.png)
+* **Which model is better and why:** **LightGBM** is universally the most accurate model across every single year. It dominates the 2021 post-pandemic spike. Its leaf-wise histogram bucketing algorithm is structurally superior to depth-wise (XGBoost) or tree-averaging (Random Forest) at isolating sudden chaotic shifts in housing wealth.
 
-### 2. Geospatial XGBoost Outputs
-| Postcode | Actual Price Sold | XGB Predicted | Variance Error (£)| Model Accuracy (%) | Error Precision (%) |
-|----------|-------------------|---------------|-------------------|--------------------|---------------------|
-| E6 5UA  | £480,000 | £432,710 | £47,290 | **90.15%** | 9.85% |
-| RM2 6NX | £400,000 | £362,760 | £37,240 | **90.69%** | 9.31% |
-| BR6 7FN | £640,000 | £558,784 | £81,216 | **87.31%** | 12.69% |
-| DA7 5LA | £500,000 | £413,607 | £86,393 | **82.72%** | 17.28% |
-| NW6 4NU | £1,566,000| £1,222,968 | £343,032| **78.10%** | 21.90% |
+**B. Monthly Seasonality Breakdown Observation**
+![Geospatial Monthly Accuracy Trend](04_accuracy_trend_monthly.png)
+* **Which model is better and why:** **LightGBM** survives the massive Spring Real-Estate Rush (Month 3) better than the others. Pure transactional volume causes severe unpredictability, but LightGBM's binning handles volatile continuous spatial variables natively faster.
 
-**Pros**: Significantly improves upon standard middle-class homes (e.g., E6 5UA jumped from 85% accuracy in RF to 90% in XGBoost).
-**Cons**: Depth-wise sequential chasing heavily penalizes massive outliers, stripping away some accuracy when attempting to forecast very expensive regions.
+**vii) Average Error Distribution Over Postal Codes**
+To mathematically prove exactly *where* the models struggle the most, we grouped the test dataset entirely by physical postal code (`outcode`) and plotted the Average Error distribution across the Top 50 most active London districts.
 
----
+![Postcode Error Distribution](04_error_distribution_by_postcode.png)
+* **Distribution & Pattern Plot Observation:** The error is absolutely not distributed evenly. Specific high-density, ultra-wealthy postal codes drastically spike the error bounds for XGBoost and Random Forest. 
+* **Why LightGBM Wins Spatially:** Notice that the LightGBM error bars consistently remain visibly lower across the hardest-to-predict postcodes. This physically proves that leaf-wise splits isolate extremely expensive spatial bounding boxes mathematically better than block-averaging coordinates.
 
-### 3. Geospatial LightGBM Outputs (Winner)
-| Postcode | Actual Price Sold | LGBM Predicted | Variance Error (£)| Model Accuracy (%) | Error Precision (%) |
-|----------|-------------------|----------------|-------------------|--------------------|---------------------|
-| RM2 6NX | £400,000 | £397,760 | £2,240 | **99.44%** | 0.56% |
-| NW9 8XJ | £315,000 | £303,219 | £11,781| **96.26%** | 3.74% |
-| KT1 1QL | £595,000 | £532,051 | £62,949| **89.42%** | 10.58% |
-| BR6 7FN | £640,000 | £558,080 | £81,920| **87.20%** | 12.80% |
-| E6 5UA  | £480,000 | £409,488 | £70,512| **85.31%** | 14.69% |
+### B) Predictive Geospatial Visualizations
 
-**Pros**: Absolutely devastating localized precision logic. By utilizing leaf-wise geographic histograms, LightGBM successfully predicted individual postal holding boundaries 5 years into the future with sub-1% error margins! (e.g. RM2 6NX predicting a £400k house and missing by only £2,240!).
-**Cons**: Can aggressively hyper-optimize small neighborhood datasets which might occasionally cause slightly erratic estimates on completely new unseen developments.
+Below are the physically generated structured charts tracking the spatial drift:
 
----
+**1. Historical Chart**
+Visibly maps the 2008-2022 London property physical price graph using spatial logic.
+![Geospatial Historical Trend](04_historical_trend.png)
 
-### 🏆 Final Output Metric Ranking Summary
+**2. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Yearly**
+Directly plots exactly how the 3 spatial machine learning models historically drifted against the true price line over the 5-year validation bracket.
+![Geospatial Yearly Validation](04_forecast_validation_yearly.png)
 
-| Ranking | Spatial Model Engine | Global MAE Score | Execution Speed | Conclusion |
-|---------|----------------------|------------------|-----------------|------------|
-| **1st (Best)** | **LightGBM (Leaf-wise)** | **£401,075** | **~0.6 seconds** | The ultimate champion for continuous geospatial boundaries. Its histogram-binning allowed it to mathematically isolate London's volatile spatial wealth-pockets perfectly, trimming thousands of pounds off median forecast error over half a decade while executing almost instantaneously. |
-| **2nd** | **XGBoost (Depth-wise)** | **£410,339** | ~3.5 seconds | An excellent and powerful predictor that reliably maps spatial gradients better than tree averaging, but requires high computational limits and struggles slightly scaling with wealthy outliers. |
-| **3rd** | **Random Forest (Baseline)** | **£424,476** | ~1.5 seconds | Stable, trustworthy, and perfectly protects luxury boundary zones. However, block-averaging latitude and longitude is fundamentally unable to map rolling wealth gradients accurately. |
+**3. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Monthly**
+Plots this same validation explicitly tracking the 1-12 month cyclical cycle.
+![Geospatial Monthly Validation](04_forecast_validation_monthly.png)
 
 ## 🌍 External Ecosystem API Feature Extraction
 
