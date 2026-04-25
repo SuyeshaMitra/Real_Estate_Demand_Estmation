@@ -47,7 +47,9 @@ unique_postcodes = df['postcode'].unique()
 print(f"Extracted {len(unique_postcodes)} unique postcodes.")
 
 # --- STEP 2: INITIALIZING THE OFFLINE DATABASE ('nom') ---
-print("Fetching Latitude and Longitude using pgeocode (Offline DB)...")
+# We query the offline Great Britain (GB) geospatial resultset.
+# pgeocode natively downloads and queries the open-source GeoNames GB.zip dataset (http://download.geonames.org/export/zip/GB.zip)
+print("Fetching Latitude and Longitude using pgeocode (Offline GB Dataset)...")
 nom = pgeocode.Nominatim('gb')
 
 # --- STEP 3 & 4: PREPARING AND QUERYING ---

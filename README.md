@@ -163,8 +163,8 @@ To scientifically prove the categorical limits of the baseline model, the algori
 ## The Geospatial Transition (04 Models Detailed Analytics)
 
 **Query & Training Data Feed (Latitude + Longitude + Years: 2008-2017)**: 
-To construct the spatial matrix, we first queried an offline file-based storage engine (the `pgeocode` module) to map physical **Latitude** and **Longitude** coordinates strictly utilizing the postcodes found within our offline resultset file: [london_data.csv](london_data.csv). 
-Once these spatial targets were generated, we merged them directly alongside our historical temporal timestamps (**Years & Months: 2008 to 2017**). This massive, unified geometric/time-series grid was then fed identically into the Machine Learning algorithms below for explicit training.
+To construct the spatial matrix, we first parse the filtered resultset ([london_data.csv](london_data.csv)) which contains our property timestamps. We then strictly query the **offline Great Britain (GB) geospatial resultset** via the `pgeocode` module (which natively downloads and queries the open-source [GeoNames GB.zip Dataset](http://download.geonames.org/export/zip/GB.zip)). This offline GB query maps every postal code into physical **Latitude** and **Longitude** coordinates.
+Once extracted, we merged the newly generated GB Lat/Lon targets directly alongside our historical temporal timestamps (**Years & Months: 2008 to 2017**). This massive, unified geometric/time-series grid was then fed identically into the Machine Learning algorithms below for explicit training.
 
 Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 Tree-Based ML models** (`Random Forest`, `XGBoost`, `LightGBM`) to observe how varying mathematical approaches manage geometric spatial proximity differently once `Latitude` and `Longitude` are properly extracted.
 
