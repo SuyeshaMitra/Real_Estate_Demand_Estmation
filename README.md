@@ -164,7 +164,7 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 **Pipeline Sequence & Training Data Generation (Generating `london_geospatial_dataset.csv`)**: 
 To construct the spatial matrix, the pipeline executes the following rigid sequence:
-1. **Temporal Filtering:** We first load the core `london_data.csv` dataset and strictly filter the property records down to our target 15-year historical block (**Years: 2008 to 2022**). 
+1. **Temporal Filtering:** We first load the core `london_data.csv` dataset (which was physically filtered in Step 02 to strictly isolate only properties inside the `GREATER LONDON` county) and then we temporally filter those property records down to our target 15-year historical block (**Years: 2008 to 2022**). 
 2. **Geospatial Mapping (No Time Dependency):** We extract the unique postal codes from those 15 years and pass them directly into the `pgeocode` module. `pgeocode` securely queries the **offline Great Britain (GB) geospatial resultset** (open-source [GeoNames GB.zip Dataset](http://download.geonames.org/export/zip/GB.zip)). *Note: This offline query operates strictly on static Postal Codes to retrieve physical **Latitude** and **Longitude** coordinates; it does not process or care about timestamp data.*
 3. **Merging & Exporting the Unified Grid:** Once the static Lat/Lon coordinates are successfully extracted, they are merged back onto the timestamped property records. We then physically export this completely unified matrix to **[london_geospatial_dataset.csv](london_geospatial_dataset.csv)**. 
 
