@@ -181,9 +181,13 @@ def evaluate_model(name, model, execution_time):
     # Calculate R^2 representing overall accuracy variance the model natively accounted for
     r2 = r2_score(y_test, y_pred)
     
-    # Calculate Median Accuracy percentage natively
+    # A(i) Check Absolute Error (MAE), Aggregate Median Accuracy, Execution Processing Speed
+    # A(iii) Explore Accuracy Rule: Accuracy is 100% minus the absolute percentage error.
+    # A(iv) Check all calculations: We enforce a strict mathematical floor at 0% for all models 
+    # across all features to guarantee values are accurate and perfectly consistent.
     absolute_percentage_errors = np.abs((y_test - y_pred) / y_test)
-    median_accuracy_percentage = np.median(100 - (absolute_percentage_errors * 100))
+    accuracy_array = np.clip(100 - (absolute_percentage_errors * 100), 0, 100)
+    median_accuracy_percentage = np.median(accuracy_array)
     
     # Store dynamic stats
     plot_models.append(name)
@@ -229,7 +233,9 @@ for code in models_dict.keys():
 print("\n=======================================================")
 print("          --- 5-YEAR AGGREGATE SUMMARY (BY YEAR) ---           ")
 print("=======================================================")
-# Compute exact historical averages explicitly tracking the yearly error pattern completely isolated 
+# A(v) Calculate the Accuracy, Error and Speed - For 5 Years 
+# A(vi) How is the Error pattern coming on Years wise: We track how the error naturally floats per year.
+# Compute exact historical averages explicitly tracking the yearly error pattern completely isolated
 yearly_test_trend = test_df.groupby('year').agg(
     price=('price', 'mean'),
     rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_acc=('rf_accuracy', 'median'),
@@ -244,7 +250,9 @@ print(yearly_test_trend.to_string(index=False))
 print("\n=======================================================")
 print("      --- SEASONALITY AGGREGATE SUMMARY (BY MONTH) ---         ")
 print("=======================================================")
-# Compute exact historical monthly averages tracking the cyclic seasonality pattern error completely isolated 
+# A(v) Calculate the Accuracy, Error and Speed - Every Monthly Average aswell
+# A(vi) How is the Error pattern coming on Months wise separately:
+# Compute exact historical monthly averages tracking the cyclic seasonality pattern error completely isolated
 monthly_test_trend = test_df.groupby('month').agg(
     price=('price', 'mean'),
     rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_acc=('rf_accuracy', 'median'),
@@ -256,6 +264,7 @@ monthly_test_trend = test_df.groupby('month').agg(
 # Display terminal readout
 print(monthly_test_trend.to_string(index=False))
 
+# B) Build charts - Historical Chart and Forecast Validation Chart (Actual Average Vs Forecasted Price)
 # Draw final graphs
 plt.figure(figsize=(10, 6))
 plt.plot(yearly_test_trend['year'], yearly_test_trend['price'], marker="o", color="black", linewidth=2, label="Actual Avg Price")

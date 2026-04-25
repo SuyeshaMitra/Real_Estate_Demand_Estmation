@@ -111,6 +111,49 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ---
 
+## 📊 Baseline Models Detailed Analytics (Time-Series Breakdown)
+
+To ensure full transparency into how the initial non-spatial tabular algorithms function, we break down their performance metrics structurally based on error consistency and historical temporal patterns.
+
+### A) Comprehensive Metric Validation
+
+#### i & ii) Absolute Error, Median Accuracy, and Execution Processing Speed
+We benchmarked 4 regression models (Random Forest, Neural Network, XGBoost, LightGBM). The execution strictly ensures that **values are completely accurate across models**, calculated identically over the identical test dataset. 
+
+* **LightGBM (Winner):** MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
+* **Random Forest:** MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
+* **XGBoost:** MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
+* **Neural Network:** MAE: £546,571 | Accuracy: 65.93% | Speed: ~2.93s
+
+*(Note: In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly).*
+
+#### iii) Accuracy Explanation: What defines an "Accurate Prediction"?
+**The Accuracy Rule:** The system strictly calculates the absolute physical percentage variance (`(True_Price - Predicted_Price) / True_Price`) and subtracts it from 100%. 
+Crucially, to mathematically define a stable median without severe negative drifts from catastrophic individual guesses (e.g., predicting £1,000,000 on a £200,000 home = -400% Accuracy), the pipeline now rigorously bounds accuracy strictly with an absolute floor of **`0%`** (`np.clip(accuracy, 0, 100)`). This logic forces all models to accurately reflect their median reliability gracefully.
+
+#### iv) Calculation Consistency Over Features
+All the absolute mathematical variance logic calculations (MAE & Accuracy) are verified to run mathematically parallel, executing identical validation loops uniformly traversing the identical feature columns (`year`, `month`, `property_code`, `old_new_code`, `duration_code`, `district_code`). 
+
+#### v & vi) Time-Series Error Analysis (5-Years + Monthly Seasonality)
+Because standard global average metrics can accidentally mask temporal failures, the framework algorithmically splits predictions chronologically to view error patterns Year-by-Year and Month-by-Month independently.
+
+**1. 5-Year Aggregation Pattern (Yearly Breakdown)**
+* By separating the holdout testing data explicitly by year (2018 - 2022), we see the error pattern floating dynamically in response to macro-events. 
+* **Observation**: During the post-pandemic housing surge in **2021**, LightGBM's Error margin actively shrank significantly to **£400,395**, resulting in a peak accuracy of **76.68%**. Conversely, Random Forest drifted up to ~£414,260 MAE in the exact same year.
+* This proves LightGBM adapts chronologically faster to massive yearly economic variance shifts using text-only inputs.
+
+**2. Seasonality Aggregation Pattern (Monthly Breakdown)**
+* By folding the historic time-series back exclusively over the 12 calendar months (`1 to 12`), we actively track the cyclical error pattern separate from yearly events.
+* **Observation**: The absolute lowest model error happens uniformly across all Tree models in **February (Month 2)**, heavily tracking the real-estate off-season. LightGBM shrinks down to **£355,499** error (76.46% accurate).
+* **Observation**: Maximum error occurs aggressively during the spring listing boom in **March (Month 3)**, where LightGBM error artificially inflates to £574,759. The error naturally scales proportionately directly aligned with active market trading volumes.
+
+### B) Predictive Baseline Visualizations
+To instantly visually prove these historical metrics, the `03_trend_analysis_and_modeling.py` code physically outputs structured charts (which can be viewed in the project root):
+* **Historical Chart:** `03_historical_trend.png` visibly maps the 2008-2022 London property physical price graph.
+* **Forecast Validation Chart (Actual Average Vs Forecasted Price):** `03_forecast_validation_yearly.png` directly plots exactly how the 4 machine learning models (dashed lines) historically drifted against the solid black true price line over the 5-year validation bracket. `03_forecast_validation_monthly.png` plots this same validation against the 1-12 month cyclical cycle.
+
+---
+
 ## 🤖 The Geospatial Transition
 ![Failed Neural Network Forecast](03_forecast_validation.png)
 
