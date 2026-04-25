@@ -88,19 +88,20 @@ Think of File `03` as the **"Baseline Test."** In data science, before you spend
 * **Neural Networks (MLP)**: We specifically included a Neural Network as a wildcard. People assume Deep Learning is always the smartest. This proves otherwise! Neural Networks perform terribly on basic tabular CSVs lacking deep complexity (Worst MAE: £546k).
 * **XGBoost & LightGBM**: These are mathematically advanced "Gradient Boosters." We originally saved them strictly for the Geospatial step, but we test them here on basic text categories like District name to see if raw algorithmic power can beat a Random Forest without using Latitude/Longitude. LightGBM manages to pull ahead (MAE £456k), but XGBoost overfits the text categories completely (MAE £494k).
 
-### 📊 What do the five File 03 Plots signify?
-File `03` computes and generates five visual artifacts directly to your root folder:
+### 📊 What do the Six File 03 Plots signify?
+File `03` computes and generates six highly granular visual artifacts directly to your root folder:
 1. **`03_historical_trend.png`**: Before the AI even trains, this plots the *true* average real estate price in London from 2008 to 2022. **Significance & Decision Context**: It visually establishes the problem we are facing. We can definitively *see* that prices are aggressively rising.
-2. **`03_forecast_validation.png`**: This draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data), and places dotted lines representing what the AI *predicted* would happen. 
+2. **`03_forecast_validation_yearly.png`**: This draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data) specifically grouped by Year, and places dotted lines representing what the 4 isolated AI models predicted. 
+3. **`03_forecast_validation_monthly.png`**: Natively groups predictions by strict 1-12 Month seasonality to visually diagnose structural weather/seasonal failures across the algorithms natively.
 
    💡 **Why is the gap between the models and reality so massive?**
    What you are looking at right now is the exact visual proof of why we called File `03` the "Baseline Test". The 4 models plotted in this image were only given basic text words (like the district name "Croydon") to try and guess the price. The chart visually proves that *none* of the algorithms successfully tracked the 2019 London real estate boom, all under-predicting reality by £300,000+!
 
-3. **`03_chart_model_mae_comparison.png` (Absolute Error)**: Demonstrates that **LightGBM** wins the error-margin contest natively (£456k), while the Neural Network spectacularly crashes (£546k).
-4. **`03_chart_model_accuracy_comparison.png` (Median Accuracy)**: Proves LightGBM achieves roughly **75.68% target accuracy** solely predicting from basic Categories.
-5. **`03_chart_model_speed_comparison.png` (Execution Processing Speed)**: Emphasizes that LightGBM accomplished its victory in a blisteringly fast ~1.63 seconds, while XGBoost suffered computational bloat at ~2.27 seconds.
+4. **`03_chart_model_mae_comparison.png` (Absolute Error)**: Demonstrates that **LightGBM** wins the error-margin contest natively (£456k), while the Neural Network spectacularly crashes (£546k).
+5. **`03_chart_model_accuracy_comparison.png` (Median Accuracy)**: Proves LightGBM achieves roughly **75.68% target accuracy** solely predicting from basic Categories, safely protected by a 0% baseline floor clipping logic.
+6. **`03_chart_model_speed_comparison.png` (Execution Processing Speed)**: Emphasizes that LightGBM accomplished its victory in a blisteringly fast ~1.63 seconds, while XGBoost suffered computational bloat at ~2.27 seconds.
 
-This huge visual failure on the forecast validation chart is the exact reason we built the **Geospatial Models** in Files `04A`, `04B`, and `04C`. When you run those files and open their graphs, you will see the actual predictions mathematically jump all the way up and tightly hug the true blue line, because Latitude and Longitude arrays allow the ML Trees to finally "see" the wealthy neighborhoods!
+This huge visual failure on the forecast validation charts is the exact reason we built the **Geospatial Models** in Files `04A`, `04B`, and `04C`. When you run those files and open their graphs, you will see the actual predictions mathematically jump all the way up and tightly hug the true blue line, because Latitude and Longitude arrays allow the ML Trees to finally "see" the wealthy neighborhoods!
 
 ### 📏 Understanding the Evaluation Metrics
 To know how good or bad our model is, we grade its "test paper" using three metrics. Here is an explanation of what they mean, completely broken down, including example performance values we achieved later on by applying our **Top 3 Geospatial Models** (Random Forest, XGBoost, LightGBM) to those same metrics:
