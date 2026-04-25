@@ -232,40 +232,44 @@ Directly plots exactly how the 3 spatial machine learning models historically dr
 Plots this same validation explicitly tracking the 1-12 month cyclical cycle.
 ![Geospatial Monthly Validation](04_forecast_validation_monthly.png)
 
-## External Ecosystem API Feature Extraction
+## External Ecosystem API Feature Extraction & NLP Semantic Analysis
 
-To further optimize forecasting accuracy, we designed `06_external_feature_extraction.py` to tap into open, free public APIs. By parsing these datasets and feeding them directly into our ML tree nodes, we can mathematically tune the engines to capture real-time spatial and psychological demand. 
+To fundamentally resolve the limitations of pure temporal and coordinate models, we architected the `06_external_feature_extraction.py` and `06B_compile_external_features.py` pipelines to extract and compile massive external macro-economic API intelligence natively into the geometric data grid.
 
-All 3 API outputs run live and successfully export physical test examples to the root directory.
+### A) Feature Resultset Extraction
+The pipeline successfully executed all API queries and generated 4 distinct physical output JSON/CSV artifacts representing the pure data from the 4 Data Providers. 
 
-### 1. OpenStreetMap (OSM) - Spatial Infrastructure Tuning
-**Why this improves accuracy:** A purely geographical ML model doesn't inherently understand what "Lat/Lon" means besides plotting a dot. By explicitly scanning the API for infrastructure and mapping a new `stations_within_1.5km` numeric column onto the dataset, we mathematically force the AI to correlate high infrastructure density with premium land valuations. 
+### B) OSM API Invocation
+The script actively queried the OSM Overpass API to download the exact coordinates of every `School`, `Bank`, `Hospital`, and `Station` located across Central London.
 
-*(Note: The coordinates below specifically match the London Property dataset postcode **BR6 7FN**)*
-| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
-|------------|--------------------------|----------------------------------------|------------------|
-| **Overpass API (`overpass-api.de`)** | `Lat: 51.3734`<br>`Lon: 0.0881`<br>`Radius: 1500m`<br>`Amenity="school"` | [Run Overpass API in Browser](http://overpass-api.de/api/interpreter?data=[out:json];node[%22amenity%22=%22school%22](around:1500,51.3734,0.0881);out;) | Live JSON array plotting the exact nodes matching schools near BR6 7FN. |
+### C) KDTree Spatial Proximity (The "Last Mile" Connection)
+> [!IMPORTANT]
+> **Spatial Distance vs Bounding Boxes**
+> We do NOT simply check if a property is "within 1.5km" of a station. Instead, we use `scipy.spatial.cKDTree` to mathematically calculate the exact true Haversine distance (in kilometers) from *every single property's exact Latitude/Longitude* to the absolute closest infrastructure node! 
+> 
+> **Explore the learning on Last Mile connection:** A house 0.1km from a station commands a drastically different premium than one 1.2km away. The KDTree explicitly teaches the Machine Learning models how precise walking distances mathematically dictate housing valuations.
 
-### 2. Google Trends (`pytrends`) - Temporal Economic Tuning
-**Why this improves accuracy:** Real estate dataset histories lag by months because of closing delays. Google search volumes lead macroeconomic reality (e.g. people aggressively search online *before* they buy). Appending the `macro_demand_index` allows our algorithmic ensemble to pre-emptively predict London price bumps prior to physical data catching up.
+### D & E) Google News SBERT Sentiment Analysis & Google Trends Volume
+> [!TIP]
+> **Contextual NLP > Keyword Counting**
+> We do NOT predict based on the volume of news (100 articles screaming "Housing Crash!" looks identical to 100 articles screaming "Housing Boom!"). 
+> 
+> Instead, we extract the live titles and use the advanced `sentence-transformers/all-MiniLM-L6-v2` **SBERT Model** to perform contextual Semantic Sentiment Analysis. We compute the Cosine Similarity between the news headlines and target concepts like "Housing Market Boom". This generates a dynamic mathematical float score that captures the true psychological sentiment of the market and feeds it directly into all 4 ML models.
 
-| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
-|------------|--------------------------|----------------------------------------|------------------|
-| **Google Trends** | `kw_list = ["London mortgage", "London house prices"]`<br>`geo="GB-ENG"`<br>`timeframe='2018-01-01 2022-12-31'` | [Run Google Trends in Browser](https://trends.google.com/trends/explore?date=2018-01-01%202022-12-31&geo=GB-ENG&q=London%20mortgage,London%20house%20prices) | Weekly internet search volume Index indexed 0-100 indicating hype levels. |
+### API Processing Timeline (Train vs Test)
+All API tracking logic is mapped historically. The Models aggressively train on the **Test Data (2008 to 2017)** API variance, and physically execute their forecasts strictly on the holdout **Next 5 Years (2018 to 2022)** block.
 
-### 3. Google News RSS Feed - Geopolitical Sentiment Tuning
-**Why this improves accuracy:** General housing demand algorithms struggle heavily when external unmodeled panics occur (e.g., banking crashes). By dynamically parsing headline strings and counting daily real estate publication volume (`weekly_news_volume`), the models can inherently dampen or elevate localized predicted growth rates.
+### The Unified API Resultset Dashboard
+Below is the dashboard tracking the actual extracted resultsets, how they are parsed, and live functional browser endpoints for manual validation:
 
-| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
-|------------|--------------------------|----------------------------------------|------------------|
-| **News RSS (`news.google.com/rss`)** | `query = "London+Real+Estate"`<br>HTTP GET Request | [Run Google News RSS in Browser](https://news.google.com/rss/search?q=London+Real+Estate) | An XML DOM tree dynamically pulling the newest article publication dates and headlines. |
+| Data Provider | Live Browser Validation Link (Click to Test) | JSON Resultset File (Click to View) | How it Feeds the Models |
+|---------------|----------------------------------------------|-------------------------------------|--------------------------|
+| **OSM (Infrastructure)** | [Test OSM Overpass in Browser](http://overpass-turbo.eu/?Q=[out:json];node[%22amenity%22=%22hospital%22](51.4,-0.2,51.6,0.1);out;) | [`api_result_osm.json`](api_result_osm.json) | Scipy KDTree calculates physical exact distance (km) from Property Lat/Lon to the closest extracted coordinate node. |
+| **Google News (Sentiment)** | [Test Live Google News RSS](https://news.google.com/rss/search?q=London+Real+Estate) | [`api_result_google_news.json`](api_result_google_news.json) | SBERT Cosine Similarity applied to generate mathematical semantic sentiment floats. |
+| **Google Trends (Volume)** | [Test Google Trends Browser](https://trends.google.com/trends/explore?date=2008-01-01%202022-12-31&geo=GB-ENG&q=London%20house%20prices) | [`api_result_google_trends.csv`](api_result_google_trends.csv) | Temporally joined (Year/Month) to all 1.6M rows exactly. |
+| **World Bank (Rates)** | [Test World Bank API](https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json&date=2008:2022) | [`api_result_boe_interest.json`](api_result_boe_interest.json) | Temporally joined (Year) to all 1.6M rows exactly. |
 
-### 4. World Bank Public API - National Interest Rates
-**Why this improves accuracy:** The price of property drastically swings inversely depending on how expensive it is to functionally borrow money. The Bank of England crashed interest rates to 0.1% during the 2021 pandemic causing a massive boom. By directly pinging the world bank for `national_interest_rate`, we mathematically tell the models exactly when lending bubbles occur!
-
-| Target API | Sample Parameters Passed | Live Browser API Endpoint (Click Here) | Result Extracted |
-|------------|--------------------------|----------------------------------------|------------------|
-| **World Bank (`api.worldbank.org`)** | `country = "GB"`<br>`indicator = FR.INR.LEND`<br>`format=json` | [Run World Bank API in Browser](https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json) | A structured JSON Array physically dictating the UK's historical absolute lending interest rate explicitly spanning decades. |
+All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and natively exported into the absolute master dataset: **`london_geospatial_enriched_dataset.csv`** which completely powers all `07` ML models.
 
 ---
 
