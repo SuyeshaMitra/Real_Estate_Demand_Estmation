@@ -269,42 +269,27 @@ This script executes and renders three gorgeous business-ready visualizations in
 **The Goal**: We proved our internal 3 models work. But what if we added external data off the internet to make the models even smarter? This script tests totally free, public APIs to extract advanced features that "tune" our models.
 
 ### Why do ML Models need External API Features?
-Even the smartest algorithm (like LightGBM) cannot predict a housing market crash if it only looks at historical Latitude and Longitude. Algorithms are blind to the outside world. By explicitly querying Google and Maps for real-time human behavior and infrastructure, we give the model "eyes" into the real world.
+Even the smartest algorithm (like LightGBM) cannot predict a housing market crash if it only looks at historical Latitude and Longitude. Algorithms are blind to the outside world. By explicitly querying Google and Maps for real-time human behavior and infrastructure, we give the model "eyes" into the real world to break the mathematical Extrapolation Limit.
 
-### 1. KDTree "Last Mile" Proximity (Replacing Old Bounding Boxes)
-*   **What we take from Distance (Exact Kilometers):** We don't use arbitrary max-radius bounds like "Is there a station within 1.5 miles?". Instead, the algorithm searches an infinite boundary to find the absolute *closest* infrastructure node to the property, and explicitly calculates the true **Haversine Euclidean distance (in exact Kilometers)**. 
-*   **What else we track:** We specifically track distance to the nearest `School`, `Hospital`, `Station`, and `Bank`. This allows the ML to inherently learn "Density". If a house is 0.5km from a station, 0.2km from a school, and 0.4km from a hospital, it is physically sitting in an ultra-premium high-density zone.
-*   **Why this model is applied (The Last Mile):** A simple "Yes/No" feature is heavily flawed. A property 0.1km from a station commands a drastically different premium than one 1.4km away, even though both are "Yes". KDTree feeds the AI the pure mathematical continuous float (e.g., `0.124 km`), teaching it exact walking-distance valuations.
+### 1. OpenStreetMap (OSM) API: KDTree "Last Mile" Proximity
+*   **Model Applied**: `scipy.spatial.cKDTree` (Haversine Spatial Mathematics)
+*   **Why the Model is Applied ("Last Mile" Proximity)**: We explicitly DO NOT use bounded boxes like "Is there a station within 1.5 miles?". Bounding boxes are mathematically rigid. Instead, the algorithm searches an infinite boundary to instantly find the absolute closest infrastructure node to the property, and applies the Haversine formula to compute the explicit geographic Great-Circle distance in **exact Kilometers**. A house 0.1km from a station commands a drastically different premium than one 1.2km away. The KDTree explicitly teaches the ML algorithms how precise walking distances mathematically dictate valuations.
+*   **What else we track:** We track distance to the nearest `School`, `Hospital`, `Station`, and `Bank` simultaneously to inherently learn "Density Zones".
+*   **Resultset Extracted**: `distance_to_nearest_school_km`, `distance_to_nearest_hospital_km`, `distance_to_nearest_station_km`, `distance_to_nearest_bank_km`.
 *   **The Python Code Logic:**
     ```python
-    # We load scipy's lightning fast spatial tree
     from scipy.spatial import cKDTree
-    
-    # We feed it the Lat/Lon of every single hospital in London
     tree = cKDTree(hospitals_list)
-    
-    # We query the exact closest hospital for all 1.6 Million properties instantly
     distances, indices = tree.query(property_coords, k=1)
-    
-    # We apply the Haversine formula to convert the spatial gap into exact Kilometers
     df['distance_to_nearest_hospital_km'] = haversine_km(distances)
     ```
 
-### 2. Google News RSS: SBERT Semantic Sentiment (Why SBERT and not VADER?)
-*   **Sentiment Analysis on What?** We perform sentiment analysis directly on the **Live Headline Titles** published by major news outlets (extracted dynamically via the Google News RSS feed for the query "London Real Estate").
-*   **Why SBERT over classic models (like VADER or TextBlob)?**
-    *   Classic models (like VADER) use a rigid dictionary. They see the word "Crash" and instantly score it `-1.0`. They see "Drop" and score it `-0.5`. 
-    *   **The Problem:** If a headline says *"London mortgage rates drop, sparking massive buyer demand"*, VADER sees the word "drop" and flags the article as Negative! 
-    *   **The SBERT Solution:** SBERT (`sentence-transformers/all-MiniLM-L6-v2`) is a Deep Learning Neural Network built by HuggingFace. It doesn't read words; it reads **Context**.
-*   **How SBERT works (Layman Example):**
-    We give SBERT two "Anchor" sentences:
-    1. *Anchor Bullish:* "The London housing market is booming and prices are rising."
-    2. *Anchor Bearish:* "The London housing market is crashing and sales have halted."
-    
-    We feed it a live headline: *"Buyers flood the market as London flats see unexpected bidding wars."*
-    
-    SBERT converts this sentence into a 384-dimensional mathematical vector and calculates the **Cosine Similarity** against our anchors. It realizes this headline contextually matches the "Bullish" anchor, even though it contains zero matching keywords!
-*   **The Result Value:**
+### 2. Google News RSS API: SBERT Semantic Sentiment
+*   **Model Applied**: HuggingFace `sentence-transformers` (SBERT Semantic NLP)
+*   **Why the Model is Applied (Sentiment vs Volume)**: We explicitly DO NOT predict based on the volume of news (100 articles screaming "Housing Crash!" looks identical to 100 articles screaming "Housing Boom!" if you just count volume). Furthermore, classic dictionary models like VADER are heavily flawed (if a headline says *"Mortgage rates drop, sparking buyer demand"*, VADER sees the word "drop" and flags it Negative!). 
+*   **How SBERT Solves This:** SBERT is a Deep Learning Neural Network that reads **Context**. We compute the Cosine Similarity between live news headlines and our target anchors ("Housing Boom" vs "Housing Crash"). This generates a dynamic float score capturing the true psychological market sentiment.
+*   **Resultset Extracted**: `sbert_sentiment_index` (A continuous float from -1.0 to +1.0).
+*   **The Result Value (Example):**
     ```python
     bull_score = 0.824 # High similarity to a booming market
     bear_score = 0.112 # Low similarity to a crashing market
@@ -312,54 +297,26 @@ Even the smartest algorithm (like LightGBM) cannot predict a housing market cras
     # Result Value: +0.712 (A strongly positive/bullish float fed to the AI)
     ```
 
-### 3. Google Trends - The Macroeconomic Feature
-```python
-pytrend = TrendReq(hl='en-GB')
-pytrend.build_payload(["London mortgage"], timeframe='2018-01-01 2022-12-31')
-interest_df = pytrend.interest_over_time()
-```
-* **What it does**: It searches Google's internal API to find out how many people were Googling the word "Mortgage" during the week that house was sold.
-* **Features Extracted**: `macro_demand_index` (A 0-to-100 indexed volume metric).
-* **The Data Science Explanation**: Housing prices "lag" reality because buying a property takes months of closing bureaucracy. Conversely, internet searches "lead" reality; people immediately search Google when mortgage rates drop. In Data Science, utilizing leading systemic economic indicators drastically prevents models from falling behind the curve.
-
-### 💾 Validating the API Data (Saved to Root)
-Once `06_external_feature_extraction.py` finishes, it mathematically validates the concepts by physically exporting the 3 external API data schemas to your root folder:
-1. `api_result_osm.json` (OpenStreetMap Geographic JSON Nodes)
-2. `api_result_google_trends.csv` (PyTrends Search Volume DataFrame)
-3. `api_result_google_news.xml` (RSS XML Document Object Model)
-4. `api_result_boe_interest.json` (World Bank GB Lending Rate Time Series)
-
-### Code Snippet 4: World Bank Public API (National Interest Rates)
-```python
-boe_url = "https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json"
-boe_response = requests.get(boe_url)
-```
-* **What it does**: It pings the global World Bank public API targeting country code 'GB' (Great Britain) to extract the official historical Lending Interest Rate natively as JSON.
-* **Features Extracted**: `national_interest_rate`
-* **The Data Science Explanation**: The price of a house is entirely dictated by how expensive it is to borrow money. Tracking "free money" (0.1% rates in 2021) directly governs real estate bubbles!
-
-### Advanced Model Applications (The 4 External Data Providers)
-To natively break the prediction limits of the baseline, we applied 4 advanced mathematical models to 4 external Data Provider APIs. Here is exactly why each model was chosen and what explicit resultset features were generated:
-
-#### 1. OpenStreetMap (OSM) API
-*   **Model Applied**: `scipy.spatial.cKDTree` (Haversine Spatial Mathematics)
-*   **Why the Model is Applied ("Last Mile" Proximity)**: We explicitly DO NOT use bounded boxes like "Is there a station within 1.5 miles?". Bounding boxes are mathematically rigid. Instead, the KDTree searches an infinite boundary to instantly find the absolute closest node to the property, and applies the Haversine formula to compute the exact geographic Great-Circle distance over the curvature of the earth. A house 0.1km from a station commands a drastically different premium than one 1.2km away. The KDTree explicitly teaches the ML algorithms how precise walking distances mathematically dictate valuations.
-*   **Resultset Extracted**: `distance_to_nearest_school_km`, `distance_to_nearest_hospital_km`, `distance_to_nearest_station_km`, `distance_to_nearest_bank_km`.
-
-#### 2. Google News RSS API
-*   **Model Applied**: HuggingFace `sentence-transformers` (SBERT Semantic NLP)
-*   **Why the Model is Applied (Sentiment vs Volume)**: We explicitly DO NOT predict based on the volume of news (100 articles screaming "Housing Crash!" looks identical to 100 articles screaming "Housing Boom!" if you just count volume). Instead, we use SBERT to perform contextual **Semantic Sentiment Analysis**. We compute the Cosine Similarity between live news headlines and our target anchors ("Housing Boom/Crash"). This generates a dynamic float score capturing the true psychological market sentiment without relying on hardcoded dictionary keywords (like VADER).
-*   **Resultset Extracted**: `sbert_sentiment_index` (A continuous float from -1.0 to +1.0).
-
-#### 3. Google Trends API
+### 3. Google Trends API: Macroeconomic Volume
 *   **Model Applied**: Temporal Demand Scaling
 *   **Why the Model is Applied (Leading vs Lagging Indicators)**: Housing prices "lag" reality because buying a property takes months of closing bureaucracy. Conversely, internet searches "lead" reality; people immediately search Google the second mortgage rates drop. By integrating temporal search volume, we allow the ML models to predict sudden housing bubbles before the physical transaction data even catches up.
 *   **Resultset Extracted**: `google_trends_volume` (A 0-to-100 normalized search index mapped month-by-month).
+*   **The Python Code Logic:**
+    ```python
+    pytrend = TrendReq(hl='en-GB')
+    pytrend.build_payload(["London mortgage"], timeframe='2018-01-01 2022-12-31')
+    interest_df = pytrend.interest_over_time()
+    ```
 
-#### 4. World Bank (Bank of England) API
+### 4. World Bank (Bank of England) API: National Rates
 *   **Model Applied**: Macroeconomic Base Rate Matrix
 *   **Why the Model is Applied**: The physical price of a house is entirely dictated by how expensive it is to borrow money from a bank. By historically mapping the exact national Bank of England lending interest rate percentages (e.g., the 0.1% rates during the 2021 pandemic), we teach the algorithm to scale its baseline real estate predictions aggressively based on the availability of "free money".
 *   **Resultset Extracted**: `boe_interest_rate` (The true national lending percentage mapped year-by-year).
+*   **The Python Code Logic:**
+    ```python
+    boe_url = "https://api.worldbank.org/v2/country/GB/indicator/FR.INR.LEND?format=json"
+    boe_response = requests.get(boe_url)
+    ```
 
 ### API Processing Timeline (Train vs Test)
 All API tracking logic is mapped historically. The Models aggressively train on the **Test Data (2008 to 2017)** API variance, and physically execute their forecasts strictly on the holdout **Next 5 Years (2018 to 2022)** block.
