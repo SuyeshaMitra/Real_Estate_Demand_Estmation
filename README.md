@@ -121,15 +121,20 @@ Because standard globally averaged numbers can mathematically mask seasonal fail
 **vi) Error Pattern on Years and Months Wise Separately**
 
 **A. 5-Year Yearly Breakdown Observation**
-When strictly plotting predicted error tracking natively separated by the 2018-2022 holdout years independently:
-* During the **2021 Post-Pandemic Spike**, LightGBM's Error Margin collapsed impressively down to **£400,395** establishing a peak **76.68% Median Accuracy** as its histogram bucketing seamlessly captured generalized neighborhood wealth migration patterns structurally faster than standard regression equations could.
-* **XGBoost & RandomForest** consistently displayed ~3% worse tracking comparatively across all isolated 5-year testing brackets natively displaying computational weakness scaling text descriptors over long-range chronological timelines.
+When strictly plotting predicted median accuracy natively separated by the 2018-2022 holdout years independently:
+
+![Yearly Accuracy Trend](03_accuracy_trend_yearly.png)
+
+* **Which model is better and why:** **LightGBM** (the purple diamond line) is universally the most accurate model across every single year. It particularly excels during the **2021 Post-Pandemic Spike**, hitting a peak **76.68% Median Accuracy** (dropping error to £400,395). 
+* **Why?** LightGBM uses leaf-wise histogram bucketing. When macro-economic events cause sudden chaotic shifts in housing wealth, Random Forest (blue line) attempts to average the chaos, and XGBoost (green line) chases the residual noise. LightGBM simply isolates the wild new outliers into their own specific leaves, keeping the median accuracy for standard homes exceptionally stable.
 
 **B. Monthly Seasonality Breakdown Observation**
-When actively sorting all historical holdout lines solely by individual chronological Month (1 - 12):
-* The lowest error margins explicitly occur in the dead of Winter (**Month 2: February**), where LightGBM error margin shrunk intensely to **£355,499 MAE** (76.46% accuracy).
-* Maximum failure drift aggressively triggered uniformly across all 4 machine learning pipelines exactly tracking the Spring Real-Estate Rush (**Month 3: March**), where pure transactional volatility caused LightGBM's absolute variance to explode massively up to **£574,759 MAE**.
-* **Analysis**: Neural Networks predictably demonstrated complete failure to map seasonality structurally, hovering near 65% accuracy unconditionally, regardless of temporal variance, confirming physical text patterns hold insufficient logic-linkage for deep layer nodes.
+When actively sorting all historical holdout lines solely by individual chronological Month (`1 - 12`) to map the cyclical seasons:
+
+![Monthly Accuracy Trend](03_accuracy_trend_monthly.png)
+
+* **Which model is better and why:** **LightGBM** strictly dominates every single month of the year. The models uniformly hit their absolute highest accuracy/lowest error in the dead of Winter (**Month 2: February**), where LightGBM peaks at **76.46% accuracy** (£355,499 MAE) because market volatility and trading volumes are at their lowest.
+* **Why?** Conversely, notice the massive, aggressive failure drift that triggers uniformly across all 4 machine learning pipelines exactly tracking the Spring Real-Estate Rush (**Month 3: March**). Pure transactional volume and aggressive bidding wars cause severe unpredictability. LightGBM survives this the best because it naturally handles volatile continuous variables (like unpredictable spring closing prices) faster than XGBoost's sequential boosting. Neural Networks (red line) fail completely (hovering near 65%), lacking the deep node logic to understand seasonal time cycles from flat text integers.
 
 #### B) Predictive Baseline Visualizations
 

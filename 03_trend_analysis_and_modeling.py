@@ -296,6 +296,39 @@ plt.savefig("03_forecast_validation_monthly.png")
 plt.close()
 
 # ==============================================================================
+# --- NEW CHARTS: ACCURACY TRENDS OVER TIME ---
+# ==============================================================================
+
+# Yearly Accuracy Trend
+plt.figure(figsize=(10, 6))
+plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_acc'], marker="x", linestyle="-", color="blue", label="Random Forest")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['mlp_acc'], marker="s", linestyle="-", color="red", label="Neural Network")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['xgb_acc'], marker="^", linestyle="-", color="green", label="XGBoost")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['lgbm_acc'], marker="d", linestyle="-", color="purple", label="LightGBM")
+plt.title("Yearly Median Accuracy Trend (2018 - 2022)")
+plt.xlabel("Year")
+plt.ylabel("Median Accuracy (%)")
+plt.legend()
+plt.grid(True)
+plt.savefig("03_accuracy_trend_yearly.png")
+plt.close()
+
+# Monthly Accuracy Trend
+plt.figure(figsize=(10, 6))
+plt.plot(monthly_test_trend['month'], monthly_test_trend['rf_acc'], marker="x", linestyle="-", color="blue", label="Random Forest")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['mlp_acc'], marker="s", linestyle="-", color="red", label="Neural Network")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['xgb_acc'], marker="^", linestyle="-", color="green", label="XGBoost")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['lgbm_acc'], marker="d", linestyle="-", color="purple", label="LightGBM")
+plt.title("Monthly Seasonality Median Accuracy Trend (Months 1-12)")
+plt.xlabel("Month")
+plt.ylabel("Median Accuracy (%)")
+plt.xticks(range(1, 13))
+plt.legend()
+plt.grid(True)
+plt.savefig("03_accuracy_trend_monthly.png")
+plt.close()
+
+# ==============================================================================
 # --- AUTOMATED BAR CHART GENERATION ---
 # ==============================================================================
 plt.style.use('default')
