@@ -100,8 +100,12 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 **ii) Accurate Values Across Models**
 The execution strictly ensures that **values are completely accurate across models**, calculated identically over the identical test dataset. In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly across all models.
 
-**iii) Explore Accuracy and the Bounding Rule**
-**The Accuracy Bounding Rule:** During localized testing, if an algorithmic model guesses £1,000,000 on a £400,000 property, the math indicates a 150% Error. The pipeline institutes a rigorous fail-safe rule mathematically flooring accuracy explicitly at 0% (`np.clip(accuracy, 0, 100)`). A totally errant negative-accuracy prediction constitutes a total failure and operates strictly as a zero-confidence metric protecting median validation scaling.
+**iii) Explore Accuracy: What defines an "Accurate" Prediction?**
+To determine how "accurate" a machine learning model is, we cannot just look at the raw physical error (like £50,000), because £50,000 is a massive error on a £100,000 home, but a tiny error on a £5,000,000 mansion. Therefore, we translate error into a normalized percentage, governed by three strict mathematical rules:
+* **1. The Variance Rule (Calculating Error %):** First, we calculate the absolute difference between the Predicted Price and the True Sold Price, and divide it by the True Price. For example, if a house sells for £500,000 and the model predicts £400,000, the error is £100,000. `(100,000 / 500,000 = 0.20 or 20% Error)`.
+* **2. The Inversion Rule (Error to Accuracy):** Accuracy is simply the mathematical opposite of error. We subtract the percentage error from 100%. Following the example above: `100% - 20% Error = 80% Accuracy`.
+* **3. The Bounding Rule (The Zero Floor):** Models can occasionally make catastrophic guesses on strange outliers. If a model guesses £1,500,000 on a £500,000 home, the error is 200%. Mathematically, `100% - 200% = -100% Accuracy`. If we allow negative numbers, a single terrible guess could artificially ruin the overall baseline score. Therefore, we institute a rigorous mathematical floor explicitly at **0%** (`np.clip(accuracy, 0, 100)`). An absolutely wrong prediction is simply capped at 0%, protecting the final metric from unbounded negative drift.
+* **Conclusion:** When the pipeline states that LightGBM has a `75.68% Median Accuracy`, it implies that if you select an average property from the dataset, the model's prediction will reliably be within a ~24.3% variance of the true physical selling price.
 
 **iv) Consistent Calculations Over All Features**
 **Consistent Auditing Over Features:** The system executes explicit validation over all 4 baseline algorithms identically enforcing `Features = ['year', 'month', 'property_code', 'old_new_code', 'duration_code', 'district_code']`.
