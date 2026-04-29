@@ -330,16 +330,18 @@ Both Yearly and Monthly exhaustive metric tables are structurally printed live d
 **A. 5-Year Yearly Breakdown Observation**
 When strictly plotting median accuracy natively separated by the 2018-2022 holdout years independently across all 5 Ablation Tracks:
 
-![Yearly Accuracy Trend](07_forecast_validation_yearly.png)
+#### **Which model is better and why (Year-Wise):** 
+**Track 07C (Google News)** and **Track 07E (All Combined)** are significantly better at predicting sudden chronological shocks. The Year-Wise chart is critical because it reveals how models handle macro-inflation over time. While the pure Lat/Lon model completely failed to predict the massive 2022 pricing boom (because coordinates don't change over time), Track 07C naturally recognized the sudden spike in positive market sentiment on Google News and adjusted its valuation upward dynamically!
 
-*   **Which model is better and why (Year-Wise):** **Track 07C (Google News)** and **Track 07E (All Combined)** are significantly better at predicting sudden chronological shocks. The Year-Wise chart is critical because it reveals how models handle macro-inflation over time. While the pure Lat/Lon model completely failed to predict the massive 2022 pricing boom (because coordinates don't change over time), Track 07C naturally recognized the sudden spike in positive market sentiment on Google News and adjusted its valuation upward dynamically!
+![Yearly Accuracy Trend](07_forecast_validation_yearly.png)
 
 **B. Monthly Seasonality Breakdown Observation**
 When actively sorting all historical holdout lines solely by individual chronological Month (`1 - 12`) to map the cyclical seasons:
 
-![Monthly Accuracy Trend](07_forecast_validation_monthly.png)
+#### **Which model is better and why (Month-Wise):** 
+**Track 07C (Google News)** and **Track 07B (OSM)** are the absolute best models. The Month-Wise chart is highly important because it proves cyclical stability (ignoring the year). Every December, the housing market transaction volume crashes, confusing algorithms. **Track 07B (OSM)** survives this winter crash the best because its physical distance calculations (e.g., "500m from a train station") remain permanently true regardless of what month the house is sold in!
 
-*   **Which model is better and why (Month-Wise):** **Track 07C (Google News)** and **Track 07B (OSM)** are the absolute best models. The Month-Wise chart is highly important because it proves cyclical stability (ignoring the year). Every December, the housing market transaction volume crashes, confusing algorithms. **Track 07B (OSM)** survives this winter crash the best because its physical distance calculations (e.g., "500m from a train station") remain permanently true regardless of what month the house is sold in!
+![Monthly Accuracy Trend](07_forecast_validation_monthly.png)
 
 ---
 
