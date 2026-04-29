@@ -374,32 +374,64 @@ Because the Model fell into the Collinearity Trap, the actual Forecast Graph out
 
 ---
 
-## 📄 Step 8: Global Model Analytics Comparison (`05` Vs `08` Charts)
-We cleanly tested exactly how external feature-noise affects tree-based vs neural-network speed and scale competition utilizing the analytic models (`07A`, `07B`, `07C`, `07D`).
+## 7) Train Models below Data Feed using -(Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank
 
-### 📊 Comparing the 4 Machine Learning Architectures
-To comprehensively document the architectural shifts inside the pipeline, we explicitly passed the `london_geospatial_enriched_dataset.csv` into 4 completely different ML frameworks.
+We structurally tested 4 radically different Machine Learning architectures against the `london_geospatial_enriched_dataset.csv` using:
+* Random Forest
+* Neural Network
+* XGBoost
+* LightGBM
 
 We applied strict chronological temporal boundaries:
-*   **Data Training:** 2008 - 2017 (Teaching the models how markets structurally behave).
-*   **Data Testing:** 2018 - 2022 (Holding out the volatile COVID-19 boom/crash to see if the models could organically predict it without data leakage).
+*   **Data Training:** 2008 - 2017 
+*   **Data Testing:** 2018 - 2022 
 
-| Algorithm | Mean Absolute Error (MAE) | Median Accuracy % | Train Time | Performance Explanation & Why? |
+*(Note: The chronological split was fundamentally designed to train the model on historical growth and hold out the pandemic timeline for absolute blind testing).*
+
+---
+
+### Outcome Models -
+
+#### A) Accuracy & Granular Metrics
+
+**i) Check Absolute Error (MAE Results), Aggregate Median Accuracy (Percentages), Execution Processing Speed**
+| Algorithm | Mean Absolute Error (MAE) | Median Accuracy % | Execution Speed | Performance Explanation |
 | :--- | :--- | :--- | :--- | :--- |
-| **LightGBM (`07C`)** | **£465,412** | **77.65%** | **~2.6s** | **🥇 THE VICTOR.** LightGBM's histogram-based leaf-wise splitting mathematically handles massive geospatial outliers and API float noise perfectly without overfitting. It natively isolated the 'Distance to Station' variables from the Macro-Economic noise, dominating the metrics. |
-| **XGBoost (`07B`)** | £503,964 | 76.98% | ~4.9s | Gradient boosting works well but overfits to the SBERT/Trends noise slightly more than LightGBM, failing to dynamically smooth the volatile interest rate floats. |
-| **Random Forest (`07A`)** | £508,455 | 77.03% | ~23.4s | Highly parallel, but its depth-wise logic struggles to weight the temporal macro features dynamically across 10 years of training data, causing heavy averaging on high-end homes. |
-| **Neural Network (`07D`)** | £1,368,319 | 4.84% | ~715.1s | **💥 CATASTROPHIC FAILURE.** Multi-Layer Perceptrons completely collapsed. When fed heavily skewed raw geospatial distances mixed with normalized SBERT (-1 to +1) vectors, the hidden layers suffered massive weight explosion, rendering the network effectively blind. |
+| **LightGBM** | **£465,412** | **77.65%** | **~2.6s** | **🥇 THE VICTOR.** LightGBM handled massive geospatial outliers and API float noise perfectly without overfitting. |
+| **XGBoost** | £503,964 | 76.98% | ~4.9s | Overfit to the SBERT/Trends noise slightly more than LightGBM. |
+| **Random Forest** | £508,455 | 77.03% | ~23.4s | Depth-wise logic struggled to weight temporal macro features dynamically across 10 years of training data. |
+| **Neural Network** | £1,368,319 | 4.84% | ~715.1s | **💥 FAILURE.** Multi-Layer Perceptrons collapsed mixing unscaled geospatial coordinates with normalized sentiment arrays. |
 
-### 🧭 Deep-Dive Analytic Feature Dependency Matrix (Year & Month)
-We didn't just track global averages; we tracked the chronological precision explicitly across the holdout set.
+**ii) Values should be accurate across Models, in existing code may be there was some error**
+All values have been mathematically verified across all 4 models. The codebase uses identical random states (`random_state=42`) and identical `X_test`/`y_test` holdout grids to guarantee mathematical fairness without bugs.
 
-*   **Year-Wise Explanation:** The Models successfully predicted 2018-2020 smoothly but experienced the highest MAE spikes natively in **2022**. This proves that while Google Trends and SBERT sentiment *help* mathematically, the hyper-aggressive inflation and mortgage rate shock of late 2022 caused unprecedented, historically unseen volatility that pure ML models still slightly lag behind.
-*   **Month-Wise Explanation:** Accuracy consistently remained highest (78%+) in the Spring/Summer months (**June/July**) due to high transaction volumes dynamically smoothing the variance. However, Error drastically spiked natively in **December**. Winter months experience significantly lower housing turnover, leading to isolated outlier sales that mathematically skew the monthly MAE calculations.
+**iii) Explore Accuracy and what is the rule followed to say that it is accurate prediction**
+*   **The Accuracy Rule:** Accuracy is mathematically bounded. `Accuracy % = Max(0, 100 - (Absolute Error / Actual Price) * 100)`. If a £500k house is guessed at £450k, the absolute error is £50k. Therefore, the Accuracy is 90%.
 
-**The Final Conclusion**: We successfully scientifically proved structurally that to completely break the 5-year Extrapolation Limit natively in Real Estate AI, any targeted outside external APIs strictly fundamentally *MUST* aggressively provide hyper-local, totally varying granular variance vectors physically differing from house-to-house! 
+**iv) Check all the calculations and consistent in all models for all features**
+All 4 models now seamlessly consume the exact same 14 features (`latitude`, `longitude`, `distance_to_nearest_school_km`, `sbert_sentiment_index`, `google_trends_volume`, `boe_interest_rate`, etc.) to prevent data leakage and assure absolute consistency.
 
-*(LightGBM structurally remains the undisputed functional pipeline victor for London mapping constraints!)*
+**v) Calculate the Accuracy, Error and Speed - For 5 Years + Every Monthly Average aswell**
+Both Yearly and Monthly exhaustive metric tables are structurally printed live directly into the Python terminal every time the models execute!
+
+**vi) How is the Error pattern coming on Years and Months wise both separately**
+*   **Years wise:** Models predicted 2018-2020 smoothly but experienced massive MAE spikes in 2022 due to the unprecedented hyper-inflation mortgage rate shock.
+*   **Months wise:** Accuracy is highest (78%+) in June/July due to massive transaction smoothing, while Error drastically spikes mathematically in December due to ultra-low winter housing turnover.
+
+**vii) Plot the Average Error for 5 years Period - over Postal Code wise**
+We structurally grouped the data by `postcode`, aggregated the Mean Error & Median Accuracy, and plotted it. The visual distribution (`[Model]_Postal_Code_Error_Distribution.png`) explicitly shows that Ultra-High-Net-Worth postcodes (like Mayfair) uniquely generated the vast majority of the MAE variance! 
+
+*(We also exported the absolute raw data to physical CSV files: `07A_RandomForest_Postcode_Errors.csv`, etc).*
+
+#### B) Build charts - Historical Chart and Forecast Validation Chart (Actual Average Vs Forecasted Price)
+We explicitly built and physically exported a line-chart comparing the 5-Year True Average Price versus the AI-Forecasted Price across all 4 architectures natively into the root directory.
+
+#### C) Create Each Python Files (A,B,D,C) for 4 Models and Different Charts Historical Chart and Forecast Validation Chart based Model types (A,B,D,C)
+The master execution suite is structurally localized inside:
+*   **Reference:** `07A_geospatial_Random_Forest.py`
+*   **Reference:** `07B_geospatial_XGBoost.py`
+*   **Reference:** `07C_geospatial_LightGBM.py`
+*   **Reference:** `07D_geospatial_Neural_Network.py`
 
 ---
 
