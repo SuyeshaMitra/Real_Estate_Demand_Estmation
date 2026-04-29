@@ -361,16 +361,6 @@ When actively sorting all historical holdout lines solely by individual chronolo
 **The Explanation of the Variation (How the Accuracy Improved):**
 By comparing 07A (Control Error: £467k) to 07C (News Error: £464k), we mathematically prove that adding Google News Sentiment reduced the absolute error by £3,000 per house across millions of predictions. Because all 07 Phase models had *never physically seen* a house price post-2017, they had zero mathematical concept of the massive 2020 COVID-19 housing boom. The fact that Track 07C successfully predicted the hyper-inflated 2022 market accurately—despite having *never seen* a 2022 price during training—proves that the external APIs broke the extrapolation boundary!
 
-#### D) Python Script Execution Files
-The master execution suite is structurally localized inside the below 6 files. Here is exactly what each file does so anyone can understand it:
-
-*   **`07A_LatLon_Years_Modeling.py`:** Trains LightGBM ONLY on the house's Latitude, Longitude, and the Year it was sold. This is the basic control group.
-*   **`07B_OSM_Infrastructure_Modeling.py`:** Trains LightGBM by adding the physical km distance to the nearest school, hospital, and train station (OpenStreetMap).
-*   **`07C_GoogleNews_Sentiment_Modeling.py`:** Trains LightGBM by adding the numeric emotional sentiment (positive/negative news) from Google News on the exact month of sale.
-*   **`07D_GoogleTrends_Modeling.py`:** Trains LightGBM by adding the raw Google Search volume for "buy house London".
-*   **`07E_All_Combined_Modeling.py`:** The ultimate test. Combines ALL of the above features (Coordinates + OSM + News + Trends + World Bank Rates) into one massive model to see if they work better together or individually.
-*   **`07F_Unified_Enriched_Comparison.py`:** Reads the raw CSV prediction outputs from files 7A through 7E, groups them by Year and Month, and generates the final plotted comparison graphs.
-
 ---
 
 ## Cloud Deployment (Zero-Cost Fargate MVP)

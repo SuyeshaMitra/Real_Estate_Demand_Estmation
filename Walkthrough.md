@@ -458,12 +458,12 @@ By comparing 07A (Control Error: £467k) to 07C (News Error: £464k), we mathema
 #### D) Python Script Execution Files
 The master execution suite is structurally localized inside the below 6 files. Here is exactly what each file does so anyone can understand it:
 
-*   **`07A_LatLon_Years_Modeling.py`:** Trains LightGBM ONLY on the house's Latitude, Longitude, and the Year it was sold. This is the basic control group.
-*   **`07B_OSM_Infrastructure_Modeling.py`:** Trains LightGBM by adding the physical km distance to the nearest school, hospital, and train station (OpenStreetMap).
-*   **`07C_GoogleNews_Sentiment_Modeling.py`:** Trains LightGBM by adding the numeric emotional sentiment (positive/negative news) from Google News on the exact month of sale.
-*   **`07D_GoogleTrends_Modeling.py`:** Trains LightGBM by adding the raw Google Search volume for "buy house London".
-*   **`07E_All_Combined_Modeling.py`:** The ultimate test. Combines ALL of the above features (Coordinates + OSM + News + Trends + World Bank Rates) into one massive model to see if they work better together or individually.
-*   **`07F_Unified_Enriched_Comparison.py`:** Reads the raw CSV prediction outputs from files 7A through 7E, groups them by Year and Month, and generates the final plotted comparison graphs.
+*   **`07A_LatLon_Years_Modeling.py` (The Control Group):** This script establishes the baseline. It actively strips away all external APIs and forces Random Forest, XGBoost, and LightGBM to predict housing prices using *only* the physical GPS Coordinates (Latitude/Longitude) and the Date of Transfer. It proves how inaccurate models are when they only know *where* and *when* a house was sold.
+*   **`07B_OSM_Infrastructure_Modeling.py` (The Geographic Anchor):** This script calculates the exact physical walking distance (in kilometers) from every single house to the nearest Hospital, Bank, School, and Train Station using OpenStreetMap data. It feeds this structural geography into the models, which anchors the prediction and stabilizes the model during the slow Winter months.
+*   **`07C_GoogleNews_Sentiment_Modeling.py` (The Emotion Tracker):** This script uses a massive Language Model (SBERT) to read thousands of Google News articles about the London housing market. It assigns a mathematical "Sentiment Float" (-1.0 to 1.0) to every single month. When news is highly positive (e.g., Post-Covid Boom), the models physically see the numeric surge and automatically raise house prices across the board.
+*   **`07D_GoogleTrends_Modeling.py` (The Demand Proxy):** This script queries Google Trends to see how many people are physically typing "Buy house in London" into the search bar. This raw search volume is fed into the models to predict whether high consumer interest leads to higher closing prices.
+*   **`07E_All_Combined_Modeling.py` (The Ultimate Test):** Instead of isolating the data, this script throws *everything* (Coordinates + OSM + News + Trends + Bank of England Rates) into one massive matrix. It forces the models to figure out the interactions between all 14 features simultaneously to see if combining all signals natively beats the isolated ablation tracks.
+*   **`07F_Unified_Enriched_Comparison.py` (The Chart Generator):** This script does not train models. Instead, it reads the 2.9 million raw CSV predictions dumped by scripts 7A through 7E. It mathematically aggregates them by Year and by Month, and then generates the final plotted comparison graphs (`07_forecast_validation_yearly.png` and `07_forecast_validation_monthly.png`) natively into the root directory.
 
 ---
 
