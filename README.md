@@ -343,7 +343,7 @@ When actively sorting all historical holdout lines solely by individual chronolo
 
 ---
 
-### C) Final Comparative: 7A through 7E vs Basic Model
+### Final Comparative: 7A through 7E vs Basic Model
 
 **The Extrapolation Master Table**
 
