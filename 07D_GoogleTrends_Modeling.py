@@ -86,5 +86,8 @@ plt.legend(fontsize=12)
 plt.savefig('07D_Historical_vs_Forecast_Prices.png', dpi=300, bbox_inches='tight')
 plt.close()
 
+test_df_copy[['year', 'month', 'price', 'LightGBM_pred', 'LightGBM_error', 'LightGBM_acc']].to_csv('07D_Predictions.csv', index=False)
+
 print("\n-> [SAVED] 07D_Historical_vs_Forecast_Prices.png")
+print("-> [SAVED] 07D_Predictions.csv")
 print("======================================================")
