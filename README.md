@@ -58,7 +58,13 @@ graph TD
 
 ---
 
-## The Baseline Models (Non-Spatial)
+## Step 1: Data Exploration (`01_data_exploration.py`)
+Analyzed the raw 3.2 GB UK Property dataset to map fundamental distributions, transaction volume, and basic pricing correlations.
+
+## Step 2: Data Preparation (`02_data_preparation.py`)
+Filtered the massive national dataset specifically to London, structurally cleaning anomalies and exporting the core `london_data.csv` for machine learning input.
+
+## Step 3: The Baseline Models (Non-Spatial)
 Before migrating to complex geographical mapping, we tested four algorithms (Random Forest, Neural Network, XGBoost, and LightGBM) on simple text-based district data (`03_trend_analysis_and_modeling.py`) to establish a non-spatial baseline.
 
 **Training & Evaluation Setup:**
@@ -160,7 +166,7 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ---
 
-## The Geospatial Transition (04 Models Detailed Analytics)
+## Step 4 & 5: The Geospatial Transition (04 Models Detailed Analytics)
 
 **Pipeline Sequence & Training Data Generation (Generating `london_geospatial_dataset.csv`)**: 
 To construct the spatial matrix, the pipeline executes the following rigid sequence:
@@ -232,7 +238,7 @@ Directly plots exactly how the 3 spatial machine learning models historically dr
 Plots this same validation explicitly tracking the 1-12 month cyclical cycle.
 ![Geospatial Monthly Validation](04_forecast_validation_monthly.png)
 
-## External Ecosystem API Feature Extraction & NLP Semantic Analysis
+## Step 6: External Ecosystem API Feature Extraction & NLP Semantic Analysis
 
 To fundamentally resolve the limitations of pure temporal and coordinate models, we architected the `06_external_feature_extraction.py` and `06B_compile_external_features.py` pipelines to extract and compile massive external macro-economic API intelligence natively into the geometric data grid.
 
@@ -280,7 +286,7 @@ All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and 
 
 ---
 
-## Train Models below Data Feed using -(Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank
+## Step 7: Train Models below Data Feed using -(Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank
 
 We structurally tested 3 radically different Machine Learning architectures against the `london_geospatial_enriched_dataset.csv` using:
 * Random Forest
