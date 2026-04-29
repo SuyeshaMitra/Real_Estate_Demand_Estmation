@@ -1,0 +1,19 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\SuyeshaM\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+    "python.analysis.extraPaths": [
+        "C:\\Users\\SuyeshaM\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages"
+    ],
+    "python.analysis.diagnosticMode": "none",
+    "python.analysis.typeCheckingMode": "off",
+    "python.linting.enabled": false,
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Enabled": false,
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingModuleSource": "none",
+        "reportMissingImports": "none",
+        "reportUnusedImport": "none",
+        "reportUnusedVariable": "none",
+        "reportUndefinedVariable": "none",
+        "reportOptionalMemberAccess": "none"
+    }
+}

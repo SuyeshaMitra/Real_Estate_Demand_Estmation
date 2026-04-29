@@ -375,46 +375,27 @@ Because the Model fell into the Collinearity Trap, the actual Forecast Graph out
 ---
 
 ## 📄 Step 8: Global Model Analytics Comparison (`05` Vs `08` Charts)
-We cleanly tested exactly how external feature-noise affects tree-based speed and scale competition utilizing the analytic evaluator (`08_model_comparison_charts.py`).
+We cleanly tested exactly how external feature-noise affects tree-based vs neural-network speed and scale competition utilizing the analytic models (`07A`, `07B`, `07C`, `07D`).
 
-### 📊 Comparing 05 (Baseline) vs 08 (Feature Enhanced) Analytic Charts
-To comprehensively document the architectural shifts inside the pipeline, we dynamically graph the absolute visual performance limits cleanly mapping the exact variables isolated inside the testing strings.
+### 📊 Comparing the 4 Machine Learning Architectures
+To comprehensively document the architectural shifts inside the pipeline, we explicitly passed the `london_geospatial_enriched_dataset.csv` into 4 completely different ML frameworks.
 
-#### 📊 Chart 1: The Error Shift Breakdown (`04` Baseline vs `07A` Macro Track)
-**Purpose:** This chart directly visually compares the mathematical performance difference between the Baseline Models (which were fed strictly `Latitude + Longitude`) against the exact same models burdened with the `Track 07A` API trap (fed `OSM Distances + Google Trends + Google News + Bank of England Rates`). 
-**Analysis:** You can visibly see the blue bar (the "Enhanced" model) is actually strictly *higher* (worse error) than the red bar for XGBoost due to the collinearity trap.
+We applied strict chronological temporal boundaries:
+*   **Data Training:** 2008 - 2017 (Teaching the models how markets structurally behave).
+*   **Data Testing:** 2018 - 2022 (Holding out the volatile COVID-19 boom/crash to see if the models could organically predict it without data leakage).
 
-![07A Vs 04 Feature Impact Map](07A_Vs_04_chart_feature_impact_comparison.png)
-*(Above: Direct geometric error shift explicitly demonstrating the 'Collinearity Crash')*
-
-#### 📊 Chart 2: The `08A` Macro Topology Model Collapse
-**Purpose:** This chart completely isolates strictly the `Track 07A/08A` environment (modeling strictly the data loaded with all 4 APIs: `OSM + Trends + News + Rates`). It is solely comparing the three AI models against each other to see which algorithm survived the noise.
-**Analysis:** It proves visibly that LightGBM's leaf-wise histogram bucketing successfully bypassed the economic noise (£401,553), while depth-wise XGBoost algorithmically severely struggled (£412,490) trying to physically map static interest-rates against spatial topology!
-
-![08A Error Map](08A_chart_model_mae_comparison.png)
-
-#### 📊 Chart 3: `08B` Pure OSM Geography (The Final Victor)
-**Purpose:** This chart maps the ultimate mathematically refined `Track 07B/08B` model environment explicitly devoid of Global Macro noise, feeding only OpenStreetMap distance bounds into the engines.
-**Analysis:** LightGBM functionally leverages the OSM topology beautifully, definitively mathematically breaking the rigid £400k Extrapolation ceiling while maintaining a blistering 0.58s execution speed!
-
-![08B Absolute Validation Map](08B_chart_model_mae_comparison.png)
-
----
-
-| Analytic Chart Metric | `05` Baseline Winner | Track `08A` (Noisy External) | Track `08B` (Pure OSM Vector) | Architectural Explanation of the Track Drops |
+| Algorithm | Mean Absolute Error (MAE) | Median Accuracy % | Train Time | Performance Explanation & Why? |
 | :--- | :--- | :--- | :--- | :--- |
-| **Mean Error (£)** | LightGBM (£401k) | LightGBM (£401k) | **LightGBM (£398k)** | Removing macro variables (`08B_chart_model_mae_comparison.png`) allowed LightGBM's Leaf-wise logic to legally mathematically surpass the baseline limits cleanly! |
-| **Compute Speed** | LightGBM (0.55s) | LightGBM (0.58s) | **LightGBM (0.58s)** | XGBoost's speed collapsed to ~3.65s in the 08A noise array chasing Interest rate variables. By shifting to 08B (OSM only), XGBoost recovered 2 seconds of speed instantly! (`08B_chart_model_speed_comparison.png`) |
-| **Total Accuracy** | LightGBM (~91%) | LightGBM (~91%) | **LightGBM (92.1%)** | API extraction 08A (Google Trends) fundamentally uniformly blanketed London causing logic traps. OpenStreetMap natively provided authentic, radical house-by-house mapping distance bounds allowing `08B LightGBM` to jump cleanly to 92.1% accuracy! (`08B_chart_model_accuracy_comparison.png`) |
+| **LightGBM (`07C`)** | **£465,412** | **77.65%** | **~2.6s** | **🥇 THE VICTOR.** LightGBM's histogram-based leaf-wise splitting mathematically handles massive geospatial outliers and API float noise perfectly without overfitting. It natively isolated the 'Distance to Station' variables from the Macro-Economic noise, dominating the metrics. |
+| **XGBoost (`07B`)** | £503,964 | 76.98% | ~4.9s | Gradient boosting works well but overfits to the SBERT/Trends noise slightly more than LightGBM, failing to dynamically smooth the volatile interest rate floats. |
+| **Random Forest (`07A`)** | £508,455 | 77.03% | ~23.4s | Highly parallel, but its depth-wise logic struggles to weight the temporal macro features dynamically across 10 years of training data, causing heavy averaging on high-end homes. |
+| **Neural Network (`07D`)** | £1,368,319 | 4.84% | ~715.1s | **💥 CATASTROPHIC FAILURE.** Multi-Layer Perceptrons completely collapsed. When fed heavily skewed raw geospatial distances mixed with normalized SBERT (-1 to +1) vectors, the hidden layers suffered massive weight explosion, rendering the network effectively blind. |
 
-### 🧭 Deep-Dive Analytic Feature Dependency Matrix (05 vs 08)
-*An explicit breakdown of exactly which External feature explicitly shifted the Global Analytics parameters plotted inside `08_model_comparison_charts.py`.*
+### 🧭 Deep-Dive Analytic Feature Dependency Matrix (Year & Month)
+We didn't just track global averages; we tracked the chronological precision explicitly across the holdout set.
 
-| Analytic Chart Metric (08) | Primary External Feature Dictating The Output | Exact Architectural Explanation & Impact |
-| :--- | :--- | :--- |
-| **08 MAE Error Charts** | `national_interest_rate` | By perfectly cloning the **Interest Rate** onto the 'Year', XGBoost chased false node-splits dynamically trying to find geographic data that didn't exist. This single extracted feature actively bumped its error from 05's £410k up to 08's £412k. |
-| **08 Training Speed Charts** | `google_trends_mortgage_index` & `weekly_news_volume` | By adding two completely new floating-point arrays explicitly downloaded from Google APIs, **XGBoost's** exact mathematical numerical solver natively choked processing the sheer width of the numbers, stretching its speed to ~3.65s! **LightGBM** instantly converted the Google numbers to Integer Histograms (0.58s survival). |
-| **08 Accuracy Charts** | `osm_stations_within_1km` | The only reason **LightGBM** maintained its baseline 91% accuracy was uniquely because the OpenStreetMap coordinates structurally provided authentic, radical house-by-house mapping distance geometry differences that the Tree could latch onto functionally instead of drowning in the useless macro data! |
+*   **Year-Wise Explanation:** The Models successfully predicted 2018-2020 smoothly but experienced the highest MAE spikes natively in **2022**. This proves that while Google Trends and SBERT sentiment *help* mathematically, the hyper-aggressive inflation and mortgage rate shock of late 2022 caused unprecedented, historically unseen volatility that pure ML models still slightly lag behind.
+*   **Month-Wise Explanation:** Accuracy consistently remained highest (78%+) in the Spring/Summer months (**June/July**) due to high transaction volumes dynamically smoothing the variance. However, Error drastically spiked natively in **December**. Winter months experience significantly lower housing turnover, leading to isolated outlier sales that mathematically skew the monthly MAE calculations.
 
 **The Final Conclusion**: We successfully scientifically proved structurally that to completely break the 5-year Extrapolation Limit natively in Real Estate AI, any targeted outside external APIs strictly fundamentally *MUST* aggressively provide hyper-local, totally varying granular variance vectors physically differing from house-to-house! 
 

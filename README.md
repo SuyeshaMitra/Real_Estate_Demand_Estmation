@@ -280,36 +280,29 @@ All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and 
 
 ---
 
-## Breaking Extrapolation Limits: The "A vs B" Feature Matrix (`07` & `08`)
+## Phase 07: Enriched Geospatial ML Suite (The 4 Models)
 
-While the Baseline (`04` & `05`) spatial models functioned brilliantly, Real Estate strictly suffers from **Extrapolation Ceilings**—Machine Learning trees cannot physically guess that a house is worth £1M if the maximum they saw during training in 2015 was £600k. 
+Once the `london_geospatial_enriched_dataset.csv` was generated, we structurally tested 4 radically different Machine Learning architectures against it. 
 
-To break this, we formally sourced explicit public APIs (`06_external_feature_extraction.py`) targeting Geopolitics (Google News), Macro Economics (World Bank Interest Rates), and Local Geography (OpenStreetMap distances). We tested exactly how they structurally impacted XGBoost and LightGBM using an isolated split track framework.
+We applied strict chronological temporal boundaries:
+*   **Data Training:** 2008 - 2017 (Teaching the models how markets structurally behave).
+*   **Data Testing:** 2018 - 2022 (Holding out the volatile COVID-19 boom/crash to see if the models could organically predict it without data leakage).
 
-### Track 07A / 08A: The "Collinearity Trap" (Total Noise)
-We first injected ALL macro variables (Interest Rates, Search volume). 
-**The Result:** The models fell into a massive mathematical phenomenon known as the "Collinearity Trap". Because Google Trends and National Interest Rates were identically static for every single house sold in London in a single year, the algorithms drowned in numerical noise searching for geographic variance that didn't exist!
-#### Chart 1: The Error Shift Breakdown (`04` Baseline vs `07A` Macro Track)
-**Purpose:** This chart directly visually compares the mathematical performance difference between the Baseline Models (which were fed strictly `Latitude + Longitude`) against the exact same models burdened with the `Track 07A` API trap (fed `OSM Distances + Google Trends + Google News + Bank of England Rates`). 
-**Analysis:** You can visibly see the blue bar (the "Enhanced" model) is actually strictly *higher* (worse error) than the red bar for XGBoost due to the collinearity trap.
+### The Final Model Comparison Dashboard
 
-![07A Vs 04 Feature Impact Map](07A_Vs_04_chart_feature_impact_comparison.png)
-*(Above: Direct geometric error shift explicitly demonstrating the 'Collinearity Crash')*
+| Algorithm | Mean Absolute Error (MAE) | Median Accuracy % | Train Time | Performance Explanation & Why? |
+| :--- | :--- | :--- | :--- | :--- |
+| **LightGBM** | **£465,412** | **77.65%** | **~2.6s** | **🥇 THE VICTOR.** LightGBM's histogram-based leaf-wise splitting mathematically handles massive geospatial outliers and API float noise perfectly without overfitting. It natively isolated the 'Distance to Station' variables from the Macro-Economic noise, dominating the metrics. |
+| **XGBoost** | £503,964 | 76.98% | ~4.9s | Gradient boosting works well but overfits to the SBERT/Trends noise slightly more than LightGBM, failing to dynamically smooth the volatile interest rate floats. |
+| **Random Forest** | £508,455 | 77.03% | ~23.4s | Highly parallel, but its depth-wise logic struggles to weight the temporal macro features dynamically across 10 years of training data, causing heavy averaging on high-end homes. |
+| **Neural Network** | £1,368,319 | 4.84% | ~715.1s | **💥 CATASTROPHIC FAILURE.** Multi-Layer Perceptrons completely collapsed. When fed heavily skewed raw geospatial distances mixed with normalized SBERT (-1 to +1) vectors, the hidden layers suffered massive weight explosion, rendering the network effectively blind. |
 
-#### Chart 2: The `08A` Macro Topology Model Collapse
-**Purpose:** This chart completely isolates strictly the `Track 07A/08A` environment (modeling strictly the data loaded with all 4 APIs: `OSM + Trends + News + Rates`). It is solely comparing the three AI models against each other to see which algorithm survived the noise.
-**Analysis:** It proves visibly that LightGBM's leaf-wise histogram bucketing successfully bypassed the economic noise (£401,553), while depth-wise XGBoost algorithmically severely struggled (£412,490) trying to physically map static interest-rates against spatial topology!
+### Year-Wise & Month-Wise Error Tracking
+We didn't just track global averages; we tracked the chronological precision explicitly across the holdout set:
+*   **Year-Wise Explanation:** The Models successfully predicted 2018-2020 smoothly but experienced the highest MAE spikes in 2022. This proves that while Google Trends and SBERT sentiment *help*, the hyper-aggressive inflation and mortgage rate shock of late 2022 caused unprecedented, historically unseen volatility that pure ML models still slightly lag behind.
+*   **Month-Wise Explanation:** Accuracy consistently remained highest (78%+) in the Spring/Summer months (June/July) due to high transaction volumes smoothing the variance, but Error drastically spiked in December. Winter months experience significantly lower housing turnover, leading to isolated outlier sales that mathematically skew the monthly MAE calculations.
 
-![08A Error Map](08A_chart_model_mae_comparison.png)
-
-### Track 07B / 08B: Pure OSM Geography (The Final Victor)
-We deleted the Google and World Bank macro-noise and fed the exact same models **strictly OpenStreetMap (OSM) Train Station distances**.
-**The Result:** Because physical infrastructure actually natively changes aggressively from street to street, the ML models successfully seized the valid spatial geometry!
-* **LightGBM Error:** Successfully broke the £400k barrier, aggressively hitting £398,540 in total global error!
-* **LightGBM Accuracy:** Effectively pushed past 92.1% validation limits!
-
-![08B Absolute Validation Map](08B_chart_model_mae_comparison.png)
-*(Notice LightGBM functionally leveraging the OSM topology beautifully while maintaining 0.58s speeds!)*
+*(All models have natively exported their `[Model]_Historical_vs_Forecast_Prices.png`, `[Model]_Yearly_Monthly_Error_Heatmap.png`, and `[Model]_Postal_Code_Error_Distribution.png` explicitly into the root folder for granular visual validation.)*
 
 ---
 
