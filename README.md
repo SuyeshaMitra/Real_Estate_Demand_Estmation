@@ -60,9 +60,15 @@ graph TD
 
 ## Step 1: Data Exploration (`01_data_exploration.py`)
 Analyzed the raw 3.2 GB UK Property dataset to map fundamental distributions, transaction volume, and basic pricing correlations.
+* **Memory Management:** Implemented a chunk-streaming architecture (`chunksize=1000000`) to safely load the massive 31-million-row `pp-complete.csv` into RAM without crashing the environment.
+* **Data Integrity Verification:** Parsed the initial dataset block to verify column alignments and confirm that critical target variables (`price` and `postcode`) contained zero missing values.
+* **Baseline Statistical Mapping:** Generated the baseline foundation required to logically segment the national dataset down to a localized regional environment.
 
 ## Step 2: Data Preparation (`02_data_preparation.py`)
 Filtered the massive national dataset specifically to London, structurally cleaning anomalies and exporting the core `london_data.csv` for machine learning input.
+* **Geographical Filtering Mask:** Streamed the entire 3.2 GB file chunk-by-chunk and applied a strict boolean mask (`county == 'GREATER LONDON'`) to forcefully drop over 27 million irrelevant national properties from memory immediately.
+* **Append-Mode CSV Construction:** Sequentially concatenated the surviving London properties into a fresh output file using write append mode (`mode='a'`), preserving memory while building the master output block.
+* **Final Deliverable:** Safely condensed the massive national dataset into an extremely manageable ~300 MB file (`london_data.csv`) containing exactly 3.9 million localized London properties, priming the environment for heavy machine learning model ingestion.
 
 ## Step 3: The Baseline Models (Non-Spatial)
 Before migrating to complex geographical mapping, we tested four algorithms (Random Forest, Neural Network, XGBoost, and LightGBM) on simple text-based district data (`03_trend_analysis_and_modeling.py`) to establish a non-spatial baseline.
