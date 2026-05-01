@@ -174,6 +174,12 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ## Step 4 & 5: The Geospatial Transition (Phase 04 Detailed Analytics)
 
+> [!NOTE]
+> **Why was the Neural Network omitted from Step 04 onwards?**
+> During the Step 03 non-spatial baseline test, the Multi-Layer Perceptron (Neural Network) proved incredibly inefficient at processing tabular text features compared to Tree-based algorithms, resulting in the highest Absolute Error (£650,227). Neural Networks require normalized, dense floating-point matrices to function properly, making them computationally unstable when dealing with sparse categorical data like 30,000 unique postal districts. Therefore, it was logically decommissioned, and we structurally transitioned to racing only the 3 superior Tree-based algorithms (Random Forest, XGBoost, LightGBM) inside the geospatial arena.
+> 
+> Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 Tree-Based ML models** (`Random Forest`, `XGBoost`, `LightGBM`) to observe how varying mathematical approaches manage geometric spatial proximity differently once `Latitude` and `Longitude` are properly extracted.
+
 **Pipeline Sequence & Training Data Generation (Generating `london_geospatial_dataset.csv`)**: 
 To construct the spatial matrix, the pipeline executes the following rigid sequence:
 1. **Temporal Filtering:** We first load the core `london_data.csv` dataset (which was physically filtered in Step 02 to strictly isolate only properties inside the `GREATER LONDON` county) and then we temporally filter those property records down to our target 15-year historical block (**Years: 2008 to 2022**). 
@@ -182,11 +188,7 @@ To construct the spatial matrix, the pipeline executes the following rigid seque
 
 This resulting massive, offline geometric/time-series dataset is then permanently fed identically into the Machine Learning algorithms below (trained strictly on 2008-2017) and serves as the master baseline dataset for all future modeling.
 
-> [!NOTE]
-> **Why was the Neural Network omitted from Step 04 onwards?**
-> During the Step 03 non-spatial baseline test, the Multi-Layer Perceptron (Neural Network) proved incredibly inefficient at processing tabular text features compared to Tree-based algorithms, resulting in the highest Absolute Error (£650,227). Neural Networks require normalized, dense floating-point matrices to function properly, making them computationally unstable when dealing with sparse categorical data like 30,000 unique postal districts. Therefore, it was logically decommissioned, and we structurally transitioned to racing only the 3 superior Tree-based algorithms (Random Forest, XGBoost, LightGBM) inside the geospatial arena.
 
-Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 Tree-Based ML models** (`Random Forest`, `XGBoost`, `LightGBM`) to observe how varying mathematical approaches manage geometric spatial proximity differently once `Latitude` and `Longitude` are properly extracted.
 
 ### A) Comprehensive Geospatial Metric Validation
 
