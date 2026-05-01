@@ -77,10 +77,12 @@
             <div id="tab2" class="tab-content">
 <h2>Baseline Models (Non-Spatial)</h2>
 <p>Before migrating to complex geographical mapping, we tested four algorithms (<b>Random Forest, Neural Network, XGBoost, and LightGBM</b>) on simple text-based district data (<code>03_trend_analysis_and_modeling.py</code>) to establish a non-spatial baseline.</p>
-<p><strong>Training &amp; Evaluation Setup:</strong>
-* <strong>Training Data:</strong> Historical property prices spanning from 2008 to 2017.
-* <strong>Testing Data:</strong> Predicted blindly on the 5-year future holdout block (2018 to 2022).
-* <strong>MAE Calculation Engine:</strong> The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.</p>
+<p><strong>Training &amp; Evaluation Setup:</strong></p>
+<ul>
+<li><strong>Training Data:</strong> Historical property prices spanning from 2008 to 2017.</li>
+<li><strong>Testing Data:</strong> Predicted blindly on the 5-year future holdout block (2018 to 2022).</li>
+<li><strong>MAE Calculation Engine:</strong> The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.</li>
+</ul>
 <table>
 <thead>
 <tr>
