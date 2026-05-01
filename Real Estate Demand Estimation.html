@@ -156,11 +156,11 @@
 </tr>
 </tbody>
 </table>
-<p><strong>Mathematical Metric Calculation Example:</strong>
-| Metric | Mathematical Formula Engine | Example Calculation Output (Based on 4 Models) |
-|--------|-----------------------------|------------------------------------------------|
-| <strong>Mean Absolute Error (MAE)</strong> | <code>MAE = Average( ABS(True_Price - Predicted_Price) )</code> | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
-| <strong>Median Accuracy</strong> | <code>Accuracy = 100 - (ABS(True - Predicted) / True) * 100</code> | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. <code>100 - 20% = 80.00% Accuracy</code>. |</p>
+<p><strong>Mathematical Metric Calculation Example:</strong></p>
+<ul>
+<li><strong>Mean Absolute Error (MAE):</strong> <code>MAE = Average( ABS(True_Price - Predicted_Price) )</code> - If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000.</li>
+<li><strong>Median Accuracy:</strong> <code>Accuracy = 100 - (ABS(True - Predicted) / True) * 100</code> - Following the example above: (£100,000 error / £500,000 price) = 0.20 off. <code>100 - 20% = 80.00% Accuracy</code>.</li>
+</ul>
 <h4>Mathematical Metric Calculation Engine</h4>
 <table>
 <thead>
