@@ -2,7 +2,7 @@
 
 ## 📊 Interactive Executive Dashboard
 > [!TIP]
-> **[Open the Interactive HTML Presentation Dashboard](https://htmlpreview.github.io/?https://github.com/SuyeshaMitra/Real_Estate_Demand_Estmation/blob/main/Real%20Estate%20Demand%20Estimation.html?v=12)** 
+> **[Open the Interactive HTML Presentation Dashboard](https://htmlpreview.github.io/?https://github.com/SuyeshaMitra/Real_Estate_Demand_Estmation/blob/main/Real%20Estate%20Demand%20Estimation.html?v=13)** 
 > A beautifully compiled, interactive 8-tab frontend summarizing the entire machine learning ablation study, model comparisons, and external API analysis for external stakeholders.
 
 
@@ -100,10 +100,8 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 | **Compute Execution Speed** | **~1.6 sec** (Extremely Fast) | It bypasses forcing symmetric splits uniformly across the entire dataset like XGBoost, ignoring stable average zones completely to focus compute solely on breaking volatility. |
 
 **Mathematical Metric Calculation Example:**
-| Metric | Mathematical Formula Engine | Example Calculation Output (Based on 4 Models) |
-|--------|-----------------------------|------------------------------------------------|
-| **Mean Absolute Error (MAE)** | `MAE = Average( ABS(True_Price - Predicted_Price) )` | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
-| **Median Accuracy** | `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`. |
+* **Mean Absolute Error (MAE):** `MAE = Average( ABS(True_Price - Predicted_Price) )` - If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000.
+* **Median Accuracy:** `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` - Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`.
 
 ### Baseline Models Detailed Analytics (Time-Series Breakdown)
 
