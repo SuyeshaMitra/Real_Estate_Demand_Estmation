@@ -13,153 +13,26 @@
             --bg: #F8FAFC;
             --text: #334155;
         }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-            color: white;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-        
+        body { margin: 0; padding: 0; font-family: 'Roboto', sans-serif; background: var(--bg); color: var(--text); }
+        .header { background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color: white; padding: 40px 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .header h1 { margin: 0; font-size: 3rem; font-weight: 900; letter-spacing: -1px; }
         .header p { margin-top: 15px; font-size: 1.2rem; font-weight: 300; color: #94A3B8; }
-        
-        .tab-container {
-            max-width: 1400px;
-            margin: -20px auto 0;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .tabs {
-            display: flex;
-            flex-wrap: wrap;
-            background: white;
-            border-radius: 12px 12px 0 0;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border-bottom: 4px solid var(--accent);
-        }
-        
-        .tab-btn {
-            flex: 1;
-            min-width: 150px;
-            padding: 22px 15px;
-            background: white;
-            border: none;
-            cursor: pointer;
-            text-align: center;
-            font-family: 'Roboto', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: #64748B;
-            transition: all 0.2s ease;
-        }
-        
-        .tab-btn:hover {
-            background: #EFF6FF;
-            color: var(--accent);
-        }
-        
-        .tab-btn.active {
-            background: var(--secondary);
-            color: var(--primary);
-            box-shadow: inset 0 -4px 0 var(--accent);
-        }
-        
-        .content-area {
-            background: white;
-            border-radius: 0 0 12px 12px;
-            padding: 50px 60px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            min-height: 600px;
-            margin-bottom: 60px;
-            font-size: 1.05rem;
-            line-height: 1.7;
-            overflow-x: auto;
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeEffect 0.4s;
-        }
-        
-        @keyframes fadeEffect {
-            from {opacity: 0; transform: translateY(10px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-        
-        h2 {
-            color: var(--primary);
-            border-bottom: 2px solid #E2E8F0;
-            padding-bottom: 12px;
-            margin-top: 0;
-            font-size: 2.2rem;
-            font-weight: 900;
-        }
-        
-        h3 {
-            color: var(--accent);
-            margin-top: 40px;
-            font-size: 1.6rem;
-            font-weight: 700;
-        }
-        
-        img {
-            max-width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            margin: 25px 0;
-            display: block;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 30px 0;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        th {
-            background: var(--primary);
-            color: white;
-            padding: 18px 15px;
-            text-align: left;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        td {
-            padding: 16px 15px;
-            border-bottom: 1px solid #E2E8F0;
-            color: #475569;
-        }
-        
-        tr:nth-child(even) {
-            background-color: #F8FAFC;
-        }
-        
-        blockquote {
-            background: #EFF6FF;
-            border-left: 6px solid var(--accent);
-            padding: 20px 25px;
-            margin: 25px 0;
-            border-radius: 0 8px 8px 0;
-            color: #1E3A8A;
-        }
+        .tab-container { max-width: 1400px; margin: -20px auto 0; padding: 0 20px; position: relative; z-index: 10; }
+        .tabs { display: flex; flex-wrap: wrap; background: white; border-radius: 12px 12px 0 0; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.1); border-bottom: 4px solid var(--accent); }
+        .tab-btn { flex: 1; min-width: 150px; padding: 22px 15px; background: white; border: none; cursor: pointer; text-align: center; font-family: 'Roboto', sans-serif; font-weight: 800; font-size: 1.2rem; color: #64748B; transition: all 0.2s ease; }
+        .tab-btn:hover { background: #EFF6FF; color: var(--accent); }
+        .tab-btn.active { background: var(--secondary); color: var(--primary); box-shadow: inset 0 -4px 0 var(--accent); }
+        .content-area { background: white; border-radius: 0 0 12px 12px; padding: 50px 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); min-height: 600px; margin-bottom: 60px; font-size: 1.05rem; line-height: 1.7; overflow-x: auto; }
+        .tab-content { display: none; animation: fadeEffect 0.4s; }
+        @keyframes fadeEffect { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+        h2 { color: var(--primary); border-bottom: 2px solid #E2E8F0; padding-bottom: 12px; margin-top: 0; font-size: 2.2rem; font-weight: 900; }
+        h3 { color: var(--accent); margin-top: 40px; font-size: 1.6rem; font-weight: 700; }
+        img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); margin: 25px 0; display: block; }
+        table { width: 100%; border-collapse: collapse; margin: 30px 0; font-size: 1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; }
+        th { background: var(--primary); color: white; padding: 18px 15px; text-align: left; font-weight: 700; font-size: 1.1rem; }
+        td { padding: 16px 15px; border-bottom: 1px solid #E2E8F0; color: #475569; }
+        tr:nth-child(even) { background-color: #F8FAFC; }
+        blockquote { background: #EFF6FF; border-left: 6px solid var(--accent); padding: 20px 25px; margin: 25px 0; border-radius: 0 8px 8px 0; color: #1E3A8A; }
     </style>
 </head>
 <body>
@@ -183,21 +56,23 @@
 
         <div class="content-area">
             <div id="tab1" class="tab-content">
-<h1>Real Estate Demand Estimation Project</h1>
-<h2>High-Level Architecture</h2>
-<p>The system handles extremely large datasets (3.2 GB raw CSV) efficiently using a chunk-streaming architecture. Geographic APIs map every property to its true Earth location to feed independent ML models.</p>
-<p><img alt="Mermaid Diagram" src="https://mermaid.ink/img/Z3JhcGggVEQKICAgIGNsYXNzRGVmIGhpZ2hsaWdodCBmaWxsOiNmZjk5OTksc3Ryb2tlOiNjYzAwMDAsc3Ryb2tlLXdpZHRoOjJweDsKICAgIGNsYXNzRGVmIGhpZ2hsaWdodEIgZmlsbDojOTlmZjk5LHN0cm9rZTojMDA5OTAwLHN0cm9rZS13aWR0aDoycHg7CgogICAgc3ViZ3JhcGggRGF0YSBMYXllcgogICAgICAgIEFbKFJhdyBVSyBQcm9wZXJ0eSBEYXRhXG4zLjIgR0IgQ1NWKV0gLS0+fENodW5rIFN0cmVhbWluZ3wgQltEYXRhIFByZXAgRW5naW5lXQogICAgICAgIEIgLS0+fEZpbHRlciAmIENsZWFufCBDWyhsb25kb25fZGF0YS5jc3ZcbjMuOU0gUmVjb3JkcyldCiAgICBlbmQKCiAgICBzdWJncmFwaCAiRmVhdHVyZSBFbmdpbmUgKHBnZW9jb2RlICYgRXh0ZXJuYWwgQVBJcykiCiAgICAgICAgQyAtLT4gRFtFeHRyYWN0IFVuaXF1ZSBQb3N0Y29kZXNdCiAgICAgICAgRCAtLT58UXVlcnkgT2ZmbGluZSBEQnwgRVtHZW5lcmF0ZSBMYXRpdHVkZSAmIExvbmdpdHVkZV0KICAgICAgICBFIC0tPiBGW01lcmdlIExhdC9Mb24gaW50byBQcmltYXJ5IERhdGFzZXRdCiAgICAgICAgCiAgICAgICAgQVBJMVsi8J+MjSBPcGVuU3RyZWV0TWFwPGJyPihPU01fc3RhdGlvbnMpIl0KICAgICAgICBBUEkyWyLwn5OwIEdvb2dsZSBOZXdzPGJyPihOZXdzX1ZvbHVtZSkiXQogICAgICAgIEFQSTNbIvCfk4ggR29vZ2xlIFRyZW5kczxicj4oTW9ydGdhZ2VfaW5kZXgpIl0KICAgICAgICBBUEk0WyLwn4+mIFdvcmxkIEJhbms8YnI+KEludGVyZXN0X1JhdGVzKSJdCiAgICAgICAgCiAgICAgICAgQVBJMSAtLT4gRgogICAgICAgIEFQSTIgLS0+IEYKICAgICAgICBBUEkzIC0tPiBGCiAgICAgICAgQVBJNCAtLT4gRgogICAgZW5kCgogICAgc3ViZ3JhcGggTWFjaGluZSBMZWFybmluZyBFbmdpbmUKICAgICAgICBGIC0tPiBHeyJUcmFpbi9UZXN0IFNwbGl0In0KICAgICAgICAKICAgICAgICBDIC0uLT58IlRhYnVsYXIgQ1NWIERhdGEgKE5vIExhdC9Mb24pInwgQmFzZWxpbmVbIk5vbi1TcGF0aWFsIEJhc2VsaW5lIl0KICAgICAgICAKICAgICAgICBHIC0tPnwiVHJhaW4gU3Vic2V0OiBCYXNlIEdlbzxicj4oTGF0aXR1ZGUgKyBMb25naXR1ZGUgT05MWSkifCBCYXNlX01vZGVsc1siU3BhdGlhbCBNb2RlbHMiXQogICAgICAgIAogICAgICAgIEcgLS0+fCJUcmFpbiBTdWJzZXQ6IE1hY3JvIFRyYXA8YnI+KE9TTSArIE5ld3MgKyBUcmVuZHMgKyBSYXRlcykifCBBX01vZGVsc1siQWxsIEZlYXR1cmVzIl0KICAgICAgICBjbGFzcyBBX01vZGVscyBoaWdobGlnaHQ7CiAgICAgICAgCiAgICAgICAgRyAtLT58IlRyYWluIFN1YnNldDogV2lubmluZyBDb21ibzxicj4oT1NNICsgTmV3cyArIFRyZW5kcykifCBCX01vZGVsc1siT1NNICsgTmV3cyArIFRyZW5kcyJdCiAgICAgICAgY2xhc3MgQl9Nb2RlbHMgaGlnaGxpZ2h0QjsKICAgICAgICAKICAgICAgICBCYXNlbGluZSAtLi0+fCJCYXNlbGluZSBBbmFseXRpY3MifCBJWyI1LVllYXIgRm9yZWNhc3QgVmFsaWRhdG9yIl0KICAgICAgICBCYXNlX01vZGVscyAtLT58IlN0YW5kYXJkIEFjY3VyYWN5InwgSQogICAgICAgIEFfTW9kZWxzIC0uLT58IkNvbGxpbmVhcml0eSBDcmFzaCJ8IEkKICAgICAgICBCX01vZGVscyA9PT58IlN1cHJlbWUgQWNjdXJhY3kgTGVhZGVyInwgSQogICAgZW5kCgogICAgc3ViZ3JhcGggUHJlc2VudGF0aW9uIExheWVyCiAgICAgICAgSSAtLT4gS1siVmFsaWRhdGlvbiBDU1ZzICYgQW5hbHl0aWNzIFBORyBDaGFydHMiXQogICAgZW5k" /></p>
-<hr />
+<h2>Project Objective</h2>
+<p>The objective of this architecture is to mathematically prove if the London real estate market is driven entirely by physical geographic coordinates, or if macro-economic phenomena (like Bank of England interest rates, online digital demand, and real-time news sentiment) fundamentally dictate physical housing valuations.</p>
+<h2>Business Value</h2>
+<p>This pipeline constructs a production-ready, massive combinatorial ablation study over 3.9 million physical housing transactions. By bridging 4 distinct machine learning architectures (Neural Networks, XGBoost, Random Forest, LightGBM) with 4 external Data Providers (OSM, Google News, Trends, World Bank), we deliver a mathematically validated predictive engine capable of highly accurate localized pricing models for real estate investors and market analysts.</p>
 <h2>Data Exploration</h2>
-<p>Analyzed the raw 3.2 GB UK Property dataset to map fundamental distributions, transaction volume, and basic pricing correlations.
-* <strong>Memory Management:</strong> Implemented a chunk-streaming architecture (<code>chunksize=1000000</code>) to safely load the massive 31-million-row <code>pp-complete.csv</code> into RAM without crashing the environment.
-* <strong>Data Integrity Verification:</strong> Parsed the initial dataset block to verify column alignments and confirm that critical target variables (<code>price</code> and <code>postcode</code>) contained zero missing values.
-* <strong>Baseline Statistical Mapping:</strong> Generated the baseline foundation required to logically segment the national dataset down to a localized regional environment.</p>
+<p>We downloaded the massive 3.2 GB UK National Property dataset (containing 28 million historical rows). Utilizing chunk-streaming memory management, we physically filtered out all non-London properties.</p>
 <h2>Data Preparation</h2>
-<p>Filtered the massive national dataset specifically to London, structurally cleaning anomalies and exporting the core <code>london_data.csv</code> for machine learning input.
-* <strong>Geographical Filtering Mask:</strong> Streamed the entire 3.2 GB file chunk-by-chunk and applied a strict boolean mask (<code>county == 'GREATER LONDON'</code>) to forcefully drop over 27 million irrelevant national properties from memory immediately.
-* <strong>Append-Mode CSV Construction:</strong> Sequentially concatenated the surviving London properties into a fresh output file using write append mode (<code>mode='a'</code>), preserving memory while building the master output block.
-* <strong>Final Deliverable:</strong> Safely condensed the massive national dataset into an extremely manageable ~300 MB file (<code>london_data.csv</code>) containing exactly 3.9 million localized London properties, priming the environment for heavy machine learning model ingestion.</p>
+<p>We cleaned the categorical strings (e.g. Property Type, Duration), and safely compressed the data into an extremely manageable <code>london_data.csv</code> containing precisely 3.9 million localized properties.</p>
+<h2>High-Level Architecture Design</h2>
+<p>This repository is structurally designed as a linear execution pipeline, built so that complete novices can easily understand how raw housing transactions are transformed into advanced geospatial AI predictions.</p>
+<ul>
+<li><strong>Data Prep Engine:</strong> Filters 28 million UK rows down to 3.9 million London properties.</li>
+<li><strong>Geospatial Mapping:</strong> Injects true Latitude and Longitude mapping coordinates.</li>
+<li><strong>API Feature Ecosystem:</strong> Scrapes real-time OpenStreetMap infrastructure, Google News sentiment, Google Trends, and World Bank lending rates.</li>
+<li><strong>Combinatorial Matrix:</strong> Trains 90 individual models simultaneously to isolate exactly which dataset drives price accuracy.</li>
+</ul>
+<p><img alt="Mermaid Diagram" src="https://mermaid.ink/img/Z3JhcGggVEQKICAgIGNsYXNzRGVmIHN0ZXAgZmlsbDojRTFGNUZFLHN0cm9rZTojMDI4OEQxLHN0cm9rZS13aWR0aDoycHg7CiAgICBjbGFzc0RlZiBkYXRhIGZpbGw6I0ZGRjlDNCxzdHJva2U6I0ZCQzAyRCxzdHJva2Utd2lkdGg6MnB4OwogICAgY2xhc3NEZWYgYXBpIGZpbGw6I0U4RjVFOSxzdHJva2U6IzM4OEUzQyxzdHJva2Utd2lkdGg6MnB4OwogICAgY2xhc3NEZWYgbW9kZWwgZmlsbDojRjNFNUY1LHN0cm9rZTojN0IxRkEyLHN0cm9rZS13aWR0aDoycHg7CgogICAgUmF3WygyOE0gUm93IFJhdyBDU1YpXSAtLT4gUzFbMDE6IERhdGEgRXhwbG9yYXRpb25dOjo6c3RlcAogICAgUzEgLS0+IFMyWzAyOiBEYXRhIFByZXBhcmF0aW9uXTo6OnN0ZXAKICAgIFMyIC0tPiBGaWx0ZXJlZFsoMy45TSBMb25kb24gRGF0YSldOjo6ZGF0YQogICAgCiAgICBGaWx0ZXJlZCAtLT4gUzNbMDM6IEJhc2VsaW5lIE1vZGVsc106OjpzdGVwCiAgICBTMyAtLT4gUzRbMDQ6IEdlb3NwYXRpYWwgTWFwcGluZ106OjpzdGVwCiAgICBTNCAtLT4gR2VvWyhNYXBwZWQgR2VvLURhdGEpXTo6OmRhdGEKICAgIAogICAgR2VvIC0tPiBTNVswNTogR2Vvc3BhdGlhbCBNb2RlbCBUcmFpbmluZ106OjpzdGVwCiAgICBTNSAtLT4gUzZbMDY6IEV4dGVybmFsIEFQSSBJbmdlc3Rpb25dOjo6c3RlcAogICAgCiAgICBPU00oKE9wZW5TdHJlZXRNYXAgQVBJKSk6OjphcGkgLS0+IFM2CiAgICBOZXdzKChHb29nbGUgTmV3cyBBUEkpKTo6OmFwaSAtLT4gUzYKICAgIFRyZW5kcygoR29vZ2xlIFRyZW5kcyBBUEkpKTo6OmFwaSAtLT4gUzYKICAgIFJhdGVzKChXb3JsZCBCYW5rIEFQSSkpOjo6YXBpIC0tPiBTNgogICAgCiAgICBTNiAtLT4gTWFzdGVyWyhNYXN0ZXIgRW5yaWNoZWQgRGF0YSldOjo6ZGF0YQogICAgTWFzdGVyIC0tPiBTN1swNzogTWFjcm8gUHJvZ3Jlc3Npb248YnI+VGVzdGluZyBBUElzIGFnYWluc3QgQUkgTW9kZWxzXTo6OnN0ZXAKICAgIFM3IC0tPiBTOFswODogMzAgQ29tYmluYXRpb25zIE1hdHJpeF06OjpzdGVwCiAgICAKICAgIFM4IC0tPiBSRigoUmFuZG9tIEZvcmVzdCkpOjo6bW9kZWwKICAgIFM4IC0tPiBMR0JNKChMaWdodEdCTSkpOjo6bW9kZWwKICAgIFM4IC0tPiBYR0IoKFhHQm9vc3QpKTo6Om1vZGVs" /></p>
 </div>
             <div id="tab2" class="tab-content">
 <h2>Baseline Models (Non-Spatial)</h2>
