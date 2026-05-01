@@ -572,7 +572,7 @@ To definitively prove whether complex feature engineering and geographical proxi
 *(Note: While Step 04 mechanically produced a numerically lower MAE number, that specific coordinate-only dataset historically overfitted on massive local wealth anomalies without understanding actual true causality. The Step 08 Random Forest model achieved true, generalizable semantic inference across the entire city.)*
 
 > [!WARNING]
-> ### 🚨 **FINAL INFERENCE: WHAT STANDS OUT? WHICH MODEL WORKS BEST AND WHY?** 🚨
+> ### **FINAL INFERENCE: WHAT STANDS OUT? WHICH MODEL WORKS BEST AND WHY?**
 
 | Algorithm | Final Verdict | Why it Won/Failed | Key Pros | Key Cons |
 | :--- | :--- | :--- | :--- | :--- |
