@@ -298,7 +298,7 @@ All features (Lat/Lon + Years + Proximity + Sentiment + Rates) are compiled and 
 
 ---
 
-## Step 7: Train Models below Data Feed using -(Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank
+## Step 7: Train Models below Data Feed using - (Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank
 
 We structurally tested 3 radically different Machine Learning architectures against the `london_geospatial_enriched_dataset.csv` using:
 * Random Forest
