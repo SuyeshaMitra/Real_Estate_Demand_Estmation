@@ -1,5 +1,11 @@
 # Real Estate Demand Estimation Project
 
+## 📊 Interactive Executive Dashboard
+> [!TIP]
+> **[Open the Interactive HTML Presentation Dashboard](Real%20Estate%20Demand%20Estimation.html)** 
+> A beautifully compiled, interactive 8-tab frontend summarizing the entire machine learning ablation study, model comparisons, and external API analysis for external stakeholders.
+
+
 This repository contains an end-to-end data engineering and machine learning pipeline to analyze, process, and forecast UK property pricing based on the HM Land Registry dataset. We enhanced predictive capacity by converting string postcodes into physical geospatial mapping (latitude/longitude) using `pgeocode` and implemented three state-of-the-art tree-based ML architectures mapping spatial variance.
 
 ## High-Level Architecture
@@ -57,12 +63,6 @@ graph TD
 ```
 
 ---
-
-
-## 📊 Interactive Executive Dashboard
-> [!TIP]
-> **[Open the Interactive HTML Presentation Dashboard](Real%20Estate%20Demand%20Estimation.html)** 
-> A beautifully compiled, interactive 8-tab frontend summarizing the entire machine learning ablation study, model comparisons, and external API analysis for external stakeholders.
 
 ## Step 1: Data Exploration (`01_data_exploration.py`)
 Analyzed the raw 3.2 GB UK Property dataset to map fundamental distributions, transaction volume, and basic pricing correlations.
