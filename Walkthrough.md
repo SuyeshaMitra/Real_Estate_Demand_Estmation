@@ -158,6 +158,10 @@ geo_data = nom.query_postal_code("BR6")
 ### Running 3 Competitor Geospatial Models
 Now that we have exact X,Y coordinates for the properties, we test three different Machine Learning Engines to see which one understands London's geography the best.
 
+> [!NOTE]
+> **Why did we drop the Neural Network from the race?**
+> As we discovered in Step 3, the Neural Network crashed and burned against simple tabular string data. It is geometrically inefficient at processing basic district names compared to Tree models. To save computing time, we officially decommissioned it and proceeded with only the top 3 spatial algorithms (Random Forest, XGBoost, LightGBM).
+
 #### 🌲 04A: Random Forest (`RandomForestRegressor`)
 * **What is the model & Why use it?**: Random Forest is essentially a massive "committee" of hundreds of separate, basic decision trees. We use it because it is the "industry standard" safe option. It gives us a very stable, reliable prediction that rarely hallucinates crazy numbers.
 * **What it does**: Imagine printing out a map of London. The Random Forest draws thousands of hard rectangular boxes over the map and simply averages the price of all houses inside that box. 

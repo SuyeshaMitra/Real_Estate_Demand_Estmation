@@ -172,7 +172,7 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ---
 
-## Step 4 & 5: The Geospatial Transition (04 Models Detailed Analytics)
+## Step 4 & 5: The Geospatial Transition (Phase 04 Detailed Analytics)
 
 **Pipeline Sequence & Training Data Generation (Generating `london_geospatial_dataset.csv`)**: 
 To construct the spatial matrix, the pipeline executes the following rigid sequence:
@@ -181,6 +181,10 @@ To construct the spatial matrix, the pipeline executes the following rigid seque
 3. **Merging & Exporting the Unified Grid:** Once the static Lat/Lon coordinates are successfully extracted, they are merged back onto the timestamped property records. We then physically export this completely unified matrix to **[london_geospatial_dataset.csv](london_geospatial_dataset.csv)**. 
 
 This resulting massive, offline geometric/time-series dataset is then permanently fed identically into the Machine Learning algorithms below (trained strictly on 2008-2017) and serves as the master baseline dataset for all future modeling.
+
+> [!NOTE]
+> **Why was the Neural Network omitted from Step 04 onwards?**
+> During the Step 03 non-spatial baseline test, the Multi-Layer Perceptron (Neural Network) proved incredibly inefficient at processing tabular text features compared to Tree-based algorithms, resulting in the highest Absolute Error (£650,227). Neural Networks require normalized, dense floating-point matrices to function properly, making them computationally unstable when dealing with sparse categorical data like 30,000 unique postal districts. Therefore, it was logically decommissioned, and we structurally transitioned to racing only the 3 superior Tree-based algorithms (Random Forest, XGBoost, LightGBM) inside the geospatial arena.
 
 Real estate pricing is dictated precisely by physical location. We transitioned the remaining **3 Tree-Based ML models** (`Random Forest`, `XGBoost`, `LightGBM`) to observe how varying mathematical approaches manage geometric spatial proximity differently once `Latitude` and `Longitude` are properly extracted.
 
