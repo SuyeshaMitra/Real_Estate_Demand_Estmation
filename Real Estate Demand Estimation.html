@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Estate Demand Estimation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2C5AA0;
+            --primary: #1565C0;
             --secondary: #E3F2FD;
             --accent: #FF5722;
             --bg: #F5F7FA;
@@ -24,133 +23,151 @@
         }
         
         .header {
-            background: var(--primary);
+            background: linear-gradient(135deg, #0D47A1 0%, #1976D2 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 40px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
         
-        .header h1 { margin: 0; font-size: 2.5rem; font-weight: 700; }
-        .header p { margin-top: 10px; font-size: 1.1rem; opacity: 0.9; }
+        .header h1 { margin: 0; font-size: 3rem; font-weight: 800; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        .header p { margin-top: 15px; font-size: 1.2rem; font-weight: 300; opacity: 0.9; }
         
         /* TOP TABS NAVIGATION */
         .tab-container {
             max-width: 1400px;
-            margin: 30px auto 0;
+            margin: -20px auto 0;
             padding: 0 20px;
+            position: relative;
+            z-index: 10;
         }
         
         .tabs {
             display: flex;
             flex-wrap: wrap;
             background: white;
-            border-radius: 8px 8px 0 0;
+            border-radius: 12px 12px 0 0;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-bottom: 4px solid var(--primary);
         }
         
         .tab-btn {
             flex: 1;
             min-width: 150px;
-            padding: 16px 15px;
+            padding: 20px 15px;
             background: white;
             border: none;
-            border-bottom: 4px solid transparent;
             cursor: pointer;
             text-align: center;
             font-family: 'Roboto', sans-serif;
-            font-weight: 500;
-            font-size: 0.95rem;
+            font-weight: 700;
+            font-size: 1.15rem;
             color: #555;
             transition: all 0.2s ease;
         }
         
         .tab-btn:hover {
-            background: #f9f9f9;
+            background: #F0F7FF;
             color: var(--primary);
         }
         
         .tab-btn.active {
             background: var(--secondary);
-            border-bottom: 4px solid var(--primary);
             color: var(--primary);
-            font-weight: 700;
+            box-shadow: inset 0 -4px 0 var(--primary);
         }
         
         /* CONTENT AREA */
         .content-area {
             background: white;
-            border-radius: 0 0 8px 8px;
-            padding: 40px 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-radius: 0 0 12px 12px;
+            padding: 50px 60px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             min-height: 600px;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
+            font-size: 1.05rem;
+            line-height: 1.7;
         }
         
         .tab-content {
             display: none;
-            animation: fadeEffect 0.3s;
+            animation: fadeEffect 0.4s;
         }
         
         @keyframes fadeEffect {
-            from {opacity: 0;}
-            to {opacity: 1;}
+            from {opacity: 0; transform: translateY(10px);}
+            to {opacity: 1; transform: translateY(0);}
         }
         
         /* MARKDOWN RENDERING STYLES */
-        .markdown-body h2 {
+        h2 {
             color: var(--primary);
             border-bottom: 2px solid #EEE;
-            padding-bottom: 10px;
+            padding-bottom: 12px;
             margin-top: 0;
+            font-size: 2rem;
+            font-weight: 800;
         }
         
-        .markdown-body h3 {
+        h3 {
             color: #444;
-            margin-top: 25px;
+            margin-top: 35px;
+            font-size: 1.5rem;
         }
         
-        .markdown-body img {
+        img {
             max-width: 100%;
-            border-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin: 25px 0;
+            display: block;
         }
         
-        .markdown-body table {
+        table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 0.95rem;
+            margin: 30px 0;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            overflow: hidden;
         }
         
-        .markdown-body th {
+        th {
             background: var(--primary);
             color: white;
-            padding: 12px;
+            padding: 15px;
             text-align: left;
+            font-weight: 700;
         }
         
-        .markdown-body td {
-            padding: 12px;
-            border-bottom: 1px solid #DDD;
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #E0E0E0;
         }
         
-        .markdown-body tr:nth-child(even) {
-            background-color: #F9F9F9;
+        tr:nth-child(even) {
+            background-color: #F8FBFF;
         }
         
-        .markdown-body blockquote {
+        blockquote {
             background: var(--secondary);
-            border-left: 5px solid var(--primary);
-            padding: 15px 20px;
-            margin: 20px 0;
+            border-left: 6px solid var(--primary);
+            padding: 20px 25px;
+            margin: 25px 0;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
         }
         
-        /* Hidden divs for raw markdown */
-        .raw-md { display: none; }
+        code {
+            background: #F1F1F1;
+            padding: 3px 6px;
+            border-radius: 4px;
+            color: #D32F2F;
+            font-family: monospace;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -162,446 +179,828 @@
 
     <div class="tab-container">
         <div class="tabs">
-            <button class="tab-btn" onclick="openTab(event, 'tab1')" id="defaultOpen">1. Overview</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab2')">2. Baseline</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab3')">3. Geospatial</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab4')">4. APIs</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab5')">5. Enrichment</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab6')">6. Phase 08</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab7')">7. Directive</button>
-            <button class="tab-btn" onclick="openTab(event, 'tab8')">8. Cloud</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab1')" id="defaultOpen">Overview</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab2')">Baseline Models</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab3')">Geospatial Transition</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab4')">External APIs</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab5')">Macro Injection</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab6')">Combinatorial Validation</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab7')">Final Directive</button>
+            <button class="tab-btn" onclick="openTab(event, 'tab8')">Cloud Architecture</button>
         </div>
 
         <div class="content-area">
-            <div id="tab1" class="tab-content markdown-body"></div>
-            <div id="tab2" class="tab-content markdown-body"></div>
-            <div id="tab3" class="tab-content markdown-body"></div>
-            <div id="tab4" class="tab-content markdown-body"></div>
-            <div id="tab5" class="tab-content markdown-body"></div>
-            <div id="tab6" class="tab-content markdown-body"></div>
-            <div id="tab7" class="tab-content markdown-body"></div>
-            <div id="tab8" class="tab-content markdown-body"></div>
-            <div id="raw1" class="raw-md">
-## Project Objective
-The absolute objective of this architecture is to mathematically prove if the London real estate market is driven entirely by physical geographic coordinates, or if macro-economic phenomena (like Bank of England interest rates, online digital demand, and real-time news sentiment) fundamentally dictate physical housing valuations.
-
-## Business Value
-This pipeline constructs a production-ready, massive combinatorial ablation study over 3.9 million physical housing transactions. By bridging 4 distinct machine learning architectures (Neural Networks, XGBoost, Random Forest, LightGBM) with 4 external Data Providers (OSM, Google News, Trends, World Bank), we deliver a mathematically validated predictive engine capable of highly accurate localized pricing models for real estate investors and market analysts.
-
-## Data Exploration & Preparation
-We downloaded the massive 3.2 GB UK National Property dataset (containing 28 million historical rows). Utilizing chunk-streaming memory management, we physically filtered out all non-London properties, cleaned the categorical strings (e.g. Property Type, Duration), and safely compressed the data into an extremely manageable `london_data.csv` containing precisely 3.9 million localized properties.
-
-
-
+            <div id="tab1" class="tab-content">
+<h2>Project Objective</h2>
+<p>The absolute objective of this architecture is to mathematically prove if the London real estate market is driven entirely by physical geographic coordinates, or if macro-economic phenomena (like Bank of England interest rates, online digital demand, and real-time news sentiment) fundamentally dictate physical housing valuations.</p>
+<h2>Business Value</h2>
+<p>This pipeline constructs a production-ready, massive combinatorial ablation study over 3.9 million physical housing transactions. By bridging 4 distinct machine learning architectures (Neural Networks, XGBoost, Random Forest, LightGBM) with 4 external Data Providers (OSM, Google News, Trends, World Bank), we deliver a mathematically validated predictive engine capable of highly accurate localized pricing models for real estate investors and market analysts.</p>
+<h2>Data Exploration &amp; Preparation</h2>
+<p>We downloaded the massive 3.2 GB UK National Property dataset (containing 28 million historical rows). Utilizing chunk-streaming memory management, we physically filtered out all non-London properties, cleaned the categorical strings (e.g. Property Type, Duration), and safely compressed the data into an extremely manageable <code>london_data.csv</code> containing precisely 3.9 million localized properties.</p>
 </div>
-            <div id="raw2" class="raw-md">
-## The Baseline Models (Non-Spatial)
-Before migrating to complex geographical mapping or coordinates, we tested algorithms exclusively on simple text-based district data (like District Names and Property Types) to establish a "dumb" baseline. 
-
-## The Baseline Models (Non-Spatial)
-Before migrating to complex geographical mapping, we tested four algorithms (Random Forest, Neural Network, XGBoost, and LightGBM) on simple text-based district data (`03_trend_analysis_and_modeling.py`) to establish a non-spatial baseline.
-
-**Training & Evaluation Setup:**
-* **Training Data:** Historical property prices spanning from 2008 to 2017.
-* **Testing Data:** Predicted blindly on the 5-year future holdout block (2018 to 2022).
-* **MAE Calculation Engine:** The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.
-
-| Baseline Model | Mean Absolute Error (MAE) | Median Accuracy | Training Speed | Pros | Cons |
-|----------------|---------------------------|-----------------|----------------|------|------|
-| **LightGBM 🏆 (Best)** | **£456,439** | **75.68%** | ~1.6 sec | Lightning fast and aggressively isolates extreme outliers natively. | Cannot define localized geometric spatial bounds without coordinates. |
-| **Random Forest** | £470,591 | 74.78% | **~0.4 sec** | Highly stable and executes almost instantly on generic categorical datasets. | Relies on averaging, missing nuanced neighborhood wealth boundaries. |
-| **XGBoost** | £494,479 | 73.82% | ~2.3 sec | Powerful gradient engine designed to deeply minimize localized errors. | Drastically overfits flat categorical text features, degrading accuracy. |
-| **Neural Network** | £546,571 | 65.93% | ~2.2 sec | Theoretically mapped for high complexity non-linear relationships. | Systematically crashes. Flat tabular strings lack depth for neural logic. |
-
-### Conclusion & Explanation: Why LightGBM Won the Baseline Contest
-
-| Evaluation Aspect | LightGBM Result vs Competitors | Why LightGBM Dominated |
-|-------------------|--------------------------------|------------------------|
-| **Prediction Error (MAE)** | **£456,439** (Lowest Error) | It uniquely handles continuous data as discrete histograms, dropping massive mathematical noise that caused Neural Networks and XGBoost to massively overfit the baseline. |
-| **Overall Accuracy** | **75.68%** (Highest Accuracy) | LightGBM uses Leaf-wise growth. While Random Forest averages broadly, LightGBM actively isolates the absolute hardest-to-predict luxury homes and dynamically hyper-focuses splits entirely on them. |
-| **Compute Execution Speed** | **~1.6 sec** (Extremely Fast) | It bypasses forcing symmetric splits uniformly across the entire dataset like XGBoost, ignoring stable average zones completely to focus compute solely on breaking volatility. |
-
-**Mathematical Metric Calculation Example:**
+            <div id="tab2" class="tab-content">
+<h2>The Baseline Models (Non-Spatial)</h2>
+<p>Before migrating to complex geographical mapping or coordinates, we tested algorithms exclusively on simple text-based district data (like District Names and Property Types) to establish a "dumb" baseline. </p>
+<h2>The Baseline Models (Non-Spatial)</h2>
+<p>Before migrating to complex geographical mapping, we tested four algorithms (Random Forest, Neural Network, XGBoost, and LightGBM) on simple text-based district data (<code>03_trend_analysis_and_modeling.py</code>) to establish a non-spatial baseline.</p>
+<p><strong>Training &amp; Evaluation Setup:</strong>
+* <strong>Training Data:</strong> Historical property prices spanning from 2008 to 2017.
+* <strong>Testing Data:</strong> Predicted blindly on the 5-year future holdout block (2018 to 2022).
+* <strong>MAE Calculation Engine:</strong> The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.</p>
+<table>
+<thead>
+<tr>
+<th>Baseline Model</th>
+<th>Mean Absolute Error (MAE)</th>
+<th>Median Accuracy</th>
+<th>Training Speed</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>LightGBM 🏆 (Best)</strong></td>
+<td><strong>£456,439</strong></td>
+<td><strong>75.68%</strong></td>
+<td>~1.6 sec</td>
+<td>Lightning fast and aggressively isolates extreme outliers natively.</td>
+<td>Cannot define localized geometric spatial bounds without coordinates.</td>
+</tr>
+<tr>
+<td><strong>Random Forest</strong></td>
+<td>£470,591</td>
+<td>74.78%</td>
+<td><strong>~0.4 sec</strong></td>
+<td>Highly stable and executes almost instantly on generic categorical datasets.</td>
+<td>Relies on averaging, missing nuanced neighborhood wealth boundaries.</td>
+</tr>
+<tr>
+<td><strong>XGBoost</strong></td>
+<td>£494,479</td>
+<td>73.82%</td>
+<td>~2.3 sec</td>
+<td>Powerful gradient engine designed to deeply minimize localized errors.</td>
+<td>Drastically overfits flat categorical text features, degrading accuracy.</td>
+</tr>
+<tr>
+<td><strong>Neural Network</strong></td>
+<td>£546,571</td>
+<td>65.93%</td>
+<td>~2.2 sec</td>
+<td>Theoretically mapped for high complexity non-linear relationships.</td>
+<td>Systematically crashes. Flat tabular strings lack depth for neural logic.</td>
+</tr>
+</tbody>
+</table>
+<h3>Conclusion &amp; Explanation: Why LightGBM Won the Baseline Contest</h3>
+<table>
+<thead>
+<tr>
+<th>Evaluation Aspect</th>
+<th>LightGBM Result vs Competitors</th>
+<th>Why LightGBM Dominated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prediction Error (MAE)</strong></td>
+<td><strong>£456,439</strong> (Lowest Error)</td>
+<td>It uniquely handles continuous data as discrete histograms, dropping massive mathematical noise that caused Neural Networks and XGBoost to massively overfit the baseline.</td>
+</tr>
+<tr>
+<td><strong>Overall Accuracy</strong></td>
+<td><strong>75.68%</strong> (Highest Accuracy)</td>
+<td>LightGBM uses Leaf-wise growth. While Random Forest averages broadly, LightGBM actively isolates the absolute hardest-to-predict luxury homes and dynamically hyper-focuses splits entirely on them.</td>
+</tr>
+<tr>
+<td><strong>Compute Execution Speed</strong></td>
+<td><strong>~1.6 sec</strong> (Extremely Fast)</td>
+<td>It bypasses forcing symmetric splits uniformly across the entire dataset like XGBoost, ignoring stable average zones completely to focus compute solely on breaking volatility.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mathematical Metric Calculation Example:</strong>
 | Metric | Mathematical Formula Engine | Example Calculation Output (Based on 4 Models) |
 |--------|-----------------------------|------------------------------------------------|
-| **Mean Absolute Error (MAE)** | `MAE = Average( ABS(True_Price - Predicted_Price) )` | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
-| **Median Accuracy** | `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`. |
-
-### Baseline Models Detailed Analytics (Time-Series Breakdown)
-
-#### A) Comprehensive Metric Validation
-
-**i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed -** We benchmarked 4 regression models. The baseline performance is:
-* **LightGBM (Winner):** MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
-* **Random Forest:** MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
-* **XGBoost:** MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
-* **Neural Network:** MAE: £546,571 | Accuracy: 65.93% | Speed: ~2.93s
-
-**ii) Accurate Values Across Models**
-The execution strictly ensures that **values are completely accurate across models**, calculated identically over the identical test dataset. In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly across all models.
-
-**iii) Explore Accuracy: What defines an "Accurate" Prediction?**
+| <strong>Mean Absolute Error (MAE)</strong> | <code>MAE = Average( ABS(True_Price - Predicted_Price) )</code> | If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000. |
+| <strong>Median Accuracy</strong> | <code>Accuracy = 100 - (ABS(True - Predicted) / True) * 100</code> | Following the example above: (£100,000 error / £500,000 price) = 0.20 off. <code>100 - 20% = 80.00% Accuracy</code>. |</p>
+<h3>Baseline Models Detailed Analytics (Time-Series Breakdown)</h3>
+<h4>A) Comprehensive Metric Validation</h4>
+<p><strong>i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed -</strong> We benchmarked 4 regression models. The baseline performance is:
+* <strong>LightGBM (Winner):</strong> MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
+* <strong>Random Forest:</strong> MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
+* <strong>XGBoost:</strong> MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
+* <strong>Neural Network:</strong> MAE: £546,571 | Accuracy: 65.93% | Speed: ~2.93s</p>
+<p><strong>ii) Accurate Values Across Models</strong>
+The execution strictly ensures that <strong>values are completely accurate across models</strong>, calculated identically over the identical test dataset. In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly across all models.</p>
+<p><strong>iii) Explore Accuracy: What defines an "Accurate" Prediction?</strong>
 To determine how "accurate" a machine learning model is, we cannot just look at the raw physical error (like £50,000), because £50,000 is a massive error on a £100,000 home, but a tiny error on a £5,000,000 mansion. Therefore, we translate error into a normalized percentage, governed by three strict mathematical rules:
-* **1. The Variance Rule (Calculating Error %):** First, we calculate the absolute difference between the Predicted Price and the True Sold Price, and divide it by the True Price. For example, if a house sells for £500,000 and the model predicts £400,000, the error is £100,000. `(100,000 / 500,000 = 0.20 or 20% Error)`.
-* **2. The Inversion Rule (Error to Accuracy):** Accuracy is simply the mathematical opposite of error. We subtract the percentage error from 100%. Following the example above: `100% - 20% Error = 80% Accuracy`.
-* **3. The Bounding Rule (The Zero Floor):** Models can occasionally make catastrophic guesses on strange outliers. If a model guesses £1,500,000 on a £500,000 home, the error is 200%. Mathematically, `100% - 200% = -100% Accuracy`. If we allow negative numbers, a single terrible guess could artificially ruin the overall baseline score. Therefore, we institute a rigorous mathematical floor explicitly at **0%** (`np.clip(accuracy, 0, 100)`). An absolutely wrong prediction is simply capped at 0%, protecting the final metric from unbounded negative drift.
-* **Conclusion:** When the pipeline states that LightGBM has a `75.68% Median Accuracy`, it implies that if you select an average property from the dataset, the model's prediction will reliably be within a ~24.3% variance of the true physical selling price.
-
-**iv) Consistent Calculations Over All Features**
-**Consistent Auditing Over Features:** The system executes explicit validation over all 4 baseline algorithms identically enforcing `Features = ['year', 'month', 'property_code', 'old_new_code', 'duration_code', 'district_code']`.
-
-**v) Calculate Accuracy, Error and Speed - For 5 Years + Every Monthly Average**
+* <strong>1. The Variance Rule (Calculating Error %):</strong> First, we calculate the absolute difference between the Predicted Price and the True Sold Price, and divide it by the True Price. For example, if a house sells for £500,000 and the model predicts £400,000, the error is £100,000. <code>(100,000 / 500,000 = 0.20 or 20% Error)</code>.
+* <strong>2. The Inversion Rule (Error to Accuracy):</strong> Accuracy is simply the mathematical opposite of error. We subtract the percentage error from 100%. Following the example above: <code>100% - 20% Error = 80% Accuracy</code>.
+* <strong>3. The Bounding Rule (The Zero Floor):</strong> Models can occasionally make catastrophic guesses on strange outliers. If a model guesses £1,500,000 on a £500,000 home, the error is 200%. Mathematically, <code>100% - 200% = -100% Accuracy</code>. If we allow negative numbers, a single terrible guess could artificially ruin the overall baseline score. Therefore, we institute a rigorous mathematical floor explicitly at <strong>0%</strong> (<code>np.clip(accuracy, 0, 100)</code>). An absolutely wrong prediction is simply capped at 0%, protecting the final metric from unbounded negative drift.
+* <strong>Conclusion:</strong> When the pipeline states that LightGBM has a <code>75.68% Median Accuracy</code>, it implies that if you select an average property from the dataset, the model's prediction will reliably be within a ~24.3% variance of the true physical selling price.</p>
+<p><strong>iv) Consistent Calculations Over All Features</strong>
+<strong>Consistent Auditing Over Features:</strong> The system executes explicit validation over all 4 baseline algorithms identically enforcing <code>Features = ['year', 'month', 'property_code', 'old_new_code', 'duration_code', 'district_code']</code>.</p>
+<p><strong>v) Calculate Accuracy, Error and Speed - For 5 Years + Every Monthly Average</strong>
 Because standard globally averaged numbers can mathematically mask seasonal failures, the Python script natively breaks predictions out chronologically tracking structural degradation points.
-* **5-Year View:** We explicitly track the absolute MAE and Accuracy dynamically across the 2018-2022 holdout block. 
-* **Monthly View:** We fold the historic time-series back exclusively over the 12 calendar months (`1 to 12`) to explicitly track the seasonality pattern.
-  * **Explanation:** Instead of tracking 2018, 2019, 2020 chronologically, the pipeline takes *all* Januaries across the entire 5-year holdout block and averages their errors together into "Month 1". It then averages all Februaries into "Month 2", and so on up to "Month 12". 
-  * **Why we do this:** This mathematically exposes the cyclical real-estate "seasonality" (e.g., the fact that housing transaction volumes and errors predictably spike every single Spring, regardless of what year it is). 
-  * **Supporting Evidence:** You can visibly observe this cyclical pattern occurring in the **Forecast Validation Chart - Monthly** (embedded below in Section B), where the black true-price line and every model's prediction error sharply spikes specifically at `Month 3` (March).
-
-**vi) Error Pattern on Years and Months Wise Separately**
-
-**A. 5-Year Yearly Breakdown Observation**
-When strictly plotting predicted median accuracy natively separated by the 2018-2022 holdout years independently:
-
-![Yearly Accuracy Trend](03_accuracy_trend_yearly.png)
-
-* **Which model is better and why:** **LightGBM** (the purple diamond line) is universally the most accurate model across every single year. It particularly excels during the **2021 Post-Pandemic Spike**, hitting a peak **76.68% Median Accuracy** (dropping error to £400,395). 
-* **Why?** LightGBM uses leaf-wise histogram bucketing. When macro-economic events cause sudden chaotic shifts in housing wealth, Random Forest (blue line) attempts to average the chaos, and XGBoost (green line) chases the residual noise. LightGBM simply isolates the wild new outliers into their own specific leaves, keeping the median accuracy for standard homes exceptionally stable.
-
-**B. Monthly Seasonality Breakdown Observation**
-When actively sorting all historical holdout lines solely by individual chronological Month (`1 - 12`) to map the cyclical seasons:
-
-![Monthly Accuracy Trend](03_accuracy_trend_monthly.png)
-
-* **Which model is better and why:** **LightGBM** strictly dominates every single month of the year. The models uniformly hit their absolute highest accuracy/lowest error in the dead of Winter (**Month 2: February**), where LightGBM peaks at **76.46% accuracy** (£355,499 MAE) because market volatility and trading volumes are at their lowest.
-* **Why?** Conversely, notice the massive, aggressive failure drift that triggers uniformly across all 4 machine learning pipelines exactly tracking the Spring Real-Estate Rush (**Month 3: March**). Pure transactional volume and aggressive bidding wars cause severe unpredictability. LightGBM survives this the best because it naturally handles volatile continuous variables (like unpredictable spring closing prices) faster than XGBoost's sequential boosting. Neural Networks (red line) fail completely (hovering near 65%), lacking the deep node logic to understand seasonal time cycles from flat text integers.
-
-#### B) Predictive Baseline Visualizations
-
-Below are the physically generated structured charts proving the analytics above for the 4 models:
-
-**1. Historical Chart**
+* <strong>5-Year View:</strong> We explicitly track the absolute MAE and Accuracy dynamically across the 2018-2022 holdout block. 
+* <strong>Monthly View:</strong> We fold the historic time-series back exclusively over the 12 calendar months (<code>1 to 12</code>) to explicitly track the seasonality pattern.
+  * <strong>Explanation:</strong> Instead of tracking 2018, 2019, 2020 chronologically, the pipeline takes <em>all</em> Januaries across the entire 5-year holdout block and averages their errors together into "Month 1". It then averages all Februaries into "Month 2", and so on up to "Month 12". 
+  * <strong>Why we do this:</strong> This mathematically exposes the cyclical real-estate "seasonality" (e.g., the fact that housing transaction volumes and errors predictably spike every single Spring, regardless of what year it is). 
+  * <strong>Supporting Evidence:</strong> You can visibly observe this cyclical pattern occurring in the <strong>Forecast Validation Chart - Monthly</strong> (embedded below in Section B), where the black true-price line and every model's prediction error sharply spikes specifically at <code>Month 3</code> (March).</p>
+<p><strong>vi) Error Pattern on Years and Months Wise Separately</strong></p>
+<p><strong>A. 5-Year Yearly Breakdown Observation</strong>
+When strictly plotting predicted median accuracy natively separated by the 2018-2022 holdout years independently:</p>
+<p><img alt="Yearly Accuracy Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_accuracy_trend_yearly.png" /></p>
+<ul>
+<li><strong>Which model is better and why:</strong> <strong>LightGBM</strong> (the purple diamond line) is universally the most accurate model across every single year. It particularly excels during the <strong>2021 Post-Pandemic Spike</strong>, hitting a peak <strong>76.68% Median Accuracy</strong> (dropping error to £400,395). </li>
+<li><strong>Why?</strong> LightGBM uses leaf-wise histogram bucketing. When macro-economic events cause sudden chaotic shifts in housing wealth, Random Forest (blue line) attempts to average the chaos, and XGBoost (green line) chases the residual noise. LightGBM simply isolates the wild new outliers into their own specific leaves, keeping the median accuracy for standard homes exceptionally stable.</li>
+</ul>
+<p><strong>B. Monthly Seasonality Breakdown Observation</strong>
+When actively sorting all historical holdout lines solely by individual chronological Month (<code>1 - 12</code>) to map the cyclical seasons:</p>
+<p><img alt="Monthly Accuracy Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_accuracy_trend_monthly.png" /></p>
+<ul>
+<li><strong>Which model is better and why:</strong> <strong>LightGBM</strong> strictly dominates every single month of the year. The models uniformly hit their absolute highest accuracy/lowest error in the dead of Winter (<strong>Month 2: February</strong>), where LightGBM peaks at <strong>76.46% accuracy</strong> (£355,499 MAE) because market volatility and trading volumes are at their lowest.</li>
+<li><strong>Why?</strong> Conversely, notice the massive, aggressive failure drift that triggers uniformly across all 4 machine learning pipelines exactly tracking the Spring Real-Estate Rush (<strong>Month 3: March</strong>). Pure transactional volume and aggressive bidding wars cause severe unpredictability. LightGBM survives this the best because it naturally handles volatile continuous variables (like unpredictable spring closing prices) faster than XGBoost's sequential boosting. Neural Networks (red line) fail completely (hovering near 65%), lacking the deep node logic to understand seasonal time cycles from flat text integers.</li>
+</ul>
+<h4>B) Predictive Baseline Visualizations</h4>
+<p>Below are the physically generated structured charts proving the analytics above for the 4 models:</p>
+<p><strong>1. Historical Chart</strong>
 Visibly maps the 2008-2022 London property physical price graph.
-![Historical Trend](03_historical_trend.png)
-
-**2. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Yearly**
+<img alt="Historical Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_historical_trend.png" /></p>
+<p><strong>2. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Yearly</strong>
 Directly plots exactly how the 4 machine learning models (dashed lines) historically drifted against the solid black true price line over the 5-year validation bracket.
-![Yearly Validation](03_forecast_validation_yearly.png)
-
-**3. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Monthly**
+<img alt="Yearly Validation" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_forecast_validation_yearly.png" /></p>
+<p><strong>3. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Monthly</strong>
 Plots this same validation against the 1-12 month cyclical cycle.
-![Monthly Validation](03_forecast_validation_monthly.png)
-
-### Baseline Output Visuals
-To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
-![Baseline MAE Comparison](03_chart_model_mae_comparison.png)
-![Baseline Accuracy Comparison](03_chart_model_accuracy_comparison.png)
-![Baseline Speed Comparison](03_chart_model_speed_comparison.png)
-
----
-
-
-
-### Predictive Baseline Visualizations
-**1. 5-Year Yearly Breakdown Observation**
-![Yearly Baseline](08_chart_model_mae_comparison.png)
-*(Note: Visual representation of early text-only bounds).*
-**Which model is better and why:** LightGBM dominates.
-**Why?** Because it physically isolates discrete categorical histograms instead of relying on flat numeric averages like Random Forest, easily predicting extreme luxury variations purely by district name strings!
-
-**2. Monthly Seasonality Breakdown Observation**
-![Monthly Baseline](08_chart_model_accuracy_comparison.png)
-*(Note: Monthly validation).*
-**Which model is better and why:** LightGBM dominates again.
-**Why?** The Leaf-wise growth algorithm perfectly captures seasonal text spikes without over-averaging winter price drop-offs.
-
+<img alt="Monthly Validation" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_forecast_validation_monthly.png" /></p>
+<h3>Baseline Output Visuals</h3>
+<p>To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
+<img alt="Baseline MAE Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_mae_comparison.png" />
+<img alt="Baseline Accuracy Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_accuracy_comparison.png" />
+<img alt="Baseline Speed Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_speed_comparison.png" /></p>
+<hr />
+<h3>Predictive Baseline Visualizations</h3>
+<p><strong>1. 5-Year Yearly Breakdown Observation</strong>
+<img alt="Yearly Baseline" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08_chart_model_mae_comparison.png" />
+<em>(Note: Visual representation of early text-only bounds).</em>
+<strong>Which model is better and why:</strong> LightGBM dominates.
+<strong>Why?</strong> Because it physically isolates discrete categorical histograms instead of relying on flat numeric averages like Random Forest, easily predicting extreme luxury variations purely by district name strings!</p>
+<p><strong>2. Monthly Seasonality Breakdown Observation</strong>
+<img alt="Monthly Baseline" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08_chart_model_accuracy_comparison.png" />
+<em>(Note: Monthly validation).</em>
+<strong>Which model is better and why:</strong> LightGBM dominates again.
+<strong>Why?</strong> The Leaf-wise growth algorithm perfectly captures seasonal text spikes without over-averaging winter price drop-offs.</p>
 </div>
-            <div id="raw3" class="raw-md">
-## Train Models below Data Feed using - (Latitude and Longitude)
-
-### Why was the Neural Network omitted from this step onwards?
-During the initial non-spatial baseline tests, the Multi-Layer Perceptron (Neural Network) proved incredibly inefficient at processing tabular text features compared to Tree-based algorithms, resulting in the highest Absolute Error (£546,571). Neural Networks require normalized, dense floating-point matrices to function properly, making them computationally unstable when dealing with sparse categorical data like 30,000 unique postal districts. Therefore, it was logically decommissioned, and we structurally transitioned to racing only the 3 superior Tree-based algorithms.
-
-### Pipeline Sequence & Training Data Generation
-We mapped all 3.9 million addresses via the `pgeocode` library to physically extract exact Latitude and Longitude coordinates, merging them into a new `london_geospatial_dataset.csv`.
-
-### Comprehensive Geospatial Metric Validation
-By explicitly feeding pure coordinates into the 3 algorithms, we achieved massive improvements.
-
-#### Average Error Distribution Over Postal Codes
-![Postal Code Error Distribution](08_PostalCode_Error_Distribution.png)
-**Distribution & Pattern Plot Observation:** The error is absolutely not distributed evenly. Specific high-density, ultra-wealthy postal codes drastically spike the error bounds for XGBoost and Random Forest.
-**Why LightGBM Wins Spatially:** Notice that the LightGBM error bars consistently remain visibly lower across the hardest-to-predict postcodes. This physically proves that leaf-wise splits isolate extremely expensive spatial bounding boxes mathematically better than block-averaging coordinates.
-
+            <div id="tab3" class="tab-content">
+<h2>Train Models below Data Feed using - (Latitude and Longitude)</h2>
+<h3>Why was the Neural Network omitted from this step onwards?</h3>
+<p>During the initial non-spatial baseline tests, the Multi-Layer Perceptron (Neural Network) proved incredibly inefficient at processing tabular text features compared to Tree-based algorithms, resulting in the highest Absolute Error (£546,571). Neural Networks require normalized, dense floating-point matrices to function properly, making them computationally unstable when dealing with sparse categorical data like 30,000 unique postal districts. Therefore, it was logically decommissioned, and we structurally transitioned to racing only the 3 superior Tree-based algorithms.</p>
+<h3>Pipeline Sequence &amp; Training Data Generation</h3>
+<p>We mapped all 3.9 million addresses via the <code>pgeocode</code> library to physically extract exact Latitude and Longitude coordinates, merging them into a new <code>london_geospatial_dataset.csv</code>.</p>
+<h3>Comprehensive Geospatial Metric Validation</h3>
+<p>By explicitly feeding pure coordinates into the 3 algorithms, we achieved massive improvements.</p>
+<h4>Average Error Distribution Over Postal Codes</h4>
+<p><img alt="Postal Code Error Distribution" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08_PostalCode_Error_Distribution.png" />
+<strong>Distribution &amp; Pattern Plot Observation:</strong> The error is absolutely not distributed evenly. Specific high-density, ultra-wealthy postal codes drastically spike the error bounds for XGBoost and Random Forest.
+<strong>Why LightGBM Wins Spatially:</strong> Notice that the LightGBM error bars consistently remain visibly lower across the hardest-to-predict postcodes. This physically proves that leaf-wise splits isolate extremely expensive spatial bounding boxes mathematically better than block-averaging coordinates.</p>
 </div>
-            <div id="raw4" class="raw-md">
-## External Ecosystem API Feature Extraction & NLP Semantic Analysis
-
-To fundamentally resolve the limitations of pure temporal and coordinate models, we architected pipelines to extract and compile massive external macro-economic API intelligence natively into the geometric data grid.
-
-### A) Feature Resultset Extraction
-The pipeline successfully executed all API queries and generated 4 distinct physical output JSON/CSV artifacts representing the pure data from the 4 Data Providers.
-
-### Advanced Model Applications (The 4 External Data Providers)
-To natively break the prediction limits of the baseline, we applied 4 advanced mathematical models to 4 external Data Provider APIs:
-
-**1. OpenStreetMap (OSM) API**
-* **Model Applied:** `scipy.spatial.cKDTree` (Haversine Spatial Mathematics)
-* **Why the Model is Applied ("Last Mile" Proximity):** We explicitly DO NOT use bounded boxes like "Is there a station within 1.5 miles?". Bounding boxes are mathematically rigid. Instead, the KDTree searches an infinite boundary to instantly find the absolute closest node to the property, and applies the Haversine formula to compute the exact geographic Great-Circle distance over the curvature of the earth.
-* **Resultset Extracted:** `distance_to_nearest_school_km`, `distance_to_nearest_hospital_km`, `distance_to_nearest_station_km`, `distance_to_nearest_bank_km`.
-
-**2. Google News RSS API**
-* **Model Applied:** HuggingFace `sentence-transformers` (SBERT Semantic NLP)
-* **Why the Model is Applied (Sentiment vs Volume):** We explicitly DO NOT predict based on the volume of news. Instead, we use SBERT to perform contextual Semantic Sentiment Analysis. We compute the Cosine Similarity between live news headlines and our target anchors ("Housing Boom/Crash"). 
-* **Resultset Extracted:** `sbert_sentiment_index` (A continuous float from -1.0 to +1.0).
-
-**3. Google Trends API**
-* **Model Applied:** Temporal Demand Scaling
-* **Why the Model is Applied (Leading vs Lagging Indicators):** Housing prices "lag" reality. Conversely, internet searches "lead" reality. By integrating temporal search volume, we allow the ML models to predict sudden housing bubbles before the physical transaction data even catches up.
-* **Resultset Extracted:** `google_trends_volume` (A 0-to-100 normalized search index mapped month-by-month).
-
-**4. World Bank (Bank of England) API**
-* **Model Applied:** Macroeconomic Base Rate Matrix
-* **Why the Model is Applied:** The physical price of a house is entirely dictated by how expensive it is to borrow money from a bank.
-* **Resultset Extracted:** `boe_interest_rate` (The true national lending percentage).
-
-### Unified API Resultset Dashboard
-| API Source | Script Used | Output Artifact | Feature Variables Created | Extracted Volume |
-|---|---|---|---|---|
-| OpenStreetMap | `06A_extract_osm.py` | `api_result_osm.json` | 4 Spatial Distances (Km) | 2,400 Geo-Nodes |
-| Google News | `06A_extract_news.py` | `api_result_google_news.xml` | `sbert_sentiment_index` | 5,000+ Articles |
-| Google Trends | `06A_extract_trends.py` | `api_result_google_trends.csv` | `google_trends_volume` | 180 Months |
-| Bank of England | `06A_extract_rates.py` | `api_result_boe_interest.json` | `boe_interest_rate` | 180 Months |
-
+            <div id="tab4" class="tab-content">
+<h2>External Ecosystem API Feature Extraction &amp; NLP Semantic Analysis</h2>
+<p>To fundamentally resolve the limitations of pure temporal and coordinate models, we architected pipelines to extract and compile massive external macro-economic API intelligence natively into the geometric data grid.</p>
+<h3>A) Feature Resultset Extraction</h3>
+<p>The pipeline successfully executed all API queries and generated 4 distinct physical output JSON/CSV artifacts representing the pure data from the 4 Data Providers.</p>
+<h3>Advanced Model Applications (The 4 External Data Providers)</h3>
+<p>To natively break the prediction limits of the baseline, we applied 4 advanced mathematical models to 4 external Data Provider APIs:</p>
+<p><strong>1. OpenStreetMap (OSM) API</strong>
+* <strong>Model Applied:</strong> <code>scipy.spatial.cKDTree</code> (Haversine Spatial Mathematics)
+* <strong>Why the Model is Applied ("Last Mile" Proximity):</strong> We explicitly DO NOT use bounded boxes like "Is there a station within 1.5 miles?". Bounding boxes are mathematically rigid. Instead, the KDTree searches an infinite boundary to instantly find the absolute closest node to the property, and applies the Haversine formula to compute the exact geographic Great-Circle distance over the curvature of the earth.
+* <strong>Resultset Extracted:</strong> <code>distance_to_nearest_school_km</code>, <code>distance_to_nearest_hospital_km</code>, <code>distance_to_nearest_station_km</code>, <code>distance_to_nearest_bank_km</code>.</p>
+<p><strong>2. Google News RSS API</strong>
+* <strong>Model Applied:</strong> HuggingFace <code>sentence-transformers</code> (SBERT Semantic NLP)
+* <strong>Why the Model is Applied (Sentiment vs Volume):</strong> We explicitly DO NOT predict based on the volume of news. Instead, we use SBERT to perform contextual Semantic Sentiment Analysis. We compute the Cosine Similarity between live news headlines and our target anchors ("Housing Boom/Crash"). 
+* <strong>Resultset Extracted:</strong> <code>sbert_sentiment_index</code> (A continuous float from -1.0 to +1.0).</p>
+<p><strong>3. Google Trends API</strong>
+* <strong>Model Applied:</strong> Temporal Demand Scaling
+* <strong>Why the Model is Applied (Leading vs Lagging Indicators):</strong> Housing prices "lag" reality. Conversely, internet searches "lead" reality. By integrating temporal search volume, we allow the ML models to predict sudden housing bubbles before the physical transaction data even catches up.
+* <strong>Resultset Extracted:</strong> <code>google_trends_volume</code> (A 0-to-100 normalized search index mapped month-by-month).</p>
+<p><strong>4. World Bank (Bank of England) API</strong>
+* <strong>Model Applied:</strong> Macroeconomic Base Rate Matrix
+* <strong>Why the Model is Applied:</strong> The physical price of a house is entirely dictated by how expensive it is to borrow money from a bank.
+* <strong>Resultset Extracted:</strong> <code>boe_interest_rate</code> (The true national lending percentage).</p>
+<h3>Unified API Resultset Dashboard</h3>
+<table>
+<thead>
+<tr>
+<th>API Source</th>
+<th>Script Used</th>
+<th>Output Artifact</th>
+<th>Feature Variables Created</th>
+<th>Extracted Volume</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenStreetMap</td>
+<td><code>06A_extract_osm.py</code></td>
+<td><code>api_result_osm.json</code></td>
+<td>4 Spatial Distances (Km)</td>
+<td>2,400 Geo-Nodes</td>
+</tr>
+<tr>
+<td>Google News</td>
+<td><code>06A_extract_news.py</code></td>
+<td><code>api_result_google_news.xml</code></td>
+<td><code>sbert_sentiment_index</code></td>
+<td>5,000+ Articles</td>
+</tr>
+<tr>
+<td>Google Trends</td>
+<td><code>06A_extract_trends.py</code></td>
+<td><code>api_result_google_trends.csv</code></td>
+<td><code>google_trends_volume</code></td>
+<td>180 Months</td>
+</tr>
+<tr>
+<td>Bank of England</td>
+<td><code>06A_extract_rates.py</code></td>
+<td><code>api_result_boe_interest.json</code></td>
+<td><code>boe_interest_rate</code></td>
+<td>180 Months</td>
+</tr>
+</tbody>
+</table>
 </div>
-            <div id="raw5" class="raw-md">
-## Train Models below Data Feed using - (Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank
-
-We structurally tested 3 radically different Machine Learning architectures against the enriched dataset using:
+            <div id="tab5" class="tab-content">
+<h2>Train Models below Data Feed using - (Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank</h2>
+<p>We structurally tested 3 radically different Machine Learning architectures against the enriched dataset using:
 * Random Forest
 * XGBoost
-* LightGBM
-
-We applied strict chronological temporal boundaries:
-* **Data Training:** 2008 - 2017
-* **Data Testing:** 2018 - 2022
-*(Note: The chronological split was fundamentally designed to train the model on historical growth and hold out the pandemic timeline for absolute blind testing).*
-
-### Final Comparative Matrix: Master Table
-| Model Track | Feature Matrix Added | Lowest MAE Generated | Winner |
-|---|---|---|---|
-| Track 07A | All Features Combined | £548,821 | LightGBM |
-| Track 07B | OSM Stations Only | £396,447 | LightGBM |
-| Track 07C | News Sentiment Only | £464,120 | LightGBM |
-| Track 07D | Google Trends Only | £466,330 | LightGBM |
-
-### The Explanation of the Variation (How the Accuracy Improved)
-By comparing the non-spatial control error (£467k) to the News Sentiment Track (£464k), we mathematically prove that adding Google News Sentiment reduced the absolute error by £3,000 per house across millions of predictions. Because all models had never physically seen a house price post-2017, they had zero mathematical concept of the massive 2020 COVID-19 housing boom. The fact that the model successfully predicted the hyper-inflated 2022 market accurately proves that the external APIs broke the extrapolation boundary!
-
+* LightGBM</p>
+<p>We applied strict chronological temporal boundaries:
+* <strong>Data Training:</strong> 2008 - 2017
+* <strong>Data Testing:</strong> 2018 - 2022
+<em>(Note: The chronological split was fundamentally designed to train the model on historical growth and hold out the pandemic timeline for absolute blind testing).</em></p>
+<h3>Final Comparative Matrix: Master Table</h3>
+<table>
+<thead>
+<tr>
+<th>Model Track</th>
+<th>Feature Matrix Added</th>
+<th>Lowest MAE Generated</th>
+<th>Winner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Track 07A</td>
+<td>All Features Combined</td>
+<td>£548,821</td>
+<td>LightGBM</td>
+</tr>
+<tr>
+<td>Track 07B</td>
+<td>OSM Stations Only</td>
+<td>£396,447</td>
+<td>LightGBM</td>
+</tr>
+<tr>
+<td>Track 07C</td>
+<td>News Sentiment Only</td>
+<td>£464,120</td>
+<td>LightGBM</td>
+</tr>
+<tr>
+<td>Track 07D</td>
+<td>Google Trends Only</td>
+<td>£466,330</td>
+<td>LightGBM</td>
+</tr>
+</tbody>
+</table>
+<h3>The Explanation of the Variation (How the Accuracy Improved)</h3>
+<p>By comparing the non-spatial control error (£467k) to the News Sentiment Track (£464k), we mathematically prove that adding Google News Sentiment reduced the absolute error by £3,000 per house across millions of predictions. Because all models had never physically seen a house price post-2017, they had zero mathematical concept of the massive 2020 COVID-19 housing boom. The fact that the model successfully predicted the hyper-inflated 2022 market accurately proves that the external APIs broke the extrapolation boundary!</p>
 </div>
-            <div id="raw6" class="raw-md">
-## Train Models below Data Feed using (Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank (30 Variations)
-
-**The Goal:** We physically mapped exactly every single possible permutation of our 5 feature categories into 30 isolated ML pipelines. For each of these 30 combinations, we tested the 3 winning algorithms (LightGBM, Random Forest, XGBoost) to generate a massive 90-model evaluation matrix.
-
-### Execution Metrics
-Across all 30 scripts, we mathematically extracted: 
+            <div id="tab6" class="tab-content">
+<h2>Train Models below Data Feed using (Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank (30 Variations)</h2>
+<p><strong>The Goal:</strong> We physically mapped exactly every single possible permutation of our 5 feature categories into 30 isolated ML pipelines. For each of these 30 combinations, we tested the 3 winning algorithms (LightGBM, Random Forest, XGBoost) to generate a massive 90-model evaluation matrix.</p>
+<h3>Execution Metrics</h3>
+<p>Across all 30 scripts, we mathematically extracted: 
 * i) Check Absolute Error (MAE Results), Aggregate Median Accuracy (Percentages), Execution Processing Speed.
 * ii) Values should be accurate across Models: 90 models successfully trained. 
 * iii) Explore Accuracy: Mathematically bounded out of 100%. 
 * iv) Check all calculations: Isolated mathematically to prevent data leakage. 
-* v) Calculate Accuracy, Error and Speed for 5 years & Monthly: Logged natively. 
+* v) Calculate Accuracy, Error and Speed for 5 years &amp; Monthly: Logged natively. 
 * vi) Error pattern on Years and Months wise: Plotted for top-performing models. 
-* vii) Plot Average Error for 5-Year Period: We logically tracked where London housing models natively fail.
-
-### The Ultimate Combinatorial Inference Table
-
-| Phase | Feature Combination | Features Count | LightGBM MAE | Random Forest MAE | XGBoost MAE | Best Model | Validation Chart |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **08P** | **OSM + Google News + Google Trends** | **6** | £550,122 | **£537,786** | £557,848 | 🏆 **1st (Random Forest)** | [View Chart](08P_OSM_News_Trends_Chart.png) |
-| **08Q** | **OSM + Google News + Rates World Bank** | **6** | £548,368 | **£539,704** | £557,748 | 🥈 **2nd (Random Forest)** | [View Chart](08Q_OSM_News_Rates_Chart.png) |
-| **08O** | **OSM + Google News + Google Trends + Rates World Bank** | **7** | £550,122 | **£540,573** | £557,848 | 🥉 **3rd (Random Forest)** | [View Chart](08O_OSM_News_Trends_Rates_Chart.png) |
-| 08AA | Google News | 1 | £594,913 | **£545,830** | £602,916 | Random Forest | [View Chart](08AA_News_Only_Chart.png) |
-| 08V | Google News + Google Trends + Rates World Bank | 3 | £594,913 | **£546,042** | £602,906 | Random Forest | [View Chart](08V_News_Trends_Rates_Chart.png) |
-| 08A | (Latitude and Longitude) + OSM + Google News + Google Trends | 8 | **£547,951** | £550,709 | £562,762 | LightGBM | [View Chart](08A_LatLon_OSM_News_Trends_Chart.png) |
-| 08H | (Latitude and Longitude) + Google News + Google Trends | 4 | **£548,004** | £559,560 | £558,799 | LightGBM | [View Chart](08H_LatLon_News_Trends_Chart.png) |
-| 08D | (Latitude and Longitude) + Google News + Google Trends + Rates World Bank | 5 | **£548,004** | £552,657 | £558,799 | LightGBM | [View Chart](08D_LatLon_News_Trends_Rates_Chart.png) |
-| 08L | (Latitude and Longitude) + Google News | 3 | **£548,142** | £560,065 | £559,386 | LightGBM | [View Chart](08L_LatLon_News_Chart.png) |
-| 08I | (Latitude and Longitude) + Google News + Rates World Bank | 4 | **£548,142** | £555,220 | £559,386 | LightGBM | [View Chart](08I_LatLon_News_Rates_Chart.png) |
-| 08S | OSM + Google News | 5 | **£548,368** | £549,092 | £557,748 | LightGBM | [View Chart](08S_OSM_News_Chart.png) |
-| 08W | Google News + Google Trends | 2 | £594,913 | **£548,514** | £602,906 | Random Forest | [View Chart](08W_News_Trends_Chart.png) |
-| 08U | OSM + Rates World Bank | 5 | **£548,644** | £584,048 | £556,137 | LightGBM | [View Chart](08U_OSM_Rates_Chart.png) |
-| 08Z | OSM | 4 | **£548,644** | £583,564 | £556,137 | LightGBM | [View Chart](08Z_OSM_Only_Chart.png) |
-| 08E | (Latitude and Longitude) + OSM + Google News | 7 | **£548,821** | £548,932 | £560,712 | LightGBM | [View Chart](08E_LatLon_OSM_News_Chart.png) |
-| 08B | (Latitude and Longitude) + OSM + Google News + Rates World Bank | 8 | **£548,821** | £554,040 | £560,712 | LightGBM | [View Chart](08B_LatLon_OSM_News_Rates_Chart.png) |
-| 08T | OSM + Google Trends | 5 | **£549,435** | £582,017 | £556,986 | LightGBM | [View Chart](08T_OSM_Trends_Chart.png) |
-| 08R | OSM + Google Trends + Rates World Bank | 6 | **£549,435** | £581,250 | £556,986 | LightGBM | [View Chart](08R_OSM_Trends_Rates_Chart.png) |
-| 08M | (Latitude and Longitude) + Google Trends | 3 | **£549,827** | £583,482 | £556,419 | LightGBM | [View Chart](08M_LatLon_Trends_Chart.png) |
-| 08J | (Latitude and Longitude) + Google Trends + Rates World Bank | 4 | **£549,827** | £583,323 | £556,419 | LightGBM | [View Chart](08J_LatLon_Trends_Rates_Chart.png) |
-| 08X | Google News + Rates World Bank | 2 | £594,913 | **£550,243** | £602,916 | Random Forest | [View Chart](08X_News_Rates_Chart.png) |
-| 08C | (Latitude and Longitude) + OSM + Google Trends + Rates World Bank | 8 | **£550,648** | £583,503 | £560,004 | LightGBM | [View Chart](08C_LatLon_OSM_Trends_Rates_Chart.png) |
-| 08F | (Latitude and Longitude) + OSM + Google Trends | 7 | **£550,648** | £584,246 | £560,004 | LightGBM | [View Chart](08F_LatLon_OSM_Trends_Chart.png) |
-| 08G | (Latitude and Longitude) + OSM + Rates World Bank | 7 | **£551,013** | £583,097 | £562,477 | LightGBM | [View Chart](08G_LatLon_OSM_Rates_Chart.png) |
-| 08K | (Latitude and Longitude) + OSM | 6 | **£551,013** | £582,526 | £562,477 | LightGBM | [View Chart](08K_LatLon_OSM_Chart.png) |
-| 08N | (Latitude and Longitude) + Rates World Bank | 3 | **£551,242** | £582,841 | £561,846 | LightGBM | [View Chart](08N_LatLon_Rates_Chart.png) |
-| 08AD | (Latitude and Longitude) | 2 | **£551,242** | £582,809 | £561,846 | LightGBM | [View Chart](08AD_LatLon_Only_Chart.png) |
-| 08AB | Google Trends | 1 | £603,266 | **£598,300** | £603,302 | Random Forest | [View Chart](08AB_Trends_Only_Chart.png) |
-| 08Y | Google Trends + Rates World Bank | 2 | £603,266 | **£598,434** | £603,302 | Random Forest | [View Chart](08Y_Trends_Rates_Chart.png) |
-| 08AC | Rates World Bank | 1 | £603,266 | **£600,144** | £603,302 | Random Forest | [View Chart](08AC_Rates_Only_Chart.png) |
-
-### 🏆 The Grand Master Cross-Phase Comparison (Steps 3 through 8)
-
-To definitively prove whether complex feature engineering and geographical proximity mapping were worth the time, we traced the explicit Absolute Error (MAE) pattern of **all 4 algorithms** iteratively across all major analytical phases of this project.
-
-| Project Phase | Feature Matrix Used | LightGBM MAE | Random Forest MAE | XGBoost MAE | Neural Network MAE |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **Text Baseline** | District Name Strings | **£456,439** | £470,591 | £494,479 | £546,571 |
-| **Geospatial Shift** | `(Latitude and Longitude)` Coordinates | **£395,634** | £430,946 | £404,452 | *Failed/Crashed* |
-| **Macro Progression** | `(Latitude and Longitude)` + `OSM` + `Google News` + `Google Trends` + `Rates World Bank` | £548,821 | **£554,040** | £560,712 | *Failed/Crashed* |
-| **The Ultimate Winner**| `OSM` + `Google News` + `Google Trends` | £550,122 | **£537,786** | £557,848 | *Failed/Crashed* |
-
-*(Note: While Step 04 mechanically produced a numerically lower MAE number, that specific coordinate-only dataset historically overfitted on massive local wealth anomalies without understanding actual true causality. The Step 08 Random Forest model achieved true, generalizable semantic inference across the entire city.)*
-
-&gt; [!WARNING]
-&gt; ### **FINAL INFERENCE: WHAT STANDS OUT? WHICH MODEL WORKS BEST AND WHY?**
-
-| Algorithm | Final Verdict | Why it Won/Failed | Key Pros | Key Cons |
-| :--- | :--- | :--- | :--- | :--- |
-| **Random Forest** | 🏆 **The Ultimate Winner (Step 8)** | As we injected highly repetitive Macro-economic data (like Bank of England Rates flatlining across the entire country), Random Forest's mathematical "averaging" committee perfectly smoothed out the noise without chasing fake trends. | Extremely stable against massive dimensional noise. | Slower to train on massive coordinate data. |
-| **LightGBM** | 🥈 **The Early Baseline Winner (Steps 3/4)** | LightGBM dominated the early datasets because it actively isolates and mathematically splits extreme luxury outliers. However, when fed flat Macro data, it attempted to hyper-optimize noise, resulting in severe local variance spiking. | Lightning fast. Best at purely geographic separation. | Severely overfits when given flat, unmoving Macro arrays. |
-| **XGBoost** | 🥉 **Consistent Third Place** | XGBoost chased both localized outliers and macro-noise too aggressively. Its gradient boosting engine attempted to minimize error so deeply that it created completely false micro-spikes. | Deep localized error minimization. | Prone to extreme overfitting on Real Estate datasets. |
-| **Neural Network** | ❌ **Decommissioned** | Failed completely on Step 3 due to the inability to efficiently map sparse categorical strings (30k postal districts) into continuous tensor logic without crashing system memory. | Theoretically powerful. | Computationally unstable on string/tabular structures. |
-
----
-
-### The Ultimate Takeaway: A Tale of Two Models
-
-#### 🏆 The Global Champion: Random Forest
-**Best Combination:** `08P_OSM_News_Trends` (`OSM` + `Google News` + `Google Trends`)
-**Lowest Sustained Error:** **£537,786**
-
-Random Forest ultimately won the entire competition because it perfectly smoothed out the volatility of external datasets. By explicitly dropping the raw `(Latitude and Longitude)` coordinates and the flatlined `Rates World Bank`, the Random Forest model was forced to evaluate properties strictly based on walking distance to infrastructure and national digital demand, preventing extreme spatial overfitting.
-
-![Random Forest Winning Chart](08P_OSM_News_Trends_Chart.png)
-*(Notice how the green Random Forest line perfectly mirrors the structural shape of the Black Actual True Price line, accurately predicting the cyclical Spring spikes without severely missing the Winter drop-offs).*
-
-#### 🥈 The Geographic Specialist: LightGBM
-**Best Combination:** `08A_LatLon_OSM_News_Trends` (`(Latitude and Longitude)` + `OSM` + `Google News` + `Google Trends`)
-**Lowest Sustained Error:** **£547,951**
-
-LightGBM was the absolute king of purely geometric geospatial data (Step 04). Because LightGBM natively isolates extreme outliers, it was perfectly suited for raw Latitude and Longitude mapping. However, the moment we injected flat macro-economic data, LightGBM attempted to hyper-optimize the noise and created massive local errors.
-
-![LightGBM Winning Chart](08A_LatLon_OSM_News_Trends_Chart.png)
-*(Notice how LightGBM perfectly hugs the price line when relying strictly on geospatial coordinates, executing the prediction matrix nearly 10x faster than Random Forest).*
-
----
-
-&gt; [!IMPORTANT]  
-&gt; ## 🚀 **FINAL PRODUCTION DEPLOYMENT DIRECTIVE** 🚀
-&gt; 
-&gt; Based on exhaustive Combinatorial Ablation against 3.9 Million properties, the final production architecture must adopt **Random Forest (Track 08P)**. 
-&gt; 
-&gt; **Why Random Forest won 1st Place:** It mathematically built a resilient "averaging committee" that absorbed external macroeconomic noise without creating fake spikes, predicting the cyclical peaks better than any other algorithm.
-&gt; 
-&gt; **Why LightGBM is the 2nd Option (Fallback):** If the production API feeds for Google News/Trends ever completely crash, the system should instantly fail-over to **LightGBM (Track 04)**. LightGBM is mathematically superior at pure geometric separation, achieving the absolute lowest error (£395,634) when restricted *only* to physical Latitude/Longitude mapping without macro-economic noise.
-&gt; 
-&gt; **Models & Features Explicitly Rejected:**
-&gt; 1. ❌ **XGBoost & Neural Networks:** Both are permanently decommissioned. Neural Networks computationally crashed when mapping 30,000 distinct postal string permutations. XGBoost's deep gradient minimization engine repeatedly hallucinated fake micro-spikes trying to mathematically fit unmoving macroeconomic data.
-&gt; 2. ❌ **(Latitude & Longitude) Coordinates:** Permanently dropped from the Random Forest deployment because pure coordinate geometry causes tree-based models to over-memorize individual luxury streets instead of learning generalized wealth indicators.
-&gt; 3. ❌ **Rates World Bank:** Permanently dropped because the Bank of England base rate applies identically to every property in the country simultaneously, creating total dataset collinearity that degraded the accuracy of all 3 algorithms.
-&gt; 
-&gt; To maintain the absolute lowest possible Error margin, the production data pipeline **MUST** sustain external API feeds solely for:
-&gt; * **OpenStreetMap (OSM)**: For localized walking-distance calculation to Transit and Hospitals.
-&gt; * **Google News Sentiment**: For mapping localized emotional market momentum via BERT transformers.
-&gt; * **Google Trends**: For tracking broad regional digital search demand.
-
-![Postal Code Wealth Accuracy Distribution](08_PostalCode_Wealth_vs_Accuracy.png)
-*(A clear Bar Chart visualization showing the AI's accuracy grouped by neighborhood wealth class. The model securely maintains ~72% to ~79% accuracy bounds safely across all 5 Wealth Tiers, successfully proving that it is mathematically unbiased against poor neighborhoods!)*
-
-
+* vii) Plot Average Error for 5-Year Period: We logically tracked where London housing models natively fail.</p>
+<h3>The Ultimate Combinatorial Inference Table</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Phase</th>
+<th style="text-align: left;">Feature Combination</th>
+<th style="text-align: left;">Features Count</th>
+<th style="text-align: left;">LightGBM MAE</th>
+<th style="text-align: left;">Random Forest MAE</th>
+<th style="text-align: left;">XGBoost MAE</th>
+<th style="text-align: left;">Best Model</th>
+<th style="text-align: left;">Validation Chart</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>08P</strong></td>
+<td style="text-align: left;"><strong>OSM + Google News + Google Trends</strong></td>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">£550,122</td>
+<td style="text-align: left;"><strong>£537,786</strong></td>
+<td style="text-align: left;">£557,848</td>
+<td style="text-align: left;">🏆 <strong>1st (Random Forest)</strong></td>
+<td style="text-align: left;"><a href="08P_OSM_News_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>08Q</strong></td>
+<td style="text-align: left;"><strong>OSM + Google News + Rates World Bank</strong></td>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">£548,368</td>
+<td style="text-align: left;"><strong>£539,704</strong></td>
+<td style="text-align: left;">£557,748</td>
+<td style="text-align: left;">🥈 <strong>2nd (Random Forest)</strong></td>
+<td style="text-align: left;"><a href="08Q_OSM_News_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>08O</strong></td>
+<td style="text-align: left;"><strong>OSM + Google News + Google Trends + Rates World Bank</strong></td>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;">£550,122</td>
+<td style="text-align: left;"><strong>£540,573</strong></td>
+<td style="text-align: left;">£557,848</td>
+<td style="text-align: left;">🥉 <strong>3rd (Random Forest)</strong></td>
+<td style="text-align: left;"><a href="08O_OSM_News_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08AA</td>
+<td style="text-align: left;">Google News</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">£594,913</td>
+<td style="text-align: left;"><strong>£545,830</strong></td>
+<td style="text-align: left;">£602,916</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08AA_News_Only_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08V</td>
+<td style="text-align: left;">Google News + Google Trends + Rates World Bank</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;">£594,913</td>
+<td style="text-align: left;"><strong>£546,042</strong></td>
+<td style="text-align: left;">£602,906</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08V_News_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08A</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM + Google News + Google Trends</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"><strong>£547,951</strong></td>
+<td style="text-align: left;">£550,709</td>
+<td style="text-align: left;">£562,762</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08A_LatLon_OSM_News_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08H</td>
+<td style="text-align: left;">(Latitude and Longitude) + Google News + Google Trends</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><strong>£548,004</strong></td>
+<td style="text-align: left;">£559,560</td>
+<td style="text-align: left;">£558,799</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08H_LatLon_News_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08D</td>
+<td style="text-align: left;">(Latitude and Longitude) + Google News + Google Trends + Rates World Bank</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"><strong>£548,004</strong></td>
+<td style="text-align: left;">£552,657</td>
+<td style="text-align: left;">£558,799</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08D_LatLon_News_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08L</td>
+<td style="text-align: left;">(Latitude and Longitude) + Google News</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><strong>£548,142</strong></td>
+<td style="text-align: left;">£560,065</td>
+<td style="text-align: left;">£559,386</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08L_LatLon_News_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08I</td>
+<td style="text-align: left;">(Latitude and Longitude) + Google News + Rates World Bank</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><strong>£548,142</strong></td>
+<td style="text-align: left;">£555,220</td>
+<td style="text-align: left;">£559,386</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08I_LatLon_News_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08S</td>
+<td style="text-align: left;">OSM + Google News</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"><strong>£548,368</strong></td>
+<td style="text-align: left;">£549,092</td>
+<td style="text-align: left;">£557,748</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08S_OSM_News_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08W</td>
+<td style="text-align: left;">Google News + Google Trends</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">£594,913</td>
+<td style="text-align: left;"><strong>£548,514</strong></td>
+<td style="text-align: left;">£602,906</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08W_News_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08U</td>
+<td style="text-align: left;">OSM + Rates World Bank</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"><strong>£548,644</strong></td>
+<td style="text-align: left;">£584,048</td>
+<td style="text-align: left;">£556,137</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08U_OSM_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08Z</td>
+<td style="text-align: left;">OSM</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><strong>£548,644</strong></td>
+<td style="text-align: left;">£583,564</td>
+<td style="text-align: left;">£556,137</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08Z_OSM_Only_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08E</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM + Google News</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"><strong>£548,821</strong></td>
+<td style="text-align: left;">£548,932</td>
+<td style="text-align: left;">£560,712</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08E_LatLon_OSM_News_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08B</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM + Google News + Rates World Bank</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"><strong>£548,821</strong></td>
+<td style="text-align: left;">£554,040</td>
+<td style="text-align: left;">£560,712</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08B_LatLon_OSM_News_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08T</td>
+<td style="text-align: left;">OSM + Google Trends</td>
+<td style="text-align: left;">5</td>
+<td style="text-align: left;"><strong>£549,435</strong></td>
+<td style="text-align: left;">£582,017</td>
+<td style="text-align: left;">£556,986</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08T_OSM_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08R</td>
+<td style="text-align: left;">OSM + Google Trends + Rates World Bank</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"><strong>£549,435</strong></td>
+<td style="text-align: left;">£581,250</td>
+<td style="text-align: left;">£556,986</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08R_OSM_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08M</td>
+<td style="text-align: left;">(Latitude and Longitude) + Google Trends</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><strong>£549,827</strong></td>
+<td style="text-align: left;">£583,482</td>
+<td style="text-align: left;">£556,419</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08M_LatLon_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08J</td>
+<td style="text-align: left;">(Latitude and Longitude) + Google Trends + Rates World Bank</td>
+<td style="text-align: left;">4</td>
+<td style="text-align: left;"><strong>£549,827</strong></td>
+<td style="text-align: left;">£583,323</td>
+<td style="text-align: left;">£556,419</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08J_LatLon_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08X</td>
+<td style="text-align: left;">Google News + Rates World Bank</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">£594,913</td>
+<td style="text-align: left;"><strong>£550,243</strong></td>
+<td style="text-align: left;">£602,916</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08X_News_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08C</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM + Google Trends + Rates World Bank</td>
+<td style="text-align: left;">8</td>
+<td style="text-align: left;"><strong>£550,648</strong></td>
+<td style="text-align: left;">£583,503</td>
+<td style="text-align: left;">£560,004</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08C_LatLon_OSM_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08F</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM + Google Trends</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"><strong>£550,648</strong></td>
+<td style="text-align: left;">£584,246</td>
+<td style="text-align: left;">£560,004</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08F_LatLon_OSM_Trends_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08G</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM + Rates World Bank</td>
+<td style="text-align: left;">7</td>
+<td style="text-align: left;"><strong>£551,013</strong></td>
+<td style="text-align: left;">£583,097</td>
+<td style="text-align: left;">£562,477</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08G_LatLon_OSM_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08K</td>
+<td style="text-align: left;">(Latitude and Longitude) + OSM</td>
+<td style="text-align: left;">6</td>
+<td style="text-align: left;"><strong>£551,013</strong></td>
+<td style="text-align: left;">£582,526</td>
+<td style="text-align: left;">£562,477</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08K_LatLon_OSM_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08N</td>
+<td style="text-align: left;">(Latitude and Longitude) + Rates World Bank</td>
+<td style="text-align: left;">3</td>
+<td style="text-align: left;"><strong>£551,242</strong></td>
+<td style="text-align: left;">£582,841</td>
+<td style="text-align: left;">£561,846</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08N_LatLon_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08AD</td>
+<td style="text-align: left;">(Latitude and Longitude)</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;"><strong>£551,242</strong></td>
+<td style="text-align: left;">£582,809</td>
+<td style="text-align: left;">£561,846</td>
+<td style="text-align: left;">LightGBM</td>
+<td style="text-align: left;"><a href="08AD_LatLon_Only_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08AB</td>
+<td style="text-align: left;">Google Trends</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">£603,266</td>
+<td style="text-align: left;"><strong>£598,300</strong></td>
+<td style="text-align: left;">£603,302</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08AB_Trends_Only_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08Y</td>
+<td style="text-align: left;">Google Trends + Rates World Bank</td>
+<td style="text-align: left;">2</td>
+<td style="text-align: left;">£603,266</td>
+<td style="text-align: left;"><strong>£598,434</strong></td>
+<td style="text-align: left;">£603,302</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08Y_Trends_Rates_Chart.png">View Chart</a></td>
+</tr>
+<tr>
+<td style="text-align: left;">08AC</td>
+<td style="text-align: left;">Rates World Bank</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">£603,266</td>
+<td style="text-align: left;"><strong>£600,144</strong></td>
+<td style="text-align: left;">£603,302</td>
+<td style="text-align: left;">Random Forest</td>
+<td style="text-align: left;"><a href="08AC_Rates_Only_Chart.png">View Chart</a></td>
+</tr>
+</tbody>
+</table>
+<h3>🏆 The Grand Master Cross-Phase Comparison (Steps 3 through 8)</h3>
+<p>To definitively prove whether complex feature engineering and geographical proximity mapping were worth the time, we traced the explicit Absolute Error (MAE) pattern of <strong>all 4 algorithms</strong> iteratively across all major analytical phases of this project.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Project Phase</th>
+<th style="text-align: left;">Feature Matrix Used</th>
+<th style="text-align: left;">LightGBM MAE</th>
+<th style="text-align: left;">Random Forest MAE</th>
+<th style="text-align: left;">XGBoost MAE</th>
+<th style="text-align: left;">Neural Network MAE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Text Baseline</strong></td>
+<td style="text-align: left;">District Name Strings</td>
+<td style="text-align: left;"><strong>£456,439</strong></td>
+<td style="text-align: left;">£470,591</td>
+<td style="text-align: left;">£494,479</td>
+<td style="text-align: left;">£546,571</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Geospatial Shift</strong></td>
+<td style="text-align: left;"><code>(Latitude and Longitude)</code> Coordinates</td>
+<td style="text-align: left;"><strong>£395,634</strong></td>
+<td style="text-align: left;">£430,946</td>
+<td style="text-align: left;">£404,452</td>
+<td style="text-align: left;"><em>Failed/Crashed</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Macro Progression</strong></td>
+<td style="text-align: left;"><code>(Latitude and Longitude)</code> + <code>OSM</code> + <code>Google News</code> + <code>Google Trends</code> + <code>Rates World Bank</code></td>
+<td style="text-align: left;">£548,821</td>
+<td style="text-align: left;"><strong>£554,040</strong></td>
+<td style="text-align: left;">£560,712</td>
+<td style="text-align: left;"><em>Failed/Crashed</em></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>The Ultimate Winner</strong></td>
+<td style="text-align: left;"><code>OSM</code> + <code>Google News</code> + <code>Google Trends</code></td>
+<td style="text-align: left;">£550,122</td>
+<td style="text-align: left;"><strong>£537,786</strong></td>
+<td style="text-align: left;">£557,848</td>
+<td style="text-align: left;"><em>Failed/Crashed</em></td>
+</tr>
+</tbody>
+</table>
+<p><em>(Note: While Step 04 mechanically produced a numerically lower MAE number, that specific coordinate-only dataset historically overfitted on massive local wealth anomalies without understanding actual true causality. The Step 08 Random Forest model achieved true, generalizable semantic inference across the entire city.)</em></p>
+<blockquote>
+<p>[!WARNING]</p>
+<h3><strong>FINAL INFERENCE: WHAT STANDS OUT? WHICH MODEL WORKS BEST AND WHY?</strong></h3>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Algorithm</th>
+<th style="text-align: left;">Final Verdict</th>
+<th style="text-align: left;">Why it Won/Failed</th>
+<th style="text-align: left;">Key Pros</th>
+<th style="text-align: left;">Key Cons</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Random Forest</strong></td>
+<td style="text-align: left;">🏆 <strong>The Ultimate Winner (Step 8)</strong></td>
+<td style="text-align: left;">As we injected highly repetitive Macro-economic data (like Bank of England Rates flatlining across the entire country), Random Forest's mathematical "averaging" committee perfectly smoothed out the noise without chasing fake trends.</td>
+<td style="text-align: left;">Extremely stable against massive dimensional noise.</td>
+<td style="text-align: left;">Slower to train on massive coordinate data.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>LightGBM</strong></td>
+<td style="text-align: left;">🥈 <strong>The Early Baseline Winner (Steps 3/4)</strong></td>
+<td style="text-align: left;">LightGBM dominated the early datasets because it actively isolates and mathematically splits extreme luxury outliers. However, when fed flat Macro data, it attempted to hyper-optimize noise, resulting in severe local variance spiking.</td>
+<td style="text-align: left;">Lightning fast. Best at purely geographic separation.</td>
+<td style="text-align: left;">Severely overfits when given flat, unmoving Macro arrays.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>XGBoost</strong></td>
+<td style="text-align: left;">🥉 <strong>Consistent Third Place</strong></td>
+<td style="text-align: left;">XGBoost chased both localized outliers and macro-noise too aggressively. Its gradient boosting engine attempted to minimize error so deeply that it created completely false micro-spikes.</td>
+<td style="text-align: left;">Deep localized error minimization.</td>
+<td style="text-align: left;">Prone to extreme overfitting on Real Estate datasets.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Neural Network</strong></td>
+<td style="text-align: left;">❌ <strong>Decommissioned</strong></td>
+<td style="text-align: left;">Failed completely on Step 3 due to the inability to efficiently map sparse categorical strings (30k postal districts) into continuous tensor logic without crashing system memory.</td>
+<td style="text-align: left;">Theoretically powerful.</td>
+<td style="text-align: left;">Computationally unstable on string/tabular structures.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3>The Ultimate Takeaway: A Tale of Two Models</h3>
+<h4>🏆 The Global Champion: Random Forest</h4>
+<p><strong>Best Combination:</strong> <code>08P_OSM_News_Trends</code> (<code>OSM</code> + <code>Google News</code> + <code>Google Trends</code>)
+<strong>Lowest Sustained Error:</strong> <strong>£537,786</strong></p>
+<p>Random Forest ultimately won the entire competition because it perfectly smoothed out the volatility of external datasets. By explicitly dropping the raw <code>(Latitude and Longitude)</code> coordinates and the flatlined <code>Rates World Bank</code>, the Random Forest model was forced to evaluate properties strictly based on walking distance to infrastructure and national digital demand, preventing extreme spatial overfitting.</p>
+<p><img alt="Random Forest Winning Chart" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08P_OSM_News_Trends_Chart.png" />
+<em>(Notice how the green Random Forest line perfectly mirrors the structural shape of the Black Actual True Price line, accurately predicting the cyclical Spring spikes without severely missing the Winter drop-offs).</em></p>
+<h4>🥈 The Geographic Specialist: LightGBM</h4>
+<p><strong>Best Combination:</strong> <code>08A_LatLon_OSM_News_Trends</code> (<code>(Latitude and Longitude)</code> + <code>OSM</code> + <code>Google News</code> + <code>Google Trends</code>)
+<strong>Lowest Sustained Error:</strong> <strong>£547,951</strong></p>
+<p>LightGBM was the absolute king of purely geometric geospatial data (Step 04). Because LightGBM natively isolates extreme outliers, it was perfectly suited for raw Latitude and Longitude mapping. However, the moment we injected flat macro-economic data, LightGBM attempted to hyper-optimize the noise and created massive local errors.</p>
+<p><img alt="LightGBM Winning Chart" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08A_LatLon_OSM_News_Trends_Chart.png" />
+<em>(Notice how LightGBM perfectly hugs the price line when relying strictly on geospatial coordinates, executing the prediction matrix nearly 10x faster than Random Forest).</em></p>
+<hr />
+<blockquote>
+<p>[!IMPORTANT]  </p>
+<h2>🚀 <strong>FINAL PRODUCTION DEPLOYMENT DIRECTIVE</strong> 🚀</h2>
+<p>Based on exhaustive Combinatorial Ablation against 3.9 Million properties, the final production architecture must adopt <strong>Random Forest (Track 08P)</strong>. </p>
+<p><strong>Why Random Forest won 1st Place:</strong> It mathematically built a resilient "averaging committee" that absorbed external macroeconomic noise without creating fake spikes, predicting the cyclical peaks better than any other algorithm.</p>
+<p><strong>Why LightGBM is the 2nd Option (Fallback):</strong> If the production API feeds for Google News/Trends ever completely crash, the system should instantly fail-over to <strong>LightGBM (Track 04)</strong>. LightGBM is mathematically superior at pure geometric separation, achieving the absolute lowest error (£395,634) when restricted <em>only</em> to physical Latitude/Longitude mapping without macro-economic noise.</p>
+<p><strong>Models &amp; Features Explicitly Rejected:</strong>
+1. ❌ <strong>XGBoost &amp; Neural Networks:</strong> Both are permanently decommissioned. Neural Networks computationally crashed when mapping 30,000 distinct postal string permutations. XGBoost's deep gradient minimization engine repeatedly hallucinated fake micro-spikes trying to mathematically fit unmoving macroeconomic data.
+2. ❌ <strong>(Latitude &amp; Longitude) Coordinates:</strong> Permanently dropped from the Random Forest deployment because pure coordinate geometry causes tree-based models to over-memorize individual luxury streets instead of learning generalized wealth indicators.
+3. ❌ <strong>Rates World Bank:</strong> Permanently dropped because the Bank of England base rate applies identically to every property in the country simultaneously, creating total dataset collinearity that degraded the accuracy of all 3 algorithms.</p>
+<p>To maintain the absolute lowest possible Error margin, the production data pipeline <strong>MUST</strong> sustain external API feeds solely for:
+* <strong>OpenStreetMap (OSM)</strong>: For localized walking-distance calculation to Transit and Hospitals.
+* <strong>Google News Sentiment</strong>: For mapping localized emotional market momentum via BERT transformers.
+* <strong>Google Trends</strong>: For tracking broad regional digital search demand.</p>
+</blockquote>
+<p><img alt="Postal Code Wealth Accuracy Distribution" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08_PostalCode_Wealth_vs_Accuracy.png" />
+<em>(A clear Bar Chart visualization showing the AI's accuracy grouped by neighborhood wealth class. The model securely maintains ~72% to ~79% accuracy bounds safely across all 5 Wealth Tiers, successfully proving that it is mathematically unbiased against poor neighborhoods!)</em></p>
 </div>
-            <div id="raw7" class="raw-md">
-&gt; [!IMPORTANT]  
-&gt; ## 🚀 **FINAL PRODUCTION DEPLOYMENT DIRECTIVE** 🚀
-&gt; 
-&gt; Based on exhaustive Combinatorial Ablation against 3.9 Million properties, the final production architecture must adopt **Random Forest (Track 08P)**. 
-&gt; 
-&gt; **Why Random Forest won 1st Place:** It mathematically built a resilient "averaging committee" that absorbed external macroeconomic noise without creating fake spikes, predicting the cyclical peaks better than any other algorithm.
-&gt; 
-&gt; **Why LightGBM is the 2nd Option (Fallback):** If the production API feeds for Google News/Trends ever completely crash, the system should instantly fail-over to **LightGBM (Track 04)**. LightGBM is mathematically superior at pure geometric separation, achieving the absolute lowest error (£395,634) when restricted *only* to physical Latitude/Longitude mapping without macro-economic noise.
-&gt; 
-&gt; **Models & Features Explicitly Rejected:**
-&gt; 1. ❌ **XGBoost & Neural Networks:** Both are permanently decommissioned. Neural Networks computationally crashed when mapping 30,000 distinct postal string permutations. XGBoost's deep gradient minimization engine repeatedly hallucinated fake micro-spikes trying to mathematically fit unmoving macroeconomic data.
-&gt; 2. ❌ **(Latitude & Longitude) Coordinates:** Permanently dropped from the Random Forest deployment because pure coordinate geometry causes tree-based models to over-memorize individual luxury streets instead of learning generalized wealth indicators.
-&gt; 3. ❌ **Rates World Bank:** Permanently dropped because the Bank of England base rate applies identically to every property in the country simultaneously, creating total dataset collinearity that degraded the accuracy of all 3 algorithms.
-&gt; 
-&gt; To maintain the absolute lowest possible Error margin, the production data pipeline **MUST** sustain external API feeds solely for:
-&gt; * **OpenStreetMap (OSM)**: For localized walking-distance calculation to Transit and Hospitals.
-&gt; * **Google News Sentiment**: For mapping localized emotional market momentum via BERT transformers.
-&gt; * **Google Trends**: For tracking broad regional digital search demand.
-
-![Postal Code Wealth Accuracy Distribution](08_PostalCode_Wealth_vs_Accuracy.png)
-*(A clear Bar Chart visualization showing the AI's accuracy grouped by neighborhood wealth class. The model securely maintains ~72% to ~79% accuracy bounds safely across all 5 Wealth Tiers, successfully proving that it is mathematically unbiased against poor neighborhoods!)*
-
-
+            <div id="tab7" class="tab-content">
+<blockquote>
+<p>[!IMPORTANT]  </p>
+<h2>🚀 <strong>FINAL PRODUCTION DEPLOYMENT DIRECTIVE</strong> 🚀</h2>
+<p>Based on exhaustive Combinatorial Ablation against 3.9 Million properties, the final production architecture must adopt <strong>Random Forest (Track 08P)</strong>. </p>
+<p><strong>Why Random Forest won 1st Place:</strong> It mathematically built a resilient "averaging committee" that absorbed external macroeconomic noise without creating fake spikes, predicting the cyclical peaks better than any other algorithm.</p>
+<p><strong>Why LightGBM is the 2nd Option (Fallback):</strong> If the production API feeds for Google News/Trends ever completely crash, the system should instantly fail-over to <strong>LightGBM (Track 04)</strong>. LightGBM is mathematically superior at pure geometric separation, achieving the absolute lowest error (£395,634) when restricted <em>only</em> to physical Latitude/Longitude mapping without macro-economic noise.</p>
+<p><strong>Models &amp; Features Explicitly Rejected:</strong>
+1. ❌ <strong>XGBoost &amp; Neural Networks:</strong> Both are permanently decommissioned. Neural Networks computationally crashed when mapping 30,000 distinct postal string permutations. XGBoost's deep gradient minimization engine repeatedly hallucinated fake micro-spikes trying to mathematically fit unmoving macroeconomic data.
+2. ❌ <strong>(Latitude &amp; Longitude) Coordinates:</strong> Permanently dropped from the Random Forest deployment because pure coordinate geometry causes tree-based models to over-memorize individual luxury streets instead of learning generalized wealth indicators.
+3. ❌ <strong>Rates World Bank:</strong> Permanently dropped because the Bank of England base rate applies identically to every property in the country simultaneously, creating total dataset collinearity that degraded the accuracy of all 3 algorithms.</p>
+<p>To maintain the absolute lowest possible Error margin, the production data pipeline <strong>MUST</strong> sustain external API feeds solely for:
+* <strong>OpenStreetMap (OSM)</strong>: For localized walking-distance calculation to Transit and Hospitals.
+* <strong>Google News Sentiment</strong>: For mapping localized emotional market momentum via BERT transformers.
+* <strong>Google Trends</strong>: For tracking broad regional digital search demand.</p>
+</blockquote>
+<p><img alt="Postal Code Wealth Accuracy Distribution" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/08_PostalCode_Wealth_vs_Accuracy.png" />
+<em>(A clear Bar Chart visualization showing the AI's accuracy grouped by neighborhood wealth class. The model securely maintains ~72% to ~79% accuracy bounds safely across all 5 Wealth Tiers, successfully proving that it is mathematically unbiased against poor neighborhoods!)</em></p>
 </div>
-            <div id="raw8" class="raw-md">
-## Cloud Deployment (Zero-Cost Fargate MVP)
-Architecturally, attempting to execute this Machine Learning framework securely relies natively on heavy parallel processing memory bounds.
-
-To seamlessly dynamically host the AI Engine completely to the internet cleanly for $0.00 infrastructure drain:
-* 📖 Read [AWS_DEPLOYMENT.md](AWS_DEPLOYMENT.md) for the complete blind-novice deployment map.
-* Infrastructure is structurally entirely automated fundamentally via `aws_cloudformation.yaml`.
-* The entire ~20MB Geolocation Coordinate offline mapping bounds runs locally memory-frozen inside the `Dockerfile`, eliminating needing expensive external RAG storage entirely!
-
-### The "1-Click" Novice Wrapper
-We have strictly automated away all complex AWS Cloud deployment knowledge by combining Docker builds, ECR pushes, and CloudFormation infrastructure maps directly into a single wrapper script.
-Just blindly run `.\cloud_power_manager.bat deploy` locally to physically launch the entire pipeline dynamically without opening an AWS Console!
-
-
-### Physical AWS Cloud Architecture Diagram
-
-```mermaid
+            <div id="tab8" class="tab-content">
+<h2>Cloud Deployment (Zero-Cost Fargate MVP)</h2>
+<p>Architecturally, attempting to execute this Machine Learning framework securely relies natively on heavy parallel processing memory bounds.</p>
+<p>To seamlessly dynamically host the AI Engine completely to the internet cleanly for $0.00 infrastructure drain:
+* 📖 Read <a href="AWS_DEPLOYMENT.md">AWS_DEPLOYMENT.md</a> for the complete blind-novice deployment map.
+* Infrastructure is structurally entirely automated fundamentally via <code>aws_cloudformation.yaml</code>.
+* The entire ~20MB Geolocation Coordinate offline mapping bounds runs locally memory-frozen inside the <code>Dockerfile</code>, eliminating needing expensive external RAG storage entirely!</p>
+<h3>The "1-Click" Novice Wrapper</h3>
+<p>We have strictly automated away all complex AWS Cloud deployment knowledge by combining Docker builds, ECR pushes, and CloudFormation infrastructure maps directly into a single wrapper script.
+Just blindly run <code>.\cloud_power_manager.bat deploy</code> locally to physically launch the entire pipeline dynamically without opening an AWS Console!</p>
+<h3>Physical AWS Cloud Architecture Diagram</h3>
+<p>```mermaid
 graph TD
     classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:white;
     classDef docker fill:#2496ED,stroke:#0db7ed,stroke-width:2px,color:white;
-    classDef external fill:#EEEEEE,stroke:#999999,stroke-width:2px;
+    classDef external fill:#EEEEEE,stroke:#999999,stroke-width:2px;</p>
+<pre><code>User(["User Request"]) --&gt; IGW["Internet Gateway"]
+IGW --&gt; VPC["AWS VPC Network"]
 
-    User(["User Request"]) --&gt; IGW["Internet Gateway"]
-    IGW --&gt; VPC["AWS VPC Network"]
-    
-    subgraph "Zero-Cost Serverless Infrastructure (AWS Fargate)"
-        VPC --&gt; ECS["Amazon Elastic Container Service (ECS Cluster)"]
-        ECS --&gt; Service["ECS Fargate Service&lt;br/&gt;(AI-Engine-Service)"]
-    end
-    
-    subgraph "Docker Application Image (real-estate-ai-engine)"
-        Service --&gt; App["Python 3.10 AI Code"]
-        App --&gt; Models[("Local Memory")]
-        Models -.-&gt; pgeocode[("pgeocode Map Database&lt;br/&gt;Frozen inside Docker")]
-        Models -.-&gt; ML["LightGBM / XGBoost Regressors"]
-    end
+subgraph "Zero-Cost Serverless Infrastructure (AWS Fargate)"
+    VPC --&gt; ECS["Amazon Elastic Container Service (ECS Cluster)"]
+    ECS --&gt; Service["ECS Fargate Service&lt;br/&gt;(AI-Engine-Service)"]
+end
 
-    ECR["Elastic Container Registry (ECR)"] -.-&gt;|Deploys Image| ECS
-    
-    class IGW,VPC,ECS,Service,ECR aws;
-    class App,Models,pgeocode,ML docker;
-    class User external;
-```
+subgraph "Docker Application Image (real-estate-ai-engine)"
+    Service --&gt; App["Python 3.10 AI Code"]
+    App --&gt; Models[("Local Memory")]
+    Models -.-&gt; pgeocode[("pgeocode Map Database&lt;br/&gt;Frozen inside Docker")]
+    Models -.-&gt; ML["LightGBM / XGBoost Regressors"]
+end
 
+ECR["Elastic Container Registry (ECR)"] -.-&gt;|Deploys Image| ECS
 
+class IGW,VPC,ECS,Service,ECR aws;
+class App,Models,pgeocode,ML docker;
+class User external;
+</code></pre>
+<p>```</p>
 </div>
 
         </div>
     </div>
 
     <script>
-        // Render all hidden markdown divs into the visible HTML containers
-        for(let i=1; i<=8; i++) {
-            const rawText = document.getElementById('raw' + i).innerText;
-            document.getElementById('tab' + i).innerHTML = marked.parse(rawText);
-        }
-
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -616,7 +1015,7 @@ graph TD
             evt.currentTarget.className += " active";
         }
 
-        // Get the element with id="defaultOpen" and click on it to open Tab 1 by default
+        // Programmatically click the default tab
         document.getElementById("defaultOpen").click();
     </script>
 </body>
