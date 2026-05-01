@@ -471,7 +471,7 @@ The master execution suite is structurally localized inside the below 6 files. H
 
 ---
 
-## Step 8: The Ultimate Combinatorial ML Execution (30 Variations)
+## Step 8: Train Models below Data Feed using  (Latitude and Longitude) + OSM + Google News + Google Trends + Rates World Bank (30 Variations)
 
 **The Goal**: We physically mapped exactly every single possible permutation of our 5 feature categories (`Lat/Lon`, `OSM`, `Google News`, `Google Trends`, `World Bank Rates`) into 30 isolated ML pipelines. For each of these 30 combinations, we tested the 3 winning algorithms (LightGBM, Random Forest, XGBoost) to generate a massive 90-model evaluation matrix. 
 
