@@ -58,6 +58,12 @@ graph TD
 
 ---
 
+
+## 📊 Interactive Executive Dashboard
+> [!TIP]
+> **[Open the Interactive HTML Presentation Dashboard](Real%20Estate%20Demand%20Estimation.html)** 
+> A beautifully compiled, interactive 8-tab frontend summarizing the entire machine learning ablation study, model comparisons, and external API analysis for external stakeholders.
+
 ## Step 1: Data Exploration (`01_data_exploration.py`)
 Analyzed the raw 3.2 GB UK Property dataset to map fundamental distributions, transaction volume, and basic pricing correlations.
 * **Memory Management:** Implemented a chunk-streaming architecture (`chunksize=1000000`) to safely load the massive 31-million-row `pp-complete.csv` into RAM without crashing the environment.

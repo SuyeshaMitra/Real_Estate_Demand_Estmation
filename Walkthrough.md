@@ -35,6 +35,12 @@ Machine learning is like baking a cake. You cannot put the cake in the oven (Tra
 
 ---
 
+
+## 📊 Interactive Executive Dashboard
+> [!TIP]
+> **[Open the Interactive HTML Presentation Dashboard](Real%20Estate%20Demand%20Estimation.html)** 
+> A beautifully compiled, interactive 8-tab frontend summarizing the entire machine learning ablation study, model comparisons, and external API analysis for external stakeholders.
+
 ## 📄 Step 1: `01_data_exploration.py` (Looking at the Giant Data)
 **The Goal**: Open a massive 3.2 Gigabyte spreadsheet (`pp-complete.csv`) without crashing our computer.
 
