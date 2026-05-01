@@ -35,14 +35,14 @@ graph TD
     subgraph Machine Learning Engine
         F --> G{"Train/Test Split"}
         
-        C -.->|"Tabular CSV Data (No Lat/Lon)"| Baseline["03: Non-Spatial Baseline (4 Models)"]
+        C -.->|"Tabular CSV Data (No Lat/Lon)"| Baseline["Non-Spatial Baseline"]
         
-        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models["04: 3 Spatial Models"]
+        G -->|"Train Subset: Base Geo<br>(Latitude + Longitude ONLY)"| Base_Models["Spatial Models"]
         
-        G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models["07A: All Features"]
+        G -->|"Train Subset: Macro Trap<br>(OSM + News + Trends + Rates)"| A_Models["All Features"]
         class A_Models highlight;
         
-        G -->|"Train Subset: Clean Geo<br>(OSM Stations ONLY)"| B_Models["07B: OSM Only"]
+        G -->|"Train Subset: Winning Combo<br>(OSM + News + Trends)"| B_Models["OSM + News + Trends"]
         class B_Models highlightB;
         
         Baseline -.->|"Baseline Analytics"| I["5-Year Forecast Validator"]
