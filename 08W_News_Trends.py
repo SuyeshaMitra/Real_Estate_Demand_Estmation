@@ -1,3 +1,16 @@
+"""
+Step 8: Combinatorial ML Execution Track
+========================================
+Target Combination: Google News + Google Trends
+Models Executed: Random Forest, XGBoost, LightGBM
+
+Explanation:
+This script isolates the dataset to purely train on the specific features listed above. 
+It loads the data (Step 1), temporally splits it (Step 2), filters the target columns (Step 3),
+and then mathematically races Random Forest, XGBoost, and LightGBM models against each other (Step 4) 
+to determine which algorithm is the most stable under this specific data context.
+"""
+
 import pandas as pd
 import numpy as np
 import warnings
@@ -35,7 +48,7 @@ lgb_model.fit(X_train, y_train)
 lgb_preds = lgb_model.predict(X_test)
 lgb_mae = mean_absolute_error(y_test, lgb_preds)
 lgb_acc = np.median(np.maximum(0, 100 - (np.abs(y_test - lgb_preds) / y_test) * 100))
-print(f"LightGBM MAE: £{lgb_mae:,.0f} | Accuracy: {lgb_acc:.2f}%")
+print(f"LightGBM MAE: {lgb_mae:,.0f} | Accuracy: {lgb_acc:.2f}%")
 
 # 5. Train XGBoost
 xgb_model = xgb.XGBRegressor(n_estimators=100, random_state=42, n_jobs=-1)
@@ -43,7 +56,7 @@ xgb_model.fit(X_train, y_train)
 xgb_preds = xgb_model.predict(X_test)
 xgb_mae = mean_absolute_error(y_test, xgb_preds)
 xgb_acc = np.median(np.maximum(0, 100 - (np.abs(y_test - xgb_preds) / y_test) * 100))
-print(f"XGBoost MAE: £{xgb_mae:,.0f} | Accuracy: {xgb_acc:.2f}%")
+print(f"XGBoost MAE: {xgb_mae:,.0f} | Accuracy: {xgb_acc:.2f}%")
 
 # 6. Train Random Forest
 rf_model = RandomForestRegressor(n_estimators=20, random_state=42, n_jobs=-1)
@@ -51,6 +64,6 @@ rf_model.fit(X_train, y_train)
 rf_preds = rf_model.predict(X_test)
 rf_mae = mean_absolute_error(y_test, rf_preds)
 rf_acc = np.median(np.maximum(0, 100 - (np.abs(y_test - rf_preds) / y_test) * 100))
-print(f"Random Forest MAE: £{rf_mae:,.0f} | Accuracy: {rf_acc:.2f}%")
+print(f"Random Forest MAE: {rf_mae:,.0f} | Accuracy: {rf_acc:.2f}%")
 
 print("Model execution completed!")
