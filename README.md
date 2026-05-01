@@ -172,7 +172,7 @@ To scientifically prove the categorical limits of the baseline model, the algori
 
 ---
 
-## Step 4 & 5: Train Models below Data Feed using -(Latitude and Longitude)
+## Step 4 & 5: Train Models below Data Feed using - (Latitude and Longitude)
 
 > [!NOTE]
 > **Why was the Neural Network omitted from Step 04 onwards?**
