@@ -84,14 +84,6 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 * **Testing Data:** Predicted blindly on the 5-year future holdout block (2018 to 2022).
 * **MAE Calculation Engine:** The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.
 
-> [!WARNING]
-> **Why are the Predicted Prices consistently £400,000 lower than the Actual Prices?**
->
-> In the validation charts below (both Yearly and Monthly), the predictions of all four models run consistently lower than the actual average price. This gap is caused by three distinct factors:
-> 1. **Log-Transform Bias (Jensen's Inequality / Geometric Mean Bias)**: The models are trained on the log-transformed target: `y_train_log = np.log1p(price)` to minimize squared error in log-space. Exponentiating predictions back via `np.expm1` outputs the conditional *geometric mean* (or median under symmetry) rather than the *arithmetic mean*. Because London property transactions are highly right-skewed (a long tail of ultra-expensive luxury homes), the geometric mean is mathematically and consistently much lower than the arithmetic mean (e.g., in the test set, the actual average arithmetic price is ~£857,000, while the geometric mean is closer to ~£550,000).
-> 2. **Tree Extrapolation Limits under Inflation**: Tree-based models (Random Forest, XGBoost, LightGBM) cannot extrapolate labels outside the price bounds seen in their training data (2008–2017). They fly blind into the post-2017 London real estate boom (2018–2022) and cannot predict the record inflation.
-> 3. **Baseline Feature Ceiling**: The baseline models lack latitude/longitude coordinates and structural proximity inputs. They rely strictly on district categorical strings and cannot resolve hyper-local micro-market wealth boundaries.
-
 | Baseline Model | Mean Absolute Error (MAE) | Mean Absolute Percentage Error (MAPE) | Median Accuracy | Training Speed | Pros | Cons |
 |----------------|---------------------------|---------------------------------------|-----------------|----------------|------|------|
 | **LightGBM 🏆 (Best)** | **£456,439** | **183.34%** | **75.68%** | ~1.6 sec | Lightning fast and aggressively isolates extreme outliers natively. | Cannot define localized geometric spatial bounds without coordinates. |
@@ -168,6 +160,29 @@ Below are the physically generated structured charts proving the analytics above
 **1. Historical Chart**
 Visibly maps the 2008-2022 London property physical price graph.
 ![Historical Trend](03_historical_trend.png)
+
+### 🔍 Baseline Model Audit: Forecast Validation & Metric Breakdown
+
+> [!NOTE]
+> **Part A: Forecast Validation Charts (Actual Average vs. Predicted Prices)**
+> *   **Why predictions are ~£400,000 lower than actual prices:**
+>     1. **Log-Transform Bias (Geometric Mean Bias / Jensen's Inequality):** Models are trained on $\log(1 + \text{price})$ to stabilize target variance. Exponentiating back via $\exp(y_{\text{pred}}) - 1$ outputs the *geometric mean* (median) rather than the *arithmetic mean*. Due to London's highly right-skewed property values (luxury mansions), the geometric mean (~£550k) is systematically much lower than the actual arithmetic average (~£857k).
+>     2. **Tree Extrapolation Limits:** Tree-based models cannot predict values higher than the maximum training labels they saw (2008–2017). They cannot extrapolate the post-2017 London price inflation (2018–2022).
+>     3. **Baseline Feature Ceiling:** Relying strictly on district name strings rather than spatial coordinates prevents resolving micro-market wealth boundaries.
+> *   **Baseline Model Verification:**
+>     *   **LightGBM 🏆:** MAE: £456,439.12 | MAPE: 183.34% | Median Accuracy: 75.68% | Speed: ~1.9s
+>     *   **Random Forest:** MAE: £470,591.80 | MAPE: 252.87% | Median Accuracy: 74.78% | Speed: ~0.5s
+>     *   **XGBoost:** MAE: £494,479.00 | MAPE: 315.87% | Median Accuracy: 73.82% | Speed: ~2.3s
+>     *   **Neural Network:** MAE: £546,571.30 | MAPE: 231.79% | Median Accuracy: 65.93% | Speed: ~2.9s
+> *   **Error Calculation vs. Visuals:** The validation charts show a ~£300k–£350k gap in averages. Individual transaction MAEs (ranging £456k–£546k) run slightly higher because absolute deviations do not cancel out like simple averages do. Yearly/monthly error trend lines show that error peaks track high volume seasons (e.g. March) and inflation waves (e.g. 2019).
+> *   **Addressing the Gap:** Subsequent steps solve this by adding **Precise Spatial Coordinates (Lat/Lon)** in `04_geospatial_analysis_and_modeling.py` (which aligns predictions with actuals) and **Macroeconomic/Inflation Features** in `07` (Bank Rates, Trends, News).
+>
+> **Part B: MAPE and MAE Error Analysis**
+> *   **Calculations (`03_trend_analysis_and_modeling.py`):**
+>     *   $\text{APE} = \frac{|\text{Actual} - \text{Predicted}|}{\text{Actual}} \times 100$
+>     *   $\text{MAPE} = \text{Mean}(\text{APE})$
+> *   **MAPE Caveat:** Housing datasets contain outlier transfers under £1,000 (token/non-arm's length sales). Standard MAPE averages relative percentages and is heavily inflated by these tiny actual values, resulting in high MAPEs (183%–315%), whereas the Median Accuracy remains steady (65%–75%).
+> *   **Visual Trends:** Five baseline analysis charts tracking yearly/monthly MAE and MAPE trends and comparing model metrics have been successfully generated (`03_mae_trend_yearly.png`, `03_mae_trend_monthly.png`, `03_mape_trend_yearly.png`, `03_mape_trend_monthly.png`, and `03_chart_model_mape_comparison.png`).
 
 **2. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Yearly**
 Directly plots exactly how the 4 machine learning models (dashed lines) historically drifted against the solid black true price line over the 5-year validation bracket.
