@@ -83,11 +83,21 @@
 <li><strong>Testing Data:</strong> Predicted blindly on the 5-year future holdout block (2018 to 2022).</li>
 <li><strong>MAE Calculation Engine:</strong> The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.</li>
 </ul>
+<blockquote>
+<p><strong>⚠️ Why are the Predicted Prices consistently £400,000 lower than the Actual Prices?</strong></p>
+<p>In the validation charts below (both Yearly and Monthly), the predictions of all four models run consistently lower than the actual historical average price. This gap is caused by three distinct structural factors:</p>
+<ol>
+<li><strong>Log-Transform Bias (Jensen's Inequality / Geometric Mean Bias)</strong>: The models are trained on the log-transformed target: <code>y_train_log = np.log1p(price)</code> to minimize squared error in log-space. Exponentiating predictions back via <code>np.expm1</code> outputs the conditional <em>geometric mean</em> (or median under symmetry) rather than the <em>arithmetic mean</em>. Because London property transactions are highly right-skewed (a long tail of ultra-expensive luxury homes), the geometric mean is mathematically and consistently much lower than the arithmetic mean (e.g., in the test set, the actual average arithmetic price is ~£857,000, while the geometric mean is closer to ~£550,000).</li>
+<li><strong>Tree Extrapolation Limits under Inflation</strong>: Tree-based models (Random Forest, XGBoost, LightGBM) cannot extrapolate labels outside the price bounds seen in their training data (2008–2017). They fly blind into the post-2017 London real estate boom (2018–2022) and cannot predict the record inflation.</li>
+<li><strong>Baseline Feature Ceiling</strong>: The baseline models lack latitude/longitude coordinates and structural proximity inputs. They rely strictly on district categorical strings and cannot resolve hyper-local micro-market wealth boundaries.</li>
+</ol>
+</blockquote>
 <table>
 <thead>
 <tr>
 <th>Baseline Model</th>
 <th>Mean Absolute Error (MAE)</th>
+<th>Mean Absolute Percentage Error (MAPE)</th>
 <th>Median Accuracy</th>
 <th>Training Speed</th>
 <th>Pros</th>
@@ -98,6 +108,7 @@
 <tr>
 <td><strong>LightGBM 🏆 (Best)</strong></td>
 <td><strong>£456,439</strong></td>
+<td><strong>183.34%</strong></td>
 <td><strong>75.68%</strong></td>
 <td>~1.6 sec</td>
 <td>Lightning fast and aggressively isolates extreme outliers natively.</td>
@@ -105,7 +116,8 @@
 </tr>
 <tr>
 <td><strong>Random Forest</strong></td>
-<td>£470,591</td>
+<td>£470,592</td>
+<td>252.87%</td>
 <td>74.78%</td>
 <td><strong>~0.4 sec</strong></td>
 <td>Highly stable and executes almost instantly on generic categorical datasets.</td>
@@ -114,6 +126,7 @@
 <tr>
 <td><strong>XGBoost</strong></td>
 <td>£494,479</td>
+<td>315.87%</td>
 <td>73.82%</td>
 <td>~2.3 sec</td>
 <td>Powerful gradient engine designed to deeply minimize localized errors.</td>
@@ -122,6 +135,7 @@
 <tr>
 <td><strong>Neural Network</strong></td>
 <td>£546,571</td>
+<td>231.79%</td>
 <td>65.93%</td>
 <td>~2.2 sec</td>
 <td>Theoretically mapped for high complexity non-linear relationships.</td>
@@ -189,6 +203,7 @@
 <tr>
 <th>Model Architecture</th>
 <th>Mean Absolute Error (MAE)</th>
+<th>Mean Absolute Percentage Error (MAPE)</th>
 <th>Median Accuracy</th>
 <th>Execution Speed</th>
 </tr>
@@ -197,24 +212,28 @@
 <tr>
 <td><strong>LightGBM (Winner)</strong></td>
 <td>£456,439</td>
+<td>183.34%</td>
 <td>75.68%</td>
 <td>~1.94s</td>
 </tr>
 <tr>
 <td><strong>Random Forest</strong></td>
-<td>£470,591</td>
+<td>£470,592</td>
+<td>252.87%</td>
 <td>74.78%</td>
 <td>~0.48s</td>
 </tr>
 <tr>
 <td><strong>XGBoost</strong></td>
 <td>£494,479</td>
+<td>315.87%</td>
 <td>73.82%</td>
 <td>~2.34s</td>
 </tr>
 <tr>
 <td><strong>Neural Network</strong></td>
 <td>£546,571</td>
+<td>231.79%</td>
 <td>65.93%</td>
 <td>~2.93s</td>
 </tr>
@@ -222,11 +241,11 @@
 </table>
 <h3>Baseline Models Detailed Analytics (Time-Series Breakdown)</h3>
 <h4>A) Comprehensive Metric Validation</h4>
-<p><strong>i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed -</strong> We benchmarked 4 regression models. The baseline performance is:
-* <strong>LightGBM (Winner):</strong> MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
-* <strong>Random Forest:</strong> MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
-* <strong>XGBoost:</strong> MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
-* <strong>Neural Network:</strong> MAE: £546,571 | Accuracy: 65.93% | Speed: ~2.93s</p>
+<p><strong>i) Absolute Error (MAE), Mean Absolute Percentage Error (MAPE), Aggregate Median Accuracy, and Execution Processing Speed -</strong> We benchmarked 4 regression models. The baseline performance is:
+* <strong>LightGBM (Winner):</strong> MAE: £456,439 | MAPE: 183.34% | Accuracy: 75.68% | Speed: ~1.94s
+* <strong>Random Forest:</strong> MAE: £470,592 | MAPE: 252.87% | Accuracy: 74.78% | Speed: ~0.48s
+* <strong>XGBoost:</strong> MAE: £494,479 | MAPE: 315.87% | Accuracy: 73.82% | Speed: ~2.34s
+* <strong>Neural Network:</strong> MAE: £546,571 | MAPE: 231.79% | Accuracy: 65.93% | Speed: ~2.93s</p>
 <p><strong>ii) Accurate Values Across Models</strong>
 The execution strictly ensures that <strong>values are completely accurate across models</strong>, calculated identically over the identical test dataset. In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly across all models.</p>
 <p><strong>iii) Explore Accuracy: What defines an "Accurate" Prediction?</strong>
@@ -270,9 +289,20 @@ Directly plots exactly how the 4 machine learning models (dashed lines) historic
 <p><strong>3. Forecast Validation Chart (Actual Average Vs Forecasted Price) - Monthly</strong>
 Plots this same validation against the 1-12 month cyclical cycle.
 <img alt="Monthly Validation" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_forecast_validation_monthly.png" /></p>
+
+<p><strong>4. MAE Trend Chart - Yearly</strong>
+<img alt="Yearly MAE Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_mae_trend_yearly.png" /></p>
+<p><strong>5. MAE Trend Chart - Monthly</strong>
+<img alt="Monthly MAE Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_mae_trend_monthly.png" /></p>
+<p><strong>6. MAPE Trend Chart - Yearly</strong>
+<img alt="Yearly MAPE Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_mape_trend_yearly.png" /></p>
+<p><strong>7. MAPE Trend Chart - Monthly</strong>
+<img alt="Monthly MAPE Trend" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_mape_trend_monthly.png" /></p>
+
 <h3>Baseline Output Visuals</h3>
 <p>To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
 <img alt="Baseline MAE Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_mae_comparison.png" />
+<img alt="Baseline MAPE Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_mape_comparison.png" />
 <img alt="Baseline Accuracy Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_accuracy_comparison.png" />
 <img alt="Baseline Speed Comparison" src="https://raw.githubusercontent.com/SuyeshaMitra/Real_Estate_Demand_Estmation/main/03_chart_model_speed_comparison.png" /></p>
 <hr />

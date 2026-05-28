@@ -100,12 +100,17 @@ File `03` computes and generates six highly granular visual artifacts directly t
 2. **`03_forecast_validation_yearly.png`**: This draws a solid line representing the **TRUE** housing prices from 2018-2022 (testing data) specifically grouped by Year, and places dotted lines representing what the 4 isolated AI models predicted. 
 3. **`03_forecast_validation_monthly.png`**: Natively groups predictions by strict 1-12 Month seasonality to visually diagnose structural weather/seasonal failures across the algorithms natively.
 
-   💡 **Why is the gap between the models and reality so massive?**
-   What you are looking at right now is the exact visual proof of why we called File `03` the "Baseline Test". The 4 models plotted in this image were only given basic text words (like the district name "Croydon") to try and guess the price. The chart visually proves that *none* of the algorithms successfully tracked the 2019 London real estate boom, all under-predicting reality by £300,000+!
+   💡 **Why is the gap between the models and reality so massive? (Geometric Bias & Extrapolation)**
+   The 4 baseline models plotted in these Yearly and Monthly charts run consistently £300,000 to £400,000 below the true average price. This gap is caused by three factors:
+   1. **Jensen's Inequality / Geometric Mean Bias**: The models are trained on log-transformed prices `np.log1p(price)` under MSE loss. The inverse-transformation `np.expm1` yields predictions that model the conditional *geometric mean* (median) rather than the *arithmetic mean*. Since house prices are highly right-skewed, the geometric mean runs systematically much lower than the arithmetic mean (e.g., test set actual mean is ~£857,000, while the geometric mean is ~£550,000).
+   2. **Tree Extrapolation Limits under Inflation**: Tree models cannot predict values higher than the maximum training values they saw (2008–2017). They fly blind into the 2018–2022 London price boom and cannot extrapolate the upward trend.
+   3. **Baseline Feature Ceiling**: Lacking coordinates, the models rely strictly on district categorical strings and cannot resolve spatial micro-market wealth boundaries.
 
-4. **`03_chart_model_mae_comparison.png` (Absolute Error)**: Demonstrates that **LightGBM** wins the error-margin contest natively (£456k), while the Neural Network spectacularly crashes (£546k).
-5. **`03_chart_model_accuracy_comparison.png` (Median Accuracy)**: Proves LightGBM achieves roughly **75.68% target accuracy** solely predicting from basic Categories, safely protected by a 0% baseline floor clipping logic.
-6. **`03_chart_model_speed_comparison.png` (Execution Processing Speed)**: Emphasizes that LightGBM accomplished its victory in a blisteringly fast ~1.63 seconds, while XGBoost suffered computational bloat at ~2.27 seconds.
+4. **`03_chart_model_mae_comparison.png` (Mean Absolute Error)**: Demonstrates that **LightGBM** wins the MAE contest (£456k), followed by Random Forest (£470k), XGBoost (£494k), and Neural Network (£546k).
+5. **`03_chart_model_mape_comparison.png` (Mean Absolute Percentage Error)**: New chart comparing MAPE, showing LightGBM at 183.34%, Neural Network at 231.79%, Random Forest at 252.87%, and XGBoost at 315.87%. (Note: Due to outlier transactions in the dataset below £10,000, standard MAPE can be skewed high by extreme relative percentages).
+6. **`03_chart_model_accuracy_comparison.png` (Median Accuracy)**: Proves LightGBM achieves roughly **75.68% target accuracy** solely predicting from basic Categories, safely protected by a 0% baseline floor clipping logic.
+7. **`03_chart_model_speed_comparison.png` (Execution Processing Speed)**: Emphasizes that LightGBM accomplished its victory in ~1.6 seconds, while XGBoost and Neural Networks require over 2.2 seconds.
+8. **Yearly/Monthly MAE and MAPE Trends (`03_mae_trend_yearly.png`, `03_mae_trend_monthly.png`, `03_mape_trend_yearly.png`, `03_mape_trend_monthly.png`)**: Added to track chronological and seasonal trends of both absolute and percentage errors.
 
 This huge visual failure on the forecast validation charts is the exact reason we built the **Geospatial Models** in Files `04A`, `04B`, and `04C`. When you run those files and open their graphs, you will see the actual predictions mathematically jump all the way up and tightly hug the true blue line, because Latitude and Longitude arrays allow the ML Trees to finally "see" the wealthy neighborhoods!
 
@@ -142,6 +147,17 @@ To know how good or bad our model is, we grade its "test paper" using three metr
   * Random Forest: 0.85 (85%)
   * XGBoost: 0.87 (87%)
   * LightGBM: **0.91 (91%)** *(WINNER)*
+
+#### 4. Mean Absolute Percentage Error (MAPE)
+* **What it is**: MAPE measures the average of the absolute percentage differences between the predicted values and the actual values. It is calculated by dividing each absolute error by its actual price, averaging those percentages, and multiplying by 100.
+* **The Math**: If a house sells for £200,000 and the model predicts £150,000, the absolute error is £50,000. The percentage error is `£50,000 / £200,000 = 25%`. We do this for all transactions, sum their absolute values, and find the mean.
+* **Why we use it & Significance**: MAPE is scale-independent, expressing errors as relative percentage deviations which business stakeholders find easy to interpret. 
+* **⚠️ Important Caveat**: Standard MAPE is highly sensitive to very small actual values. If the dataset contains transaction price outliers (e.g. £1 to £1,000 representing non-arm's length transfers or token transfers), even a tiny prediction error (like predicting £5,000 for a £1 sale) generates an enormous percentage error (499,900%). This can artificially inflate the average MAPE of the model. This explains why baseline models report high MAPEs (183% to 315%) despite having 65%-75% median accuracy (since median accuracy uses the median percentage error and is clipped at 0%-100% bounds, filtering out outlier skewness).
+* **Example Baseline Outputs**:
+  * LightGBM: **183.34%** *(WINNER)*
+  * Neural Network: 231.79%
+  * Random Forest: 252.87%
+  * XGBoost: 315.87%
 
 ---
 

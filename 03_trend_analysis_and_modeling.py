@@ -102,6 +102,7 @@ y_test = test_df[target]
 # Array to hold charting metrics dynamically
 plot_models = []
 plot_maes = []
+plot_mapes = []
 plot_times = []
 plot_accuracies = []
 
@@ -189,9 +190,13 @@ def evaluate_model(name, model, execution_time):
     accuracy_array = np.clip(100 - (absolute_percentage_errors * 100), 0, 100)
     median_accuracy_percentage = np.median(accuracy_array)
     
+    # Mean Absolute Percentage Error (MAPE)
+    mape = np.mean(absolute_percentage_errors) * 100
+    
     # Store dynamic stats
     plot_models.append(name)
     plot_maes.append(mae)
+    plot_mapes.append(mape)
     plot_times.append(execution_time)
     plot_accuracies.append(median_accuracy_percentage)
     
@@ -201,6 +206,8 @@ def evaluate_model(name, model, execution_time):
     print(f"RMSE: £{rmse:,.2f}")
     # Output the exact £ MAE cleanly
     print(f"MAE: £{mae:,.2f}")
+    # Show MAPE
+    print(f"MAPE: {mape:.2f}%")
     # Show R2 scoring matrix out of 1.0 peak
     print(f"R-Squared (out-of-sample): {r2:.4f}")
     # Show median accuracy
@@ -227,8 +234,10 @@ models_dict = {'rf': 'Random Forest', 'mlp': 'Neural Network', 'xgb': 'XGBoost',
 for code in models_dict.keys():
     # Calculate pure absolute error physically per single house record natively
     test_df[f'{code}_abs_err'] = np.abs(test_df['price'] - test_df[f'{code}_predicted_price'])
+    # Absolute Percentage Error (APE)
+    test_df[f'{code}_ape'] = (test_df[f'{code}_abs_err'] / test_df['price']) * 100
     # Floor accuracy strictly at 0% baseline removing negative drifts completely from skewing models
-    test_df[f'{code}_accuracy'] = np.clip(100 - (test_df[f'{code}_abs_err'] / test_df['price'] * 100), 0, 100)
+    test_df[f'{code}_accuracy'] = np.clip(100 - test_df[f'{code}_ape'], 0, 100)
 
 print("\n=======================================================")
 print("          --- 5-YEAR AGGREGATE SUMMARY (BY YEAR) ---           ")
@@ -238,10 +247,10 @@ print("=======================================================")
 # Compute exact historical averages explicitly tracking the yearly error pattern completely isolated
 yearly_test_trend = test_df.groupby('year').agg(
     price=('price', 'mean'),
-    rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_acc=('rf_accuracy', 'median'),
-    mlp_predicted=('mlp_predicted_price', 'mean'), mlp_mae=('mlp_abs_err', 'mean'), mlp_acc=('mlp_accuracy', 'median'),
-    xgb_predicted=('xgb_predicted_price', 'mean'), xgb_mae=('xgb_abs_err', 'mean'), xgb_acc=('xgb_accuracy', 'median'),
-    lgbm_predicted=('lgbm_predicted_price', 'mean'), lgbm_mae=('lgbm_abs_err', 'mean'), lgbm_acc=('lgbm_accuracy', 'median')
+    rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_mape=('rf_ape', 'mean'), rf_acc=('rf_accuracy', 'median'),
+    mlp_predicted=('mlp_predicted_price', 'mean'), mlp_mae=('mlp_abs_err', 'mean'), mlp_mape=('mlp_ape', 'mean'), mlp_acc=('mlp_accuracy', 'median'),
+    xgb_predicted=('xgb_predicted_price', 'mean'), xgb_mae=('xgb_abs_err', 'mean'), xgb_mape=('xgb_ape', 'mean'), xgb_acc=('xgb_accuracy', 'median'),
+    lgbm_predicted=('lgbm_predicted_price', 'mean'), lgbm_mae=('lgbm_abs_err', 'mean'), lgbm_mape=('lgbm_ape', 'mean'), lgbm_acc=('lgbm_accuracy', 'median')
 ).reset_index()
 
 # Display terminal readout
@@ -255,10 +264,10 @@ print("=======================================================")
 # Compute exact historical monthly averages tracking the cyclic seasonality pattern error completely isolated
 monthly_test_trend = test_df.groupby('month').agg(
     price=('price', 'mean'),
-    rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_acc=('rf_accuracy', 'median'),
-    mlp_predicted=('mlp_predicted_price', 'mean'), mlp_mae=('mlp_abs_err', 'mean'), mlp_acc=('mlp_accuracy', 'median'),
-    xgb_predicted=('xgb_predicted_price', 'mean'), xgb_mae=('xgb_abs_err', 'mean'), xgb_acc=('xgb_accuracy', 'median'),
-    lgbm_predicted=('lgbm_predicted_price', 'mean'), lgbm_mae=('lgbm_abs_err', 'mean'), lgbm_acc=('lgbm_accuracy', 'median')
+    rf_predicted=('rf_predicted_price', 'mean'), rf_mae=('rf_abs_err', 'mean'), rf_mape=('rf_ape', 'mean'), rf_acc=('rf_accuracy', 'median'),
+    mlp_predicted=('mlp_predicted_price', 'mean'), mlp_mae=('mlp_abs_err', 'mean'), mlp_mape=('mlp_ape', 'mean'), mlp_acc=('mlp_accuracy', 'median'),
+    xgb_predicted=('xgb_predicted_price', 'mean'), xgb_mae=('xgb_abs_err', 'mean'), xgb_mape=('xgb_ape', 'mean'), xgb_acc=('xgb_accuracy', 'median'),
+    lgbm_predicted=('lgbm_predicted_price', 'mean'), lgbm_mae=('lgbm_abs_err', 'mean'), lgbm_mape=('lgbm_ape', 'mean'), lgbm_acc=('lgbm_accuracy', 'median')
 ).reset_index()
 
 # Display terminal readout
@@ -296,7 +305,7 @@ plt.savefig("03_forecast_validation_monthly.png")
 plt.close()
 
 # ==============================================================================
-# --- NEW CHARTS: ACCURACY TRENDS OVER TIME ---
+# --- NEW CHARTS: ACCURACY AND ERROR TRENDS OVER TIME ---
 # ==============================================================================
 
 # Yearly Accuracy Trend
@@ -310,7 +319,7 @@ plt.xlabel("Year")
 plt.ylabel("Median Accuracy (%)")
 plt.legend()
 plt.grid(True)
-plt.savefig("03_accuracy_trend_yearly.png")
+plt.savefig("03_accuracy_trend_yearly.png", dpi=200)
 plt.close()
 
 # Monthly Accuracy Trend
@@ -325,7 +334,65 @@ plt.ylabel("Median Accuracy (%)")
 plt.xticks(range(1, 13))
 plt.legend()
 plt.grid(True)
-plt.savefig("03_accuracy_trend_monthly.png")
+plt.savefig("03_accuracy_trend_monthly.png", dpi=200)
+plt.close()
+
+# Yearly MAE Trend
+plt.figure(figsize=(10, 6))
+plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_mae'], marker="x", linestyle="-", color="blue", label="Random Forest")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['mlp_mae'], marker="s", linestyle="-", color="red", label="Neural Network")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['xgb_mae'], marker="^", linestyle="-", color="green", label="XGBoost")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['lgbm_mae'], marker="d", linestyle="-", color="purple", label="LightGBM")
+plt.title("Yearly Mean Absolute Error (MAE) Trend (2018 - 2022)")
+plt.xlabel("Year")
+plt.ylabel("MAE (£)")
+plt.legend()
+plt.grid(True)
+plt.savefig("03_mae_trend_yearly.png", dpi=200)
+plt.close()
+
+# Monthly MAE Trend
+plt.figure(figsize=(10, 6))
+plt.plot(monthly_test_trend['month'], monthly_test_trend['rf_mae'], marker="x", linestyle="-", color="blue", label="Random Forest")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['mlp_mae'], marker="s", linestyle="-", color="red", label="Neural Network")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['xgb_mae'], marker="^", linestyle="-", color="green", label="XGBoost")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['lgbm_mae'], marker="d", linestyle="-", color="purple", label="LightGBM")
+plt.title("Monthly Seasonality MAE Trend (Months 1-12)")
+plt.xlabel("Month")
+plt.ylabel("MAE (£)")
+plt.xticks(range(1, 13))
+plt.legend()
+plt.grid(True)
+plt.savefig("03_mae_trend_monthly.png", dpi=200)
+plt.close()
+
+# Yearly MAPE Trend
+plt.figure(figsize=(10, 6))
+plt.plot(yearly_test_trend['year'], yearly_test_trend['rf_mape'], marker="x", linestyle="-", color="blue", label="Random Forest")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['mlp_mape'], marker="s", linestyle="-", color="red", label="Neural Network")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['xgb_mape'], marker="^", linestyle="-", color="green", label="XGBoost")
+plt.plot(yearly_test_trend['year'], yearly_test_trend['lgbm_mape'], marker="d", linestyle="-", color="purple", label="LightGBM")
+plt.title("Yearly Mean Absolute Percentage Error (MAPE) Trend (2018 - 2022)")
+plt.xlabel("Year")
+plt.ylabel("MAPE (%)")
+plt.legend()
+plt.grid(True)
+plt.savefig("03_mape_trend_yearly.png", dpi=200)
+plt.close()
+
+# Monthly MAPE Trend
+plt.figure(figsize=(10, 6))
+plt.plot(monthly_test_trend['month'], monthly_test_trend['rf_mape'], marker="x", linestyle="-", color="blue", label="Random Forest")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['mlp_mape'], marker="s", linestyle="-", color="red", label="Neural Network")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['xgb_mape'], marker="^", linestyle="-", color="green", label="XGBoost")
+plt.plot(monthly_test_trend['month'], monthly_test_trend['lgbm_mape'], marker="d", linestyle="-", color="purple", label="LightGBM")
+plt.title("Monthly Seasonality MAPE Trend (Months 1-12)")
+plt.xlabel("Month")
+plt.ylabel("MAPE (%)")
+plt.xticks(range(1, 13))
+plt.legend()
+plt.grid(True)
+plt.savefig("03_mape_trend_monthly.png", dpi=200)
 plt.close()
 
 # ==============================================================================
@@ -345,6 +412,18 @@ for i, v in enumerate(plot_maes):
     ax.text(i, v + 2000, f'£{v:,.0f}', ha='center', fontweight='bold', fontsize=11)
 plt.tight_layout()
 plt.savefig('03_chart_model_mae_comparison.png', dpi=200)
+plt.close()
+
+# MAPE Comparison
+plt.figure(figsize=(10, 6))
+ax_mape = sns.barplot(x=plot_models, y=plot_mapes, hue=plot_models, palette=bar_colors, dodge=False)
+plt.title('Baseline Model Mean Absolute Percentage Error (MAPE) Comparison\n(Lower MAPE = Better)', fontsize=14, pad=15)
+plt.ylabel('Mean Absolute Percentage Error (%)', fontsize=12)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+for i, v in enumerate(plot_mapes):
+    ax_mape.text(i, v + 2, f'{v:.2f}%', ha='center', fontweight='bold', fontsize=11)
+plt.tight_layout()
+plt.savefig('03_chart_model_mape_comparison.png', dpi=200)
 plt.close()
 
 # Speed Comparison

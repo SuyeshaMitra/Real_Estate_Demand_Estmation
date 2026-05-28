@@ -84,12 +84,20 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 * **Testing Data:** Predicted blindly on the 5-year future holdout block (2018 to 2022).
 * **MAE Calculation Engine:** The Mean Absolute Error strictly calculates the exact absolute financial difference (in £) between the True Selling Price and the AI's Predicted Price across all testing rows, producing a flat physical error margin.
 
-| Baseline Model | Mean Absolute Error (MAE) | Median Accuracy | Training Speed | Pros | Cons |
-|----------------|---------------------------|-----------------|----------------|------|------|
-| **LightGBM 🏆 (Best)** | **£456,439** | **75.68%** | ~1.6 sec | Lightning fast and aggressively isolates extreme outliers natively. | Cannot define localized geometric spatial bounds without coordinates. |
-| **Random Forest** | £470,591 | 74.78% | **~0.4 sec** | Highly stable and executes almost instantly on generic categorical datasets. | Relies on averaging, missing nuanced neighborhood wealth boundaries. |
-| **XGBoost** | £494,479 | 73.82% | ~2.3 sec | Powerful gradient engine designed to deeply minimize localized errors. | Drastically overfits flat categorical text features, degrading accuracy. |
-| **Neural Network** | £546,571 | 65.93% | ~2.2 sec | Theoretically mapped for high complexity non-linear relationships. | Systematically crashes. Flat tabular strings lack depth for neural logic. |
+> [!WARNING]
+> **Why are the Predicted Prices consistently £400,000 lower than the Actual Prices?**
+>
+> In the validation charts below (both Yearly and Monthly), the predictions of all four models run consistently lower than the actual average price. This gap is caused by three distinct factors:
+> 1. **Log-Transform Bias (Jensen's Inequality / Geometric Mean Bias)**: The models are trained on the log-transformed target: `y_train_log = np.log1p(price)` to minimize squared error in log-space. Exponentiating predictions back via `np.expm1` outputs the conditional *geometric mean* (or median under symmetry) rather than the *arithmetic mean*. Because London property transactions are highly right-skewed (a long tail of ultra-expensive luxury homes), the geometric mean is mathematically and consistently much lower than the arithmetic mean (e.g., in the test set, the actual average arithmetic price is ~£857,000, while the geometric mean is closer to ~£550,000).
+> 2. **Tree Extrapolation Limits under Inflation**: Tree-based models (Random Forest, XGBoost, LightGBM) cannot extrapolate labels outside the price bounds seen in their training data (2008–2017). They fly blind into the post-2017 London real estate boom (2018–2022) and cannot predict the record inflation.
+> 3. **Baseline Feature Ceiling**: The baseline models lack latitude/longitude coordinates and structural proximity inputs. They rely strictly on district categorical strings and cannot resolve hyper-local micro-market wealth boundaries.
+
+| Baseline Model | Mean Absolute Error (MAE) | Mean Absolute Percentage Error (MAPE) | Median Accuracy | Training Speed | Pros | Cons |
+|----------------|---------------------------|---------------------------------------|-----------------|----------------|------|------|
+| **LightGBM 🏆 (Best)** | **£456,439** | **183.34%** | **75.68%** | ~1.6 sec | Lightning fast and aggressively isolates extreme outliers natively. | Cannot define localized geometric spatial bounds without coordinates. |
+| **Random Forest** | £470,592 | 252.87% | 74.78% | **~0.4 sec** | Highly stable and executes almost instantly on generic categorical datasets. | Relies on averaging, missing nuanced neighborhood wealth boundaries. |
+| **XGBoost** | £494,479 | 315.87% | 73.82% | ~2.3 sec | Powerful gradient engine designed to deeply minimize localized errors. | Drastically overfits flat categorical text features, degrading accuracy. |
+| **Neural Network** | £546,571 | 231.79% | 65.93% | ~2.2 sec | Theoretically mapped for high complexity non-linear relationships. | Systematically crashes. Flat tabular strings lack depth for neural logic. |
 
 ### Conclusion & Explanation: Why LightGBM Won the Baseline Contest
 
@@ -101,17 +109,18 @@ Before migrating to complex geographical mapping, we tested four algorithms (Ran
 
 **Mathematical Metric Calculation Example:**
 * **Mean Absolute Error (MAE):** `MAE = Average( ABS(True_Price - Predicted_Price) )` - If LightGBM predicts a house is £400,000 but the True Sold Price was £500,000, the absolute physical error is recorded exactly as £100,000.
+* **Mean Absolute Percentage Error (MAPE):** `MAPE = Average( ABS(True_Price - Predicted_Price) / True_Price ) * 100` - MAPE calculates the mean of raw percentage errors. (Note: Because the HM Land Registry dataset contains outliers like £1 sales representing non-arm's length transfers, standard MAPE can be highly skewed by low-value properties).
 * **Median Accuracy:** `Accuracy = 100 - (ABS(True - Predicted) / True) * 100` - Following the example above: (£100,000 error / £500,000 price) = 0.20 off. `100 - 20% = 80.00% Accuracy`.
 
 ### Baseline Models Detailed Analytics (Time-Series Breakdown)
 
 #### A) Comprehensive Metric Validation
 
-**i) Absolute Error (MAE), Aggregate Median Accuracy, and Execution Processing Speed -** We benchmarked 4 regression models. The baseline performance is:
-* **LightGBM (Winner):** MAE: £456,439 | Accuracy: 75.68% | Speed: ~1.94s
-* **Random Forest:** MAE: £470,591 | Accuracy: 74.78% | Speed: ~0.48s
-* **XGBoost:** MAE: £494,479 | Accuracy: 73.82% | Speed: ~2.34s
-* **Neural Network:** MAE: £546,571 | Accuracy: 65.93% | Speed: ~2.93s
+**i) Absolute Error (MAE), Mean Absolute Percentage Error (MAPE), Aggregate Median Accuracy, and Execution Processing Speed -** We benchmarked 4 regression models. The baseline performance is:
+* **LightGBM (Winner):** MAE: £456,439 | MAPE: 183.34% | Accuracy: 75.68% | Speed: ~1.94s
+* **Random Forest:** MAE: £470,592 | MAPE: 252.87% | Accuracy: 74.78% | Speed: ~0.48s
+* **XGBoost:** MAE: £494,479 | MAPE: 315.87% | Accuracy: 73.82% | Speed: ~2.34s
+* **Neural Network:** MAE: £546,571 | MAPE: 231.79% | Accuracy: 65.93% | Speed: ~2.93s
 
 **ii) Accurate Values Across Models**
 The execution strictly ensures that **values are completely accurate across models**, calculated identically over the identical test dataset. In prior local versions, unbound percentage skewing caused mathematical variance; the script now correctly normalizes the percentage variance uniformly across all models.
@@ -168,9 +177,22 @@ Directly plots exactly how the 4 machine learning models (dashed lines) historic
 Plots this same validation against the 1-12 month cyclical cycle.
 ![Monthly Validation](03_forecast_validation_monthly.png)
 
+**4. MAE Trend Chart - Yearly**
+![Yearly MAE Trend](03_mae_trend_yearly.png)
+
+**5. MAE Trend Chart - Monthly**
+![Monthly MAE Trend](03_mae_trend_monthly.png)
+
+**6. MAPE Trend Chart - Yearly**
+![Yearly MAPE Trend](03_mape_trend_yearly.png)
+
+**7. MAPE Trend Chart - Monthly**
+![Monthly MAPE Trend](03_mape_trend_monthly.png)
+
 ### Baseline Output Visuals
 To scientifically prove the categorical limits of the baseline model, the algorithms automatically dump their evaluation analytics locally into three charting arrays:
 ![Baseline MAE Comparison](03_chart_model_mae_comparison.png)
+![Baseline MAPE Comparison](03_chart_model_mape_comparison.png)
 ![Baseline Accuracy Comparison](03_chart_model_accuracy_comparison.png)
 ![Baseline Speed Comparison](03_chart_model_speed_comparison.png)
 
